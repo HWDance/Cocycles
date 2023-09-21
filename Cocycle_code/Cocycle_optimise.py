@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import os
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
                 
-class train:
+class Train:
     
     def __init__(self,model):
         self.model = model
@@ -27,7 +27,7 @@ class train:
                 return inputs_batch
 
     def optimise(self,loss,inputs,outputs, inputs_val = [],outputs_val = [], conditioner_learn_rate = 0.001, transformer_learn_rate = 0.001, maxiter = 2000,miniter = 100, optimise_loss_params = True, 
-                 val_loss = True, val_tol = 1e-3, batch_size = 1024, val_batch_size = 4096,batch_sampling = "random", scheduler = False, schedule_milestone = 100, n_schedule = 100,lr_mult = 0.9, 
+                 val_loss = True, val_tol = 1e-3, batch_size = 1024, val_batch_size = 4096,batch_sampling = "random", scheduler = False, schedule_milestone = 50, n_schedule = 100,lr_mult = 0.9, 
                      plot = False, plot_start = 30, print_ = False, optimise_conditioners = True):
         
         # Dimensions

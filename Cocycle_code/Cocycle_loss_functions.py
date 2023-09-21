@@ -131,7 +131,34 @@ class Loss:
         return torch.mean(K_xx*K_yy)
     
     def JMMD_M(self,model,inputs,outputs):
-        return
+        """
+        model: cocycle_model
+        inputs : X , n x d
+        outputs : Y , n x p
+        """
+        
+        # Dimensions
+        n = len(outputs)
+        
+        # Make model prediction
+        U = model.inverse_transformation(inputs,outputs).T
+        outputs_pred = model.transformation(inputs,U)[:,:,None]   # N x N  x 1 tensor (need to check if works for multivariate Y) 
+        
+        nrows_sample = max(min(n,int(10**9/n**2)),1) # To prevent memory overload, subsample from outer sum
+        if nrows_sample < n:
+            outputs_pred_row_batch,outputs_row_batch = self.get_subsample(outputs_pred,outputs,subsamples = nrows_sample) # nrow x N x 1 tensor
+        else:
+            outputs_pred_row_batch,outputs_row_batch = outputs_pred,outputs
+            
+        # Get gram matrices
+        K_xx = self.kernel[0].get_gram(inputs,inputs)
+        K = 0
+        one = torch.ones((nrows_sample,1,1))
+        for i in range(nrows_sample):
+            K += (K_xx[None,:]*self.kernel[1].get_gram(one*outputs_pred_row_batch[i][None,:,:],outputs_pred_row_batch)).mean() # returns (N x N x N).mean()
+            K += -2*(K_xx*self.kernel[1].get_gram(outputs_row_batch,outputs_pred_row_batch[i])).mean() #(N x N).mean()
+        
+        return K*n
     
     def JMMD_M_RFF(self,model,inputs,outputs):
         """
@@ -182,7 +209,7 @@ class Loss:
         
         # Get gram matrices
         K = self.kernel[1].get_gram(outputs_pred_row_batch,outputs_pred_row_batch).mean()
-        K += -2*self.kernel[1].get_gram(outputs_row_batch[:,:,None],outputs_pred_row_batch).mean()
+        K += -2*self.kernel[1].get_gram(outputs_row_batch[:,None,:],outputs_pred_row_batch).mean()
         
         return K*n
     
@@ -306,16 +333,16 @@ class Loss:
         
         return torch.mean((outputs - outputs_pred)**2)
         
-    def LS(self,model,inputs,outputs):
+    def L1(self,model,inputs,outputs):
         """
         model: cocycle_model
         inputs : X , n x d
         outputs : Y , n x p
         """          
         # Making prediction
-        U = model.inverse_transformation(inputs,outputs) - self.parameters
+        U = model.inverse_transformation(inputs,outputs)
         
-        return torch.mean(U**2)
+        return torch.mean(U.abs())
     
     def MLE(self,model,inputs,outputs):
         U,logdet = model.inverse_transformation(inputs,outputs)
@@ -356,8 +383,8 @@ class Loss:
             return self.CLS(model,inputs,outputs)
         elif self.loss_fn == "CLS_M":
             return self.CLS_M(model,inputs,outputs)
-        elif self.loss_fn == "LS":
-            return self.LS(model,inputs,outputs)
+        elif self.loss_fn == "L1":
+            return self.L1(model,inputs,outputs)
         elif self.loss_fn == "MLE":
             return self.MLE(model,inputs,outputs)
         
