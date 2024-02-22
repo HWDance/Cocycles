@@ -1,0 +1,8 @@
+name: cocycles
+channels:
+  - conda-forge
+dependencies:
+  - python
+  - pip
+  - numpy
+
