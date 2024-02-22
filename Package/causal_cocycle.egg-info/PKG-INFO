@@ -1,0 +1,6 @@
+Metadata-Version: 2.1
+Name: causal-cocycle
+Version: 0.0.1.dev0
+Summary: cocycles
+Author: Hugh Dance
+Requires-Python: >=3.8
