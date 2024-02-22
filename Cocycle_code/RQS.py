@@ -21,6 +21,7 @@ def unconstrained_RQS(inputs, unnormalized_widths, unnormalized_heights,
                       min_bin_height=DEFAULT_MIN_BIN_HEIGHT,
                       min_derivative=DEFAULT_MIN_DERIVATIVE, log_det = True):
     inside_intvl_mask = ((inputs >= -tail_bound) & (inputs <= tail_bound)).view(len(inputs),)
+    inputs_in_mask = 0
     outside_interval_mask = ~inside_intvl_mask
 
     outputs = torch.zeros_like(inputs)
@@ -33,23 +34,20 @@ def unconstrained_RQS(inputs, unnormalized_widths, unnormalized_heights,
 
     outputs[outside_interval_mask] = inputs[outside_interval_mask]
     logabsdet[outside_interval_mask] = 0
-
-    outputs[inside_intvl_mask], logabsdet[inside_intvl_mask] = RQS(
-        inputs=inputs[inside_intvl_mask],
-        unnormalized_widths=unnormalized_widths[inside_intvl_mask, :],
-        unnormalized_heights=unnormalized_heights[inside_intvl_mask, :],
-        unnormalized_derivatives=unnormalized_derivatives[inside_intvl_mask, :],
-        inverse=inverse,
-        left=-tail_bound, right=tail_bound, bottom=-tail_bound, top=tail_bound,
-        min_bin_width=min_bin_width,
-        min_bin_height=min_bin_height,
-        min_derivative=min_derivative
-    )
+    if inside_intvl_mask.sum()>0:
+        outputs[inside_intvl_mask], logabsdet[inside_intvl_mask] = RQS(
+            inputs=inputs[inside_intvl_mask],
+            unnormalized_widths=unnormalized_widths[inside_intvl_mask, :],
+            unnormalized_heights=unnormalized_heights[inside_intvl_mask, :],
+            unnormalized_derivatives=unnormalized_derivatives[inside_intvl_mask, :],
+            inverse=inverse,
+            left=-tail_bound, right=tail_bound, bottom=-tail_bound, top=tail_bound,
+            min_bin_width=min_bin_width,
+            min_bin_height=min_bin_height,
+            min_derivative=min_derivative
+        )
     
-    if log_det:
-        return outputs, logabsdet
-    else:
-        return outputs
+    return outputs, logabsdet,inputs_in_mask
 
 def RQS(inputs, unnormalized_widths, unnormalized_heights,
         unnormalized_derivatives, inverse=False, left=0., right=1.,
@@ -57,7 +55,7 @@ def RQS(inputs, unnormalized_widths, unnormalized_heights,
         min_bin_height=DEFAULT_MIN_BIN_HEIGHT,
         min_derivative=DEFAULT_MIN_DERIVATIVE):
     
-    if torch.min(inputs) < left or torch.max(inputs) > right:
+    if ((torch.min(inputs) < left) + (torch.max(inputs) > right)).sum()>0: # changed this
         raise ValueError("Input outside domain")
 
     num_bins = unnormalized_widths.shape[-1]

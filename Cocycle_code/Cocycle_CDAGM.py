@@ -12,12 +12,12 @@ import inspect
 
 class CCDAGM:
     
-    def __init__(self,cocycle_models,parents):
+    def __init__(self,models,parents):
         """
-        cocycles = tuple of d cocycle models
+        models = tuple of d cocycle models
         parents = tuple of parent indices
         """
-        self.cocycle_models = cocycle_models
+        self.models = models
         self.parents = parents
     
     def train_cocycle(self,X,loss,median_heuristic = False,RFF = False,n_RFF = 100,train_val_split = 0.8,
@@ -37,7 +37,7 @@ class CCDAGM:
             inputs_train,outputs_train, inputs_val,outputs_val = X[:ntrain],Y[:ntrain],X[ntrain:],Y[ntrain:]
 
             # Setting up objective fn
-            loss_fn = Loss(loss_fn = cocycle_models[i],kernel = [gaussian_kernel(),
+            loss_fn = Loss(loss_fn = self.models[i],kernel = [gaussian_kernel(),
                                                                  gaussian_kernel()])
             if RFF_features:
                 loss_fn.get_RFF_features()
@@ -58,7 +58,7 @@ class CCDAGM:
                               outputs_val]
                              +arg_vals)
             # Optimisation
-            cocycle_models[i] = Train(cocycle_models[i]).optimise(*arg_vals)
+            self.models[i] = Train(self.models[i]).optimise(*arg_vals)
     
     def conditional_expectation(self,Y_int,Z,regression_functional = KRR_functional(gaussian_kernel()),
                                       optimiser_args = [], optimiser_argvals = [], train = True):
@@ -88,7 +88,7 @@ class CCDAGM:
         
         Outputs h(phi,X)
         """
-        k = len(self.cocycle_models)
+        k = len(self.models)
         n = len(X)
         X_int = X*1
         
@@ -99,7 +99,7 @@ class CCDAGM:
                 Xi,Xpai,Xintpai = (X[:,i].view(n,1),
                                    X[:,pai].view(n,npa),
                                    X_int[:,pai].view(n,npa))
-                X_int[:,i] = self.cocycle_models[i].cocycle(Xintpai,Xpai,Xi).detach().view(n,)
+                X_int[:,i] = self.models[i].cocycle(Xintpai,Xpai,Xi).detach().view(n,)
             if intervention_level[i] != "id":
                 X_int[:,i] = intervention_function(intervention_level[i],X_int[:,i])
         

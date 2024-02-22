@@ -1,170 +1,170 @@
 import torch
 from RQS import *
 
-class Shift_Transformer:
+def inv_sigmoid(x):
+    return torch.log(x) - torch.log(1 - x)
+
+class Transformer:
+    """
+    Aggregrate transformer that takes in monotone map layers
+    """
+    
+    def __init__(self,layers,logdet=False):
+        self.layers = layers
+        self.logdet = logdet
+        
+    def forward(self,theta,y):
+        logdet = torch.zeros(len(y))
+        for i in range(len(self.layers)):
+            y,ld = self.layers[len(self.layers)-(i+1)].forward(theta[len(self.layers)-(i+1)],y,self.logdet)
+            logdet += ld
+        if self.logdet:
+            return y,logdet
+        else:
+            return y
+        
+    def backward(self,theta,y):  
+        logdet = torch.zeros(len(y))
+        for i in range(len(self.layers)):
+            y,ld = self.layers[i].backward(theta[i],y,self.logdet)
+            logdet += ld
+        if self.logdet:
+            return y,logdet
+        else:
+            return y
+           
+class Shift_layer:
+    """
+    g : (theta,y) -> theta + y
+    """
+    
+    def __init__(self,transform = lambda x : x):
+        self.transform = transform
+    
+    def forward(self,theta,y,logdet=False):
+        ld = 0
+        return self.transform(theta) + y,ld
+    
+    def backward(self,theta,y,logdet=False):
+        ld = 0
+        return y - self.transform(theta),ld
+    
+class Scale_layer:
+    """
+    g : (theta,y) -> theta * y
+    """
+    
+    def __init__(self,transform = lambda x : torch.log(1+torch.exp(x))):
+        self.transform = transform
+        
+    def forward(self,theta,y,logdet=False):
+        if logdet:
+            ld = torch.log(self.transform(theta[0]))
+        else:
+            ld = 0
+        return self.transform(theta)*y,ld
+    
+    def backward(self,theta,y,logdet=False):
+        if logdet:
+            ld = -torch.log(self.transform(theta[0]))
+        else:
+            ld = 0
+        return y/self.transform(theta),ld
+    
+class Inverse_layer:
+    
+    """
+    g : (theta,y) -> theta/y
+    """
     
     def __init__(self):
         return
+    
+    def forward(self,theta,y,logdet=False):
+        if logdet:
+            ld = torch.log(theta)-2*torch.log(y)
+        else:
+            ld = 0
+        return theta/y,ld
+    
+    def backward(self,theta,y,logdet=False):
+        if logdet:
+            ld = torch.log(theta)-2*torch.log(y)       
+        else:
+            ld = 0
+        return theta/y,ld
+    
+class Hyperbolic_RELU_layer:
+    """
+    g : (knot,y) -> y if y >= knot and knot +1/knot - 1/y if y < knot
+    
+    Used to map R_+ or R_- to R in forward transformation
+    """
+    
+    def __init__(self, knot, domain_flip = False):
+        self.knot = knot
+        self.flip = domain_flip
+        return
+    
+    def forward(self,theta,y,logdet=False): # no free parameters
+        f1 = y
+        f2 = (self.knot + 1/self.knot - 1/y)
         
-    def forward(self,theta,y):
-        return theta[0] + y
+        if logdet:
+            ld = (1*(y>=self.knot) + (1/y**2)*(y<self.knot))
+        else:
+            ld = 0
+        return (-1)**self.flip*(f1*(y>=self.knot) + f2*(y<self.knot)),ld
     
-    def backward(self,theta,y):
-        return y - theta[0]
-    
-    def parameters(self):
-        return []
-    
-class Linear_Transformer:
-    
-    def __init__(self):
-        return
+    def backward(self,theta,y,logdet=False): # no free parameters
+        f1inv = y
+        f2inv = (1/(self.knot + 1/self.knot - y))
         
-    def forward(self,theta,y):
-        return theta[0]*y
-    
-    def backward(self,theta,y):
-        return y/theta[0]
-    
-    def parameters(self):
-        return []
-    
-class Affine_Transformer:
-    
-    def __init__(self, log_det = False):
-        self.ld = log_det
-        return
-
-    def forward(self,theta,y):
-        if self.ld:
-            return theta[0]+torch.exp(theta[1])*y,theta[1]          
+        if logdet:
+            ld = (1*((-1)**self.flip*y>=self.knot) + (f2inv)**2*((-1)**self.flip*y<self.knot))
         else:
-            return theta[0]+torch.exp(theta[1])*y
+            ld = 0
+            
+        return f1inv*((-1)**self.flip*y>=self.knot) + (-1)**self.flip*f2inv*((-1)**self.flip*y<self.knot),ld
     
-    def backward(self,theta,y):
-        if self.ld:
-            return (y-theta[0])/torch.exp(theta[1]),-theta[1]
-        else:
-            return (y-theta[0])/torch.exp(theta[1])
+class RQS_layer:
+    """
+    g: (theta,y) -> RQS_theta(y)
+    """
     
-    def parameters(self):
-        return []
-    
-class Linear_Affine_Transformer:
-    
-    def __init__(self, log_det = False):
-        self.ld = log_det
-        return
-
-    def forward(self,theta,y):
-        if self.ld:
-            return theta[0]+theta[1]*y         
-        else:
-            return theta[0]+theta[1]*y
-    
-    def backward(self,theta,y):
-        if self.ld:
-            return (y-theta[0])/theta[1],
-        else:
-            return (y-theta[0])/theta[1]
-    
-    def parameters(self):
-        return []
-    
-    
-class Softplus_Affine_Transformer:
-    
-    def __init__(self, log_det = False):
-        self.ld = log_det
-        return
-
-    def forward(self,theta,y):
-        if self.ld:
-            return theta[0]+torch.log(1+torch.exp(theta[1]))*y,torch.log(torch.log(1+torch.exp(theta[1])))       
-        else:
-            return theta[0]+torch.log(1+torch.exp(theta[1]))*y
-    
-    def backward(self,theta,y):
-        if self.ld:
-            return (y-theta[0])/torch.log(1+torch.exp(theta[1])),-torch.log(torch.log(1+torch.exp(theta[1]))) 
-        else:
-            return (y-theta[0])/torch.log(1+torch.exp(theta[1]))
-    
-    def parameters(self):
-        return []
-    
-class RQS_Shift_Transformer:
-    
-    def __init__(self,widths,heights,derivatives,tail_bound = 3,
-                 min_width = 1e-3, min_height = 1e-3,min_derivative = 1e-3,log_det = True):
+    def __init__(self,bins=8,min_width = 1e-3, min_height = 1e-3,min_derivative = 1e-3):
         
-        self.widths = widths
-        self.heights = heights
-        self.derivatives = derivatives
-        self.tail_bound = tail_bound
         self.min_width = min_width
         self.min_height = min_height
         self.min_derivative = min_derivative
-        self.ld = log_det
-
-    def parameters(self):
-        return [self.widths,self.heights,self.derivatives]
+        self.bins = bins
+        self.inputs_in_mask_itercount = 0
+        
+    def forward(self,theta,y,logdet = False):
+        Tu,ld,in_mask_count =  unconstrained_RQS(y.view(len(y),), 
+                                    theta[:,:self.bins],
+                                    theta[:,self.bins:2*self.bins],
+                                    theta[:,2*self.bins:(3*self.bins+1)],
+                                    False,
+                                    theta[:,-1].abs().mean(), # NEED TO CHANGE THIS TO DEPEND ON ALL INPUTS
+                                    self.min_width,
+                                    self.min_height,
+                                    self.min_derivative,
+                                    logdet)
+        self.inputs_in_mask_itercount += in_mask_count
+        return Tu.view(len(y),1),ld
     
-    def forward(self,theta,y):
-        one = torch.ones((len(y),1))
-        if self.ld:
-            Tu,logdet =  unconstrained_RQS(y.view(len(y,)), 
-                    one @ self.widths,
-                    one @ self.heights,
-                    one @ self.derivatives,
-                    False,
-                    self.tail_bound,
-                    self.min_width,
-                    self.min_height,
-                    self.min_derivative,
-                    self.ld)
-            return Tu.view(len(y),1)+theta[0],logdet
-        else:       
-            Tu =  unconstrained_RQS(y.view(len(y,)), 
-                    one @ self.widths,
-                    one @ self.heights,
-                    one @ self.derivatives,
-                    False,
-                    self.tail_bound,
-                    self.min_width,
-                    self.min_height,
-                    self.min_derivative,
-                    self.ld)
-            return Tu.view(len(y),1)+theta[0]
-    
-    def backward(self,theta,y):
-        one = torch.ones((len(y),1))
-        if self.ld:
-            u,logdet =  unconstrained_RQS((y-theta[0]).view(len(y),),
-                    one @ self.widths,
-                    one @ self.heights,
-                    one @ self.derivatives,
-                    True,
-                    self.tail_bound,
-                    self.min_width,
-                    self.min_height,
-                    self.min_derivative,
-                    self.ld)
-            return u.view(len(y),1),logdet
-        else:
-            u =  unconstrained_RQS((y-theta[0]).view(len(y),),
-                    one @ self.widths,
-                    one @ self.heights,
-                    one @ self.derivatives,
-                    True,
-                    self.tail_bound,
-                    self.min_width,
-                    self.min_height,
-                    self.min_derivative,
-                    self.ld)
-            return u.view(len(y),1)
-     
-    
-    
-    
+    def backward(self,theta,y,logdet = False):
+        u,ld,in_mask_count =  unconstrained_RQS(y.view(len(y),),
+                                    theta[:,:self.bins],
+                                    theta[:,self.bins:2*self.bins],
+                                    theta[:,2*self.bins:(3*self.bins+1)],
+                                    True,
+                                    theta[:,-1].abs().mean(), # NEED TO CHANGE THIS TO DEPEND ON ALL INPUTS
+                                    self.min_width,
+                                    self.min_height,
+                                    self.min_derivative,
+                                    logdet)
+        self.inputs_in_mask_itercount += in_mask_count
+        return u.view(len(y),1),ld
     

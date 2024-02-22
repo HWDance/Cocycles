@@ -56,10 +56,22 @@ class KDE:
                 K_test_train = self.kernel.get_gram(Xtest[:,1:],Xtrain[:,1:])
                 ypred = K_test_train @ Xtrain[:,:1] / K_test_train.sum(1)[:,None]
                 
-                loss += torch.sum((Xtest[:,:1] - ypred)**2) 
+                loss += torch.mean((Xtest[:,:1] - ypred)**2) 
                 
 
         return loss
+    
+    def normalise_scale(self,reg,Loss,input_dims):
+        if len(self.kernel.lengthscale.size())==1:
+                S = torch.eye(input_dims)*self.kernel.lengthscale
+        else:
+                S = torch.ones((input_dims,input_dims))*self.kernel.lengthscale
+        if Loss == "loglik":
+                logdet = torch.logdet(S.T @ S +torch.eye(input_dims)*reg)
+        self.kernel.scale = (2*self.pi())**-(input_dims/2) * torch.exp(logdet)**0.5
+        return
+        
+        
 
     def optimise(self,X,learn_rate,miniter,maxiter,tol,nfold,reg = 1e-10, Loss = "loglik"): # Currently compatible with MVN kernel only
                 
@@ -76,13 +88,7 @@ class KDE:
         while (i < miniter) or (i< maxiter and Losses[i-1] - Losses[i-11] < - tol):
             optimizer.zero_grad()
             self.kernel.lengthscale = torch.exp(ls)
-            if len(self.kernel.lengthscale.size())==1:
-                S = torch.eye(d)*self.kernel.lengthscale
-            else:
-                S = torch.ones((d,d))*self.kernel.lengthscale
-            if Loss == "loglik":
-                logdet = torch.logdet(S.T @ S +torch.eye(d)*reg)
-                self.kernel.scale = (2*self.pi())**-(d/2) * torch.exp(logdet)**0.5
+            self.normalise_scale(reg,Loss,input_dims = d)
             loss = self.get_KDE_CV_loss(Xsplits,nfold,reg,Loss)
             loss.backward()
             optimizer.step()
@@ -90,9 +96,12 @@ class KDE:
             if not i % 10:
                 print("iter", i, ", loss = ", Losses[i])   
             i += 1
+            
+        # Final hyper update
         self.kernel.lengthscale = torch.exp(ls)
+        self.normalise_scale(reg,Loss, input_dims = d)
         return Losses  
-    
+        
     def sample(self,X, nsamples=10**4,reg=1e-5):
         # Sampling X
         d = len(X.T)

@@ -4,25 +4,26 @@ import numpy as np
 
 class Loss:
     
-    def __init__(self,loss_fn, loss_param = 0.0, kernel = [], kernel_covariates = 1, outer_subsample = [],features = []):
+    def __init__(self,loss_fn, kernel = [], kernel_covariates = 1, outer_subsample = [],features = [],get_CMMD_mask = False,mask_size = 128):
         """
-        loss_fn : LS (least squares), 
-                  CLS (cocycles least squares), 
-                  CLS_M (cocycle least squares with mean subtract), 
-                  CMR (conditional moment restrictions), 
-                  CMR_M (conditional moment restrictions with mean subtract)
-                  CMMD (cocycle conditional mean kernel MMD), 
-                  JMMD (cocycle joint kernel MMD)
-        loss_param : free parameter of loss function (e.g. mean of moment conditions)
+        loss_fn : str matching loss functions below
         kernel : list of up to two kernels for inputs and outputs respectively
         kernel_covariates : (for cocycle MMD) 0 = (X), 1 = (X,X'), 2 = (X,X',Y')
         """
-        self.loss_fn = loss_fn
-        self.parameters = loss_param
+        self.loss_fn = loss_fn  # String e.g. "CMMD_M"
         self.kernel = kernel
-        self.kernel_covariates = kernel_covariates
         self.outer_subsample = outer_subsample
         self.features = features
+        if get_CMMD_mask:
+            Mask = torch.ones((mask_size,
+                               mask_size,
+                               mask_size))
+            for i in range(mask_size):
+                    Mask[i,:,i] = 0
+                    Mask[i,i,:] = 0
+                    Mask[:,i,i] = 0
+            self.mask = Mask
+            
         
     def get_RFF_features(self,features):
         self.A = Normal(0,1/self.kernel[1].lengthscale).sample((features,)).view((features,))
@@ -85,106 +86,6 @@ class Loss:
         
         return torch.trace(K_xx @ H @ K_uu @ H)/m**2 
     
-    def HSIC_uncentered(self,model,inputs,outputs):
-        """
-        model: cocycle_model
-        inputs : X , n x d
-        outputs : Y , n x p
-        """         
-        # Getting dimensions 
-        m = len(outputs)
-        
-        # Making prediction
-        U = model.inverse_transformation(inputs,outputs)
-        
-        # Getting gram matrix
-        K_xx = self.kernel[0].get_gram(inputs,inputs)
-        K_uu = self.kernel[1].get_gram(U,U)
-        
-        # Getting centering matrix
-        H = torch.eye(m) - 1/m*torch.ones((m,m))
-        
-        return torch.trace(K_xx @ K_uu @ H)/m**2 
-    
-    def JMMD(self,model,inputs,outputs):
-        """
-        model: cocycle_model
-        inputs : (X,X',Y') , n x 2d+p
-        outputs : Y' , n x p
-        """
-        # Getting dimensions
-        d = int((len(inputs.T)-1)/2)
-        
-        # Make model prediction
-        outputs_pred = model.cocycle(inputs[:,:d],inputs[:,d:2*d],inputs[:,2*d:])
-        
-        # Stack inputs together
-        covariates_inds = [d,2*d,2*d+1]
-        max_ind = covariates_inds[self.kernel_covariates]
-        
-        # Get gram matrices 
-        K_xx = self.kernel[0].get_gram(inputs[:,:max_ind],inputs[:,:max_ind])
-        K_Y11 = self.kernel[0].get_gram(outputs_pred,outputs_pred)
-        K_Y01 = self.kernel[1].get_gram(outputs_pred,outputs)
-        K_yy = K_Y11 - K_Y01 - K_Y01.T
-        
-        return torch.mean(K_xx*K_yy)
-    
-    def JMMD_M(self,model,inputs,outputs):
-        """
-        model: cocycle_model
-        inputs : X , n x d
-        outputs : Y , n x p
-        """
-        
-        # Dimensions
-        n = len(outputs)
-        
-        # Make model prediction
-        U = model.inverse_transformation(inputs,outputs).T
-        outputs_pred = model.transformation(inputs,U)[:,:,None]   # N x N  x 1 tensor (need to check if works for multivariate Y) 
-        
-        nrows_sample = max(min(n,int(10**9/n**2)),1) # To prevent memory overload, subsample from outer sum
-        if nrows_sample < n:
-            outputs_pred_row_batch,outputs_row_batch = self.get_subsample(outputs_pred,outputs,subsamples = nrows_sample) # nrow x N x 1 tensor
-        else:
-            outputs_pred_row_batch,outputs_row_batch = outputs_pred,outputs
-            
-        # Get gram matrices
-        K_xx = self.kernel[0].get_gram(inputs,inputs)
-        K = 0
-        one = torch.ones((nrows_sample,1,1))
-        for i in range(nrows_sample):
-            K += (K_xx[None,:]*self.kernel[1].get_gram(one*outputs_pred_row_batch[i][None,:,:],outputs_pred_row_batch)).mean() # returns (N x N x N).mean()
-            K += -2*(K_xx*self.kernel[1].get_gram(outputs_row_batch,outputs_pred_row_batch[i])).mean() #(N x N).mean()
-        
-        return K*n
-    
-    def JMMD_M_RFF(self,model,inputs,outputs):
-        """
-        model: cocycle_model
-        inputs : X , n x d
-        outputs : Y , n x p
-        """
-        
-        # Dimensions
-        n = len(outputs)
-        # Make model prediction
-        U = model.inverse_transformation(inputs,outputs).T
-        outputs_pred = model.transformation(inputs,U) 
-        features_pred = torch.cos(torch.einsum('p,qr->pqr', self.A, outputs_pred)+self.b[:,None,None]).mean(2) # returns d x N matrix
-        features_pred -= torch.cos(self.A.view(len(self.A),1)*outputs.view(1,n) + self.b[:,None])
-        
-        # Getting gram matrix
-        K_xx = self.kernel[0].get_gram(inputs,inputs)
-
-        return (K_xx * (features_pred.T @ features_pred)).mean()
-    
-    def JMMD_M_features(self,model,inputs,outputs):
-        return
-    
-    def CMMD(self,model,inputs,outputs): # no input features - this method pulls outer sum outside the norm
-        return
     
     def CMMD_M(self,model,inputs,outputs): # no input features - this method pulls outer sum outside the norm
         """
@@ -197,10 +98,15 @@ class Loss:
         n = len(outputs)
         
         # Make model prediction
-        U = model.inverse_transformation(inputs,outputs).T
-        outputs_pred = model.transformation(inputs,U)[:,:,None]   # N x N  x 1 tensor (need to check if works for multivariate Y) 
+        #U = model.inverse_transformation(inputs,outputs).T
+        outputs_pred = model.cocycle_outer(inputs,inputs,outputs)
+        if len(outputs_pred.size())<3:
+            outputs_pred = outputs_pred[...,None] # adding extra dimension to make sure output is N x N x 1 here
         
-        nrows_sample = max(min(n,int(10**9/n**2)),1) # To prevent memory overload, subsample from outer sum
+        if not self.outer_subsample:
+            nrows_sample = max(min(n,int(10**9/n**2)),1) # To prevent memory overload, subsample from outer sum
+        else:
+            nrows_sample = max(min(self.outer_subsample,int(10**9/self.outer_subsample**2)),1) # To prevent memory overload, subsample from outer sum            
         if nrows_sample < n:
             outputs_pred_row_batch,outputs_row_batch = self.get_subsample(outputs_pred,outputs,subsamples = nrows_sample) # nrow x N x 1 tensor
         else:
@@ -211,9 +117,9 @@ class Loss:
         K = self.kernel[1].get_gram(outputs_pred_row_batch,outputs_pred_row_batch).mean()
         K += -2*self.kernel[1].get_gram(outputs_row_batch[:,None,:],outputs_pred_row_batch).mean()
         
-        return K*n
+        return K
     
-    def CMMD_M_RFF(self,model,inputs,outputs):
+    def CMMD_U(self,model,inputs,outputs): # no input features - this method pulls outer sum outside the norm
         """
         model: cocycle_model
         inputs : X , n x d
@@ -222,132 +128,37 @@ class Loss:
         
         # Dimensions
         n = len(outputs)
-        # Make model prediction
-        U = model.inverse_transformation(inputs,outputs).T
-        outputs_pred = model.transformation(inputs,U) 
-        features_pred = torch.cos(torch.einsum('p,qr->pqr', self.A, outputs_pred)+self.b[:,None,None]).mean(2) # returns d x N matrix
-        features_pred -= torch.cos(self.A.view(len(self.A),1)*outputs.view(1,n) + self.b[:,None])
-        return ((features_pred)**2).mean()
-    
-    def CMMD_M_features(self,model,inputs,outputs):
-        """
-        model: cocycle_model
-        inputs : X , n x d
-        outputs : Y , n x p
-        """
-        
-        # Dimensions
-        n = len(outputs)
-        # Make model prediction
-        U = model.inverse_transformation(inputs,outputs).T
-        outputs_pred = model.transformation(inputs,U) 
-        features = self.features(outputs)[...,-1]  # returns d x N matrix
-        features_pred = self.features(outputs_pred).mean(2) # returns d x N matrix
-        return (((features - features_pred)**2)/features.var(1)[:,None]).mean()
-
-    def CMMD_old(self,model,inputs,outputs):
-        """
-        model: cocycle_model
-        inputs : (X,X',Y') , n x 2d+p
-        outputs : Y' , n x p
-        """      
-        # Getting dimensions
-        d = int((len(inputs.T)-1)/2)
-        m = len(outputs)
         
         # Make model prediction
-        outputs_pred = model.cocycle(inputs[:,:d],inputs[:,d:2*d],inputs[:,2*d:])
+        #U = model.inverse_transformation(inputs,outputs).T
+        outputs_pred = model.cocycle_outer(inputs,inputs,outputs)
+        if len(outputs_pred.size())<3:
+            outputs_pred = outputs_pred[...,None] # adding extra dimension to make sure output is N x N x 1 here
         
-        # Stack inputs together
-        covariates_inds = [d,2*d,2*d+1]
-        max_ind = covariates_inds[self.kernel_covariates]
+        if not self.outer_subsample:
+            nrows_sample = max(min(n,int(10**9/n**2)),1) # To prevent memory overload, subsample from outer sum
+        else:
+            nrows_sample = max(min(self.outer_subsample,int(10**9/self.outer_subsample**2)),1) # To prevent memory overload, subsample from outer sum            
+        if nrows_sample < n:
+            outputs_pred_row_batch,outputs_row_batch = self.get_subsample(outputs_pred,outputs,subsamples = nrows_sample) # nrow x N x 1 tensor
+        else:
+            outputs_pred_row_batch,outputs_row_batch = outputs_pred,outputs
+            
         
-        # Get gram matrix
-        K_xx = self.kernel[0].get_gram(inputs[:,:max_ind],inputs[:,:max_ind])
+        # Get gram matrices
+        K1 = self.kernel[1].get_gram(outputs_pred_row_batch,outputs_pred_row_batch) # N x N x N now 
+        K2 = -2*self.kernel[1].get_gram(outputs_pred_row_batch,outputs_row_batch[:,None,:])[...,0] # N x N
         
-        Z = outputs_pred-outputs
-        return Z.T @ K_xx @ Z/m**2
+        
+        return (K1*self.mask).sum()/(n*(n-1)*(n-2)) + (K2*(1-torch.eye(n))).sum()/(n*(n-1))   
     
-    def CMR(self,model,inputs,outputs):
-        """
-        model: cocycle_model
-        inputs : X , n x d
-        outputs : Y , n x p
-        """          
-        # Getting dimensions 
-        m = len(outputs)
-        
-        # Making prediction
-        U = model.inverse_transformation(inputs,outputs) - self.parameters
-        
-        # Getting gram matrix
-        K_xx = self.kernel[0].get_gram(inputs,inputs)
-        
-        return U.T @ K_xx @ U/m
-    
-    def CMR_M(self,model,inputs,outputs):
-        """
-        model: cocycle_model
-        inputs : X , n x d
-        outputs : Y , n x p
-        """          
-        # Getting dimensions 
-        m = len(outputs)
-        
-        # Making prediction
-        Umean = model.inverse_transformation(inputs,outputs).mean()
-        outputs_pred = model.transformation(inputs,Umean)
-        
-        # Getting gram matrix
-        K_xx = self.kernel[0].get_gram(inputs,inputs)
-        
-        Z = outputs_pred-outputs
-        return Z.T @ K_xx @ Z/m
-
-    def CLS(self,model,inputs,outputs):
-        """
-        model: cocycle_model
-        inputs : (X,X',Y') , n x 2d+p
-        outputs : Y' , n x p
-        """           
-        # Getting dimensions
-        d = int((len(inputs.T)-1)/2)
-        
-        # Making prediction
-        outputs_pred = model.cocycle(inputs[:,:d],inputs[:,d:2*d],inputs[:,2*d:])
-        
-        return torch.mean((outputs - outputs_pred)**2)
-    
-    def CLS_M(self,model,inputs,outputs):
-        """
-        model: cocycle_model
-        inputs : X , n x d
-        outputs : Y' , n x p
-        """           
-        # Getting dimensions
-        d = int((len(inputs.T)-1)/2)
-        
-        # Making prediction
-        Umean = model.inverse_transformation(inputs,outputs).mean()
-        outputs_pred = model.transformation(inputs,Umean)
-        
-        return torch.mean((outputs - outputs_pred)**2)
-        
-    def L1(self,model,inputs,outputs):
-        """
-        model: cocycle_model
-        inputs : X , n x d
-        outputs : Y , n x p
-        """          
-        # Making prediction
-        U = model.inverse_transformation(inputs,outputs)
-        
-        return torch.mean(U.abs())
-    
-    def MLE(self,model,inputs,outputs):
-        U,logdet = model.inverse_transformation(inputs,outputs)
-        return torch.mean(U**2 - 2*logdet)
-    
+    def URR(self,model,inputs,outputs):
+        Dist =  Normal(0,1)
+        output_samples_1 = model.transformation(inputs,Dist.sample((len(inputs),1)))
+        output_samples_2 = model.transformation(inputs,Dist.sample((len(inputs),1)))
+        K1 = self.kernel[1].get_gram(output_samples_1[...,None],output_samples_2[...,None])
+        K2 = self.kernel[1].get_gram(output_samples_1[...,None],outputs[...,None])
+        return (K1 - 2*K2).mean()
     
     def __call__(self,model,inputs,outputs):
         """
@@ -355,38 +166,12 @@ class Loss:
         """
         if self.loss_fn == "HSIC":
             return self.HSIC(model,inputs,outputs)
-        if self.loss_fn == "HSIC_uncentered":
-            return self.HSIC_uncentered(model,inputs,outputs)
-        if self.loss_fn == "JMMD":
-            return self.JMMD(model,inputs,outputs)
-        if self.loss_fn == "JMMD_M":
-            return self.JMMD_M(model,inputs,outputs)
-        if self.loss_fn == "JMMD_M_RFF":
-            return self.JMMD_M_RFF(model,inputs,outputs)
-        if self.loss_fn == "JMMD_M_features":
-            return self.JMMD_M_features(model,inputs,outputs)
-        if self.loss_fn == "CMMD":
-            return self.CMMD(model,inputs,outputs)
         if self.loss_fn == "CMMD_M":
             return self.CMMD_M(model,inputs,outputs)
-        if self.loss_fn == "CMMD_M_RFF":
-            return self.CMMD_M_RFF(model,inputs,outputs)
-        if self.loss_fn == "CMMD_M_features":
-            return self.CMMD_M_features(model,inputs,outputs)
-        elif self.loss_fn == "CMMD":
-            return self.CMMD(model,inputs,outputs)
-        elif self.loss_fn == "CMR":
-            return self.CMR(model,inputs,outputs)
-        elif self.loss_fn == "CMR_M":
-            return self.CMR_M(model,inputs,outputs)
-        elif self.loss_fn == "CLS":
-            return self.CLS(model,inputs,outputs)
-        elif self.loss_fn == "CLS_M":
-            return self.CLS_M(model,inputs,outputs)
-        elif self.loss_fn == "L1":
-            return self.L1(model,inputs,outputs)
-        elif self.loss_fn == "MLE":
-            return self.MLE(model,inputs,outputs)
+        if self.loss_fn == "CMMD_U":
+            return self.CMMD_U(model,inputs,outputs)
+        elif self.loss_fn == "URR":
+            return self.URR(model,inputs,outputs)
         
         
     
