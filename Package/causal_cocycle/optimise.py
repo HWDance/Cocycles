@@ -26,14 +26,16 @@ def get_subsample(inputs,outputs=[],subsamples=[]):
 """
 General optimisation function for coboundary models/ CTMs / BCMs with flows
 """
-def optimise(model,loss,
+def optimise(model,
+             loss,
              inputs,
              outputs, 
              inputs_val = [],
              outputs_val = [], 
              learn_rate = [1e-3], 
-             maxiter = 2000,
-             miniter = 100, 
+             maxiter = 10000,
+             miniter = 10000, 
+             weight_decay = 0,
              optimise_loss_params = True, 
              val_loss = True, 
              val_loss_freq = 100,
@@ -42,17 +44,15 @@ def optimise(model,loss,
              val_batch_size = 4096,
              batch_sampling = "random", 
              scheduler = False, 
-             schedule_milestone = 50, 
+             schedule_milestone = 100, 
              n_schedule = 100,
-             lr_mult = 0.9, 
+             lr_mult = 0.90, 
              plot = False, 
              plot_start = 30, 
              print_ = False, 
              optimise_conditioners = True, 
              likelihood_param_opt = False,
-             likelihood_param_lr = 0.01, 
-             return_train_loss = False,
-             return_val_loss = False):
+             likelihood_param_lr = 0.01):
 
     # Dimensions
     m = len(outputs)
@@ -70,7 +70,7 @@ def optimise(model,loss,
          conditioner_params_list +=  [{'params' : [loss.parameters],
                                         'lr' : likelihood_param_lr}]  
     # Optimiser set up
-    optimizer = torch.optim.Adam(conditioner_params_list)  
+    optimizer = torch.optim.Adam(conditioner_params_list,weight_decay = weight_decay)  
     if scheduler:
         lr_schedule = torch.optim.lr_scheduler.StepLR(optimizer, 
                                                       step_size = schedule_milestone, 
@@ -81,9 +81,8 @@ def optimise(model,loss,
     Losses = torch.zeros(maxiter)
     Losses_val = torch.zeros(maxiter)
     i = 0 # iter counter
-    s = 0 # validation loss counter
-    while i < miniter or (i < maxiter and (not val_loss or Losses_val[s-1].mean() 
-                                   - Losses_val[:s-1].min() < val_tol)):
+    
+    while i < maxiter:
         optimizer.zero_grad()
 
         #Subsampling
@@ -112,21 +111,10 @@ def optimise(model,loss,
             break    
         Losses[i] = Loss.detach()
 
-        # Validation loss computation
-        if inputs_val != [] and val_loss and (not i % val_loss_freq or i==maxiter-1): 
-            if val_batch_size < m_val:
-                inputs_batch_val,outputs_batch_val = get_subsample(inputs_val,
-                                                                   outputs_val,
-                                                                   batch_size)
-            else:
-                inputs_batch_val,outputs_batch_val = inputs_val,outputs_val
-            Loss_val = loss(model,inputs_batch_val,outputs_batch_val)
-            Losses_val[s] = Loss_val.detach()
-            s += 1
-
         # Optimisation step
         Loss.backward()
         optimizer.step()
+        lr_schedule.step()
 
         # Display
         if print_ or plot:
@@ -134,24 +122,17 @@ def optimise(model,loss,
                 clear_output(wait=True)
                 if print_:
                     print("Training loss last 10 avg is :",Losses[i-10:i].mean())
-                    if val_loss:
-                        print("Validation loss last 10 avg is :",Losses_val[s-10:s].mean())
-                    print("Completion % :", (i+1)/maxiter*100)
+                    print(100*i/maxiter," % completion")
                 if plot and i > plot_start:
                     plt.plot(Losses[20:i+1])
-                    if val_loss and inputs_val != []:
-                        plt.plot(Losses_val[20:s+1])
                     display(plt.gcf())
         i += 1
-    
-    # Returning specified losses objects
+
+    # Validation loss computation
     objs = []
-    if val_loss:
-        objs.append(Loss_val.detach())
-    if return_train_loss:
-        objs.append(Losses)
-    if return_val_loss:
-        objs.append(Losses_val)   
+    if val_loss and inputs_val != []:
+        objs.append(loss(model,inputs_val,outputs_val).detach())
+        
     return objs
     
 def get_CV_splits(X,folds = 5):
@@ -167,7 +148,7 @@ def get_CV_splits(X,folds = 5):
     row_count = torch.linspace(0,n-1,n) 
     train_val_sets = list()
 
-    for i in range(self.folds):
+    for i in range(folds):
         test_inds = ((row_count>= n_per_fold*i)*(row_count<n_per_fold*(i+1)))>0
         train_inds = test_inds==0
         train_val_sets.append([X[train_inds],X[test_inds]])
@@ -196,8 +177,9 @@ def validate(models,loss,inputs,outputs,method = "CV", train_val_split = 0.8,opt
     n,d = inputs.size()
     N,p = outputs.size()
     assert(n==N)
-    assert(len(models) == len(hyper_args))
-    assert(len(hyper_args) == len(hyper_argvals))
+    if hyper_args:
+        assert(len(models) == len(hyper_args))
+        assert(len(hyper_args) == len(hyper_argvals))
     assert(len(opt_args) == len(opt_argvals))
     
     # Getting CV folds optionally
@@ -227,9 +209,10 @@ def validate(models,loss,inputs,outputs,method = "CV", train_val_split = 0.8,opt
         # Updating hyperparameters for optimiser for model m
         if hyper_args:
             hyper_arg,hyper_argval = hyper_args[m],hyper_argvals[m]
-            for j in range(len(hyper_arg)):
-                hyper_index =  np.where(hyper_arg[j]==np.array(optimiser_args))[0][0]-num_non_defaults
-                new_argvals[hyper_index] = hyper_argval[j]
+            if hyper_arg:
+                for j in range(len(hyper_arg)):
+                    hyper_index =  np.where(hyper_arg[j]==np.array(optimiser_args))[0][0]-num_non_defaults
+                    new_argvals[hyper_index] = hyper_argval[j]
         
         # Doing CV
         for k in range(len(input_splits)):
@@ -246,7 +229,7 @@ def validate(models,loss,inputs,outputs,method = "CV", train_val_split = 0.8,opt
             final_args = [model,loss,inputs_train,outputs_train]+new_argvals
                 
             # Optimising model
-            Val_losses[m] += optimise(final_args)[0]/k
+            Val_losses[m] += optimise(*final_args)[0]/len(input_splits)
             print("Currently optimising model ",m,", for fold ",k)
         
         # Saving model run on final fold

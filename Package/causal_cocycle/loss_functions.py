@@ -87,7 +87,7 @@ class Loss:
         return torch.trace(K_xx @ H @ K_uu @ H)/m**2 
     
     
-    def CMMD_M(self,model,inputs,outputs): # no input features - this method pulls outer sum outside the norm
+    def CMMD_V(self,model,inputs,outputs): # no input features - this method pulls outer sum outside the norm
         """
         model: cocycle_model
         inputs : X , n x d
@@ -166,8 +166,8 @@ class Loss:
         """
         if self.loss_fn == "HSIC":
             return self.HSIC(model,inputs,outputs)
-        if self.loss_fn == "CMMD_M":
-            return self.CMMD_M(model,inputs,outputs)
+        if self.loss_fn == "CMMD_V":
+            return self.CMMD_V(model,inputs,outputs)
         if self.loss_fn == "CMMD_U":
             return self.CMMD_U(model,inputs,outputs)
         elif self.loss_fn == "URR":
