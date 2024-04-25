@@ -27,9 +27,9 @@ class KRR_functional(Functional):
         self.hyperparameters = [self.kernel.lengthscale,
                                 torch.tensor([penalty], requires_grad = True)]
     
-    def __call__(self, Ytrain,Xtrain,Xtest):
-        ridge_penalty = torch.exp(self.hyperparameters[-1])
-        self.kernel.lengthscale = torch.exp(self.hyperparameters[0])
+    def __call__(self,Ytrain,Xtrain,Xtest):
+        ridge_penalty = self.hyperparameters[-1].abs()
+        self.kernel.lengthscale = self.hyperparameters[0].abs()
         K_xx = self.kernel.get_gram(Xtrain,Xtrain)
         K_xtestx =  self.kernel.get_gram(Xtest,Xtrain)
         In = torch.eye(len(Ytrain))*(ridge_penalty+self.reg)
@@ -39,15 +39,16 @@ class KRR_functional(Functional):
 class NW_functional(Functional):
     # Implements NW regression
     
-    def __init__(self,kernel):
+    def __init__(self,kernel,reg = 0):
         self.kernel = kernel
         self.hyperparameters = [self.kernel.lengthscale]
+        self.reg = reg
     
     def __call__(self, Ytrain,Xtrain,Xtest):
         
         # Setting parameters
-        self.kernel.lengthscale = torch.exp(self.hyperparameters[0])
-        K_xtestx = self.kernel.get_gram(Xtest,Xtrain)
+        self.kernel.lengthscale = self.hyperparameters[0].abs()
+        K_xtestx = self.kernel.get_gram(Xtest,Xtrain)+self.reg
         return K_xtestx @ Ytrain / K_xtestx.sum(1)[:,None] # to check
 
 class LL_functional(Functional):

@@ -40,6 +40,11 @@ class multivariate_gaussian_kernel(kernel):
     def get_gram(self,X,Z):
         K_xx = torch.exp(-0.5*torch.cdist(X @ self.lengthscale, Z @ self.lengthscale, p=2.0)**2)
         return K_xx*self.scale
+
+class linear_kernel(kernel):
+
+    def get_gram(self,X,Z):
+        return X @ Z.T
     
 def median_heuristic(X):
     """

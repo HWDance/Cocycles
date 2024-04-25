@@ -4,30 +4,14 @@ import numpy as np
 
 class Loss:
     
-    def __init__(self,loss_fn, kernel = [], kernel_covariates = 1, outer_subsample = [],features = [],get_CMMD_mask = False,mask_size = 128):
+    def __init__(self,loss_fn, kernel = [], outer_subsample = []):
         """
         loss_fn : str matching loss functions below
         kernel : list of up to two kernels for inputs and outputs respectively
-        kernel_covariates : (for cocycle MMD) 0 = (X), 1 = (X,X'), 2 = (X,X',Y')
         """
         self.loss_fn = loss_fn  # String e.g. "CMMD_M"
         self.kernel = kernel
         self.outer_subsample = outer_subsample
-        self.features = features
-        if get_CMMD_mask:
-            Mask = torch.ones((mask_size,
-                               mask_size,
-                               mask_size))
-            for i in range(mask_size):
-                    Mask[i,:,i] = 0
-                    Mask[i,i,:] = 0
-                    Mask[:,i,i] = 0
-            self.mask = Mask
-            
-        
-    def get_RFF_features(self,features):
-        self.A = Normal(0,1/self.kernel[1].lengthscale).sample((features,)).view((features,))
-        self.b = Uniform(0,2*torch.acos(torch.zeros(1)).item()).sample((features,))
         
     def get_subsample(self,inputs,outputs=[],subsamples=[]):
             ind_list = np.linspace(0,len(inputs)-1,len(inputs)).astype(int)
@@ -98,24 +82,21 @@ class Loss:
         n = len(outputs)
         
         # Make model prediction
-        #U = model.inverse_transformation(inputs,outputs).T
         outputs_pred = model.cocycle_outer(inputs,inputs,outputs)
         if len(outputs_pred.size())<3:
             outputs_pred = outputs_pred[...,None] # adding extra dimension to make sure output is N x N x 1 here
-        
-        if not self.outer_subsample:
-            nrows_sample = max(min(n,int(10**9/n**2)),1) # To prevent memory overload, subsample from outer sum
+
+        # Computing kernels in batches to avoid memory overload
+        K = 0
+        if n**3 >= 10**8:
+            batchsize = max(1,min(n,int(10**8/n**2)))
         else:
-            nrows_sample = max(min(self.outer_subsample,int(10**9/self.outer_subsample**2)),1) # To prevent memory overload, subsample from outer sum            
-        if nrows_sample < n:
-            outputs_pred_row_batch,outputs_row_batch = self.get_subsample(outputs_pred,outputs,subsamples = nrows_sample) # nrow x N x 1 tensor
-        else:
-            outputs_pred_row_batch,outputs_row_batch = outputs_pred,outputs
-            
-        
-        # Get gram matrices
-        K = self.kernel[1].get_gram(outputs_pred_row_batch,outputs_pred_row_batch).mean()
-        K += -2*self.kernel[1].get_gram(outputs_row_batch[:,None,:],outputs_pred_row_batch).mean()
+            batchsize = n
+        nbatch = int(n/batchsize)
+        for i in range(nbatch):
+            # Get gram matrices
+            K += self.kernel[1].get_gram(outputs_pred[i*batchsize:(i+1)*batchsize],outputs_pred[i*batchsize:(i+1)*batchsize]).sum()/n**3
+            K += -2*self.kernel[1].get_gram(outputs[i*batchsize:(i+1)*batchsize,None,:],outputs_pred[i*batchsize:(i+1)*batchsize]).sum()/n**2
         
         return K
     
@@ -128,29 +109,25 @@ class Loss:
         
         # Dimensions
         n = len(outputs)
+
+        # Getting mask
+        Mask = torch.ones((n,n,n))
+        for i in range(n):
+                Mask[i,:,i] = 0
+                Mask[i,i,:] = 0
+                Mask[:,i,i] = 0        
         
         # Make model prediction
-        #U = model.inverse_transformation(inputs,outputs).T
         outputs_pred = model.cocycle_outer(inputs,inputs,outputs)
         if len(outputs_pred.size())<3:
             outputs_pred = outputs_pred[...,None] # adding extra dimension to make sure output is N x N x 1 here
-        
-        if not self.outer_subsample:
-            nrows_sample = max(min(n,int(10**9/n**2)),1) # To prevent memory overload, subsample from outer sum
-        else:
-            nrows_sample = max(min(self.outer_subsample,int(10**9/self.outer_subsample**2)),1) # To prevent memory overload, subsample from outer sum            
-        if nrows_sample < n:
-            outputs_pred_row_batch,outputs_row_batch = self.get_subsample(outputs_pred,outputs,subsamples = nrows_sample) # nrow x N x 1 tensor
-        else:
-            outputs_pred_row_batch,outputs_row_batch = outputs_pred,outputs
-            
-        
+
         # Get gram matrices
-        K1 = self.kernel[1].get_gram(outputs_pred_row_batch,outputs_pred_row_batch) # N x N x N now 
-        K2 = -2*self.kernel[1].get_gram(outputs_pred_row_batch,outputs_row_batch[:,None,:])[...,0] # N x N
+        K1 = self.kernel[1].get_gram(outputs_pred,outputs_pred) # N x N x N now 
+        K2 = -2*self.kernel[1].get_gram(outputs_pred,outputs[:,None,:])[...,0] # N x N
         
         
-        return (K1*self.mask).sum()/(n*(n-1)*(n-2)) + (K2*(1-torch.eye(n))).sum()/(n*(n-1))   
+        return (K1*Mask).sum()/(n*(n-1)*(n-2)) + (K2*(1-torch.eye(n))).sum()/(n*(n-1))   
     
     def URR(self,model,inputs,outputs):
         Dist =  Normal(0,1)
@@ -159,6 +136,9 @@ class Loss:
         K1 = self.kernel[1].get_gram(output_samples_1[...,None],output_samples_2[...,None])
         K2 = self.kernel[1].get_gram(output_samples_1[...,None],outputs[...,None])
         return (K1 - 2*K2).mean()
+
+    def LS(self,model,inputs,outputs):
+        return (model.inverse_transformation(inputs,outputs).abs()**2).mean()
     
     def __call__(self,model,inputs,outputs):
         """
@@ -170,8 +150,11 @@ class Loss:
             return self.CMMD_V(model,inputs,outputs)
         if self.loss_fn == "CMMD_U":
             return self.CMMD_U(model,inputs,outputs)
-        elif self.loss_fn == "URR":
+        if self.loss_fn == "URR":
             return self.URR(model,inputs,outputs)
+        if self.loss_fn == "LS":
+            return self.LS(model,inputs,outputs)
+        
         
         
     

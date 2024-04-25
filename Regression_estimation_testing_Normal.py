@@ -13,13 +13,13 @@ from causal_cocycle.kernels import *
 """
 Function to run regression estimation experiment
 """
-def run_experiment(seed):
+def run_experiment(seed,N):
 
     """
     Configs
     """
     # Experimental set up
-    N,D,P = 200,1,1
+    N,D,P = N,1,1
     sig_noise_ratio = 1
     
     # Training set up
@@ -49,7 +49,7 @@ def run_experiment(seed):
     X *= 1/(D)**0.5
     B = torch.ones((D,1))*(torch.linspace(0,D-1,D)<P)[:,None]
     F = X @ B
-    U = Normal(0,1).sample((N,1))/sig_noise_ratio
+    U = Normal(0,1).sample((N,1))/sig_noise_ratio**0.5
     Y = F + U
 
     # Training with L2
@@ -88,7 +88,7 @@ def run_experiment(seed):
     
     # Training with CMMD
     inputs_train,outputs_train, inputs_val,outputs_val  = X[:ntrain],Y[:ntrain],X[ntrain:],Y[ntrain:]
-    loss_fn = Loss(loss_fn = "CMMD_M",kernel = [gaussian_kernel(torch.ones(1),1),gaussian_kernel(torch.ones(1),1)])
+    loss_fn = Loss(loss_fn = "CMMD_V",kernel = [gaussian_kernel(torch.ones(1),1),gaussian_kernel(torch.ones(1),1)])
     loss_fn.median_heuristic(X,Y, subsamples = 10**4)
     conditioner = Lin_Conditioner(D,1, bias = bias)
     transformer = Transformer([Shift_layer()])
@@ -99,7 +99,7 @@ def run_experiment(seed):
     
     # Training with CMMD (unbiased implementation)
     inputs_train,outputs_train, inputs_val,outputs_val  = X[:ntrain],Y[:ntrain],X[ntrain:],Y[ntrain:]
-    loss_fn = Loss(loss_fn = "CMMD_U",kernel = [gaussian_kernel(torch.ones(1),1),gaussian_kernel(torch.ones(1),1)],get_CMMD_mask = True, mask_size = batch_size)
+    loss_fn = Loss(loss_fn = "CMMD_U",kernel = [gaussian_kernel(torch.ones(1),1),gaussian_kernel(torch.ones(1),1)])
     loss_fn.median_heuristic(X,Y, subsamples = 10**4)
     conditioner = Lin_Conditioner(D,1, bias = bias)
     transformer = Transformer([Shift_layer()])
@@ -130,4 +130,8 @@ def run_experiment(seed):
     Coeffs[:,6] = B.T
     
     # Saving output
-    return { "names": names, "Coeffs": Coeffs}
+    return {"seed" : seed,
+            "names": names, 
+            "Coeffs": Coeffs,
+            "dist" : "Normal",
+            "nsamples" : N}

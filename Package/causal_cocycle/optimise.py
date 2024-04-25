@@ -30,8 +30,9 @@ def optimise(model,
              loss,
              inputs,
              outputs, 
+             loss_val = [],
              inputs_val = [],
-             outputs_val = [], 
+             outputs_val = [],
              learn_rate = [1e-3], 
              maxiter = 10000,
              miniter = 10000, 
@@ -41,7 +42,7 @@ def optimise(model,
              val_loss_freq = 100,
              val_tol = 1e-3, 
              batch_size = 1024, 
-             val_batch_size = 4096,
+             val_batch_size = 1024,
              batch_sampling = "random", 
              scheduler = False, 
              schedule_milestone = 100, 
@@ -114,7 +115,8 @@ def optimise(model,
         # Optimisation step
         Loss.backward()
         optimizer.step()
-        lr_schedule.step()
+        if scheduler:
+            lr_schedule.step()
 
         # Display
         if print_ or plot:
@@ -131,7 +133,10 @@ def optimise(model,
     # Validation loss computation
     objs = []
     if val_loss and inputs_val != []:
-        objs.append(loss(model,inputs_val,outputs_val).detach())
+        if loss_val == []:
+            loss_val = loss
+        with torch.no_grad():
+            objs.append(loss_val(model,inputs_val[:val_batch_size],outputs_val[:val_batch_size]))
         
     return objs
     
@@ -158,12 +163,14 @@ def get_CV_splits(X,folds = 5):
 """
 For cross-validation over models
 """
-def validate(models,loss,inputs,outputs,method = "CV", train_val_split = 0.8,opt_args=[],opt_argvals=[],hyper_args=[],hyper_argvals=[]):
+def validate(models,loss,inputs,outputs,loss_val =[],method = "CV", train_val_split = 0.8,opt_args=[],opt_argvals=[],hyper_args=[],hyper_argvals=[],
+            choose_best_model = "overall", retrain = True):
     """
     models : list of cocycle models 
-    loss : a Loss object 
+    loss : a Loss object for training
     inputs : N x D tensor of inputs X
     outputs : N x P tensor of outputs Y
+    loss_val : a Loss object for validation
     method : "CV" for k-fold CV, "fixed" for a fixed validation set
                 with size determined by (1-train_val_split) x n
     train_val_split : split for K fold CV or train/validation set
@@ -171,6 +178,10 @@ def validate(models,loss,inputs,outputs,method = "CV", train_val_split = 0.8,opt
     opt_argvals: list of values for opt_args
     hyper_args : list of hyperparameters for optimise() to change from defaults per each model
     hyper_argvals: list of list of hyperparameter values per each model
+    choose_best_model : str ("overall" = choose best hypers across all folds, 
+                             "per fold" = choose best hypers per fold)
+    retrain : Bool (True = retrain best model on final dataset,
+                            only runs for choose_best_model = "overall")
     """ 
     
     # Checking dims
@@ -188,6 +199,7 @@ def validate(models,loss,inputs,outputs,method = "CV", train_val_split = 0.8,opt
         input_splits = get_CV_splits(inputs,folds)
         output_splits = get_CV_splits(outputs,folds)
     else:
+        folds = 1
         ntrain = int(train_val_split*n)
         input_splits = [[inputs[:ntrain],inputs[ntrain:]]]
         output_splits = [[outputs[:ntrain],outputs[ntrain:]]]
@@ -199,23 +211,28 @@ def validate(models,loss,inputs,outputs,method = "CV", train_val_split = 0.8,opt
     new_argvals = list(optimiser_defaults)
     if opt_args:
         for j in range(len(opt_args)):
-            index = np.where(opt_args[j]==np.array(optimiser_args))[0][0]-num_non_defaults
+            index = (np.where(opt_args[j]==np.array(optimiser_args))[0][0]
+                    -num_non_defaults)
             new_argvals[index] = opt_argvals[j]
 
     # Optimisation
-    Val_losses = torch.zeros(len(models))
+    Val_losses = torch.zeros((len(models),folds))
+    Models_store = []
     for m in range(len(models)):
-                
+
+        models_store = []
+        
         # Updating hyperparameters for optimiser for model m
         if hyper_args:
             hyper_arg,hyper_argval = hyper_args[m],hyper_argvals[m]
             if hyper_arg:
                 for j in range(len(hyper_arg)):
-                    hyper_index =  np.where(hyper_arg[j]==np.array(optimiser_args))[0][0]-num_non_defaults
+                    hyper_index =  (np.where(hyper_arg[j]==np.array(optimiser_args))[0][0]
+                                    -num_non_defaults)
                     new_argvals[hyper_index] = hyper_argval[j]
         
         # Doing CV
-        for k in range(len(input_splits)):
+        for k in range(folds):
             
             # Getting latest initialised model
             model = copy.deepcopy(models[m])
@@ -225,17 +242,56 @@ def validate(models,loss,inputs,outputs,method = "CV", train_val_split = 0.8,opt
             inputs_val,outputs_val = input_splits[k][1],output_splits[k][1]
             
             # Finalising optimiser arguments by adding non-defaults 
-            new_argvals[0],new_argvals[1] = inputs_val,outputs_val
+            new_argvals[0],new_argvals[1],new_argvals[2] = loss_val,inputs_val,outputs_val
             final_args = [model,loss,inputs_train,outputs_train]+new_argvals
                 
             # Optimising model
-            Val_losses[m] += optimise(*final_args)[0]/len(input_splits)
+            Val_losses[m,k] = optimise(*final_args)[0]
             print("Currently optimising model ",m,", for fold ",k)
         
-        # Saving model run on final fold
-        models[m] = model
+            # Storing model
+            models_store.append(model)
+
+        Models_store.append(models_store)
+    
+    # Getting best models
+    if choose_best_model == "overall":
+        best_ind = torch.where(Val_losses.mean(1) ==Val_losses.mean(1).min())[0][0]
+        final_model = Models_store[best_ind]
+    else:
+        final_model = []
+        for k in range(folds):
+            best_ind_k = torch.where(Val_losses[:,k] ==Val_losses[:,k].min())[0][0]
+            final_model.append(Models_store[best_ind_k][k])
+
+    # Optional retraining on full dataset when selecting overall model
+    if retrain and choose_best_model == "overall":
+        
+        # Setting correct hypers
+        if hyper_args:
+            hyper_arg,hyper_argval = hyper_args[best_ind],hyper_argvals[best_ind]
+            if hyper_arg:
+                for j in range(len(hyper_arg)):
+                    hyper_index =  (np.where(hyper_arg[j]==np.array(optimiser_args))[0][0]
+                                    -num_non_defaults)
+                    new_argvals[hyper_index] = hyper_argval[j]
+
+        # Getting initialised model
+        model = copy.deepcopy(models[best_ind])
+        
+        # Finalising optimiser arguments by adding non-defaults, and using full training set
+        new_argvals[0],new_argvals[1],new_argvals[2] = loss_val,[],[]
+        final_args = [model,loss,inputs,outputs]+new_argvals
             
-    return models,Val_losses
+        # Optimising final model
+        optimise(*final_args)
+        print("Finished optimising final model")
+    
+        # Storing final model and avg val loss
+        final_model = model
+        Val_losses = Val_losses.mean(1).min()
+
+    return final_model,Val_losses
         
     
     

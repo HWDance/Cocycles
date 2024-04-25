@@ -45,13 +45,13 @@ class CV:
     
         return train_val_sets
     
-    def get_CV_loss(self,X,Y,functional):
+    def get_CV_loss(self,X,Y,functional,norm = 2):
         loss = 0
         for i in range(self.folds):
             Xtrain,Xtest = X[i][0],X[i][1]
             Ytrain,Ytest = Y[i][0],Y[i][1]
             Ypred = functional(Ytrain,Xtrain,Xtest)
-            loss += torch.mean((Ytest - Ypred)**2)/self.folds     
+            loss += torch.mean((Ytest - Ypred)**norm)/self.folds     
 
         return loss
     
@@ -74,7 +74,6 @@ class Conditional_Expectation_Regressor(CV):
     
     def __init__(self, functional):
         self.functional = functional
-        self.hyperparameters = self.functional.hyperparameters
     
     def get_weights(self,Ytrain,Xtrain):
         self.weights = self.functional.get_weights(Ytrain,Xtrain)
@@ -88,7 +87,7 @@ class Conditional_Expectation_Regressor(CV):
     def __call__(self,X):
         return self.features(X) @ self.weights
     
-    def optimise(self,X,Y,miniter=100,maxiter = 1000,nfold = 5, learn_rate = 0.01, tol = 1e-4, subsample = False,subsamples = 1000):
+    def optimise(self,X,Y,miniter=100,maxiter = 1000,nfold = 5, learn_rate = 0.01, tol = 1e-4, subsample = False,subsamples = 1000,norm = 2,print_=False):
                   
         # Getting data folds
         n = len(Y)
@@ -99,7 +98,7 @@ class Conditional_Expectation_Regressor(CV):
             Ysplits = self.get_CV_splits(Y)
 
         # doing optimisation
-        optimizer = torch.optim.Adam(self.hyperparameters, lr=learn_rate)  
+        optimizer = torch.optim.Adam(self.functional.hyperparameters, lr=learn_rate)  
         Losses = torch.zeros(maxiter)
         i=0
         while (i < miniter) or (i< maxiter and Losses[i-11:i-1].mean() - Losses[:i-49].min() < - tol):
@@ -108,16 +107,16 @@ class Conditional_Expectation_Regressor(CV):
                 Xsample,Ysample = self.get_subsample(X,Y,subsamples)
                 Xsplits,Ysplits = (self.get_CV_splits(Xsample),
                                     self.get_CV_splits(Ysample))
-            loss = self.get_CV_loss(Xsplits,Ysplits,self.functional)
+            loss = self.get_CV_loss(Xsplits,Ysplits,self.functional,norm)
             loss.backward()
             optimizer.step()
             Losses[i] = loss.detach()
-            if not i % 10:
+            if not i % 10 and print_:
                 print("iter", i, ", loss = ", Losses[i])   
             i += 1
         return Losses  
     
-    def CVgridsearch(self,X,Y,nfold = 5,subsample = False,subsamples = 1000,hyper_grid = []):
+    def CVgridsearch(self,X,Y,nfold = 5,subsample = False,subsamples = 1000,hyper_grid = [],norm = 2):
     
         # Getting data folds
         n = len(Y)
@@ -129,16 +128,15 @@ class Conditional_Expectation_Regressor(CV):
         
         Losses = torch.zeros(len(hyper_grid))
         for j in range(len(hyper_grid)):
-            self.hyperparameters[-1] = hyper_grid[j]
+            self.functional.hyperparameters = hyper_grid[j]
             if subsample and subsamples <= len(Y):
                 Xsample,Ysample = self.get_subsample(X,Y,subsamples)
                 Xsplits,Ysplits = (self.get_CV_splits(Xsample),
                                     self.get_CV_splits(Ysample))
-            Losses[j] = self.get_CV_loss(Xsplits,Ysplits,self.functional)
+            Losses[j] = self.get_CV_loss(Xsplits,Ysplits,self.functional,norm)
         
         best_ind = Losses.sort()[-1][0]
-        self.hyperparameters[-1] = hyper_grid[best_ind]
-        
+        self.functional.hyperparameters = hyper_grid[best_ind]
         return
         
         

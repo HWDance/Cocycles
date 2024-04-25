@@ -3,6 +3,23 @@ import torch
 from torch import nn
 from torch.distributions import Normal,Uniform
 
+class empirical_KR:
+
+    def __init__(self,X,Y):
+        self.X = X.sort()[0]
+        self.Y = Y.sort()[0]
+
+    def backward(self,y):
+        u = (self.Y<=y.T).float().mean(0)
+        Xind = (u*len(self.X)).int()
+        Xind[u*len(self.X) % 1 == False] -=1
+        return self.X[Xind]
+        
+    def forward(self,x):
+        u = (self.X<=x.T).float().mean(0)
+        Yind = (u*len(self.Y)).int()
+        Yind[u*len(self.Y) % 1 == False] -=1
+        return self.Y[Yind]
 
 class mmd:
     
@@ -33,7 +50,7 @@ class mmd:
 
 class likelihood_loss:
     
-    def __init__(self,dist, tail_adapt = False,tail_init = 1.0,log_det = True):
+    def __init__(self,dist, tail_adapt = False,tail_init = 10.0,log_det = True):
         self.dist = dist
         self.tail_adapt = tail_adapt
         self.parameters = torch.tensor([tail_init]).requires_grad_(True)
@@ -43,13 +60,47 @@ class likelihood_loss:
         if self.log_det:
             U,logdet = model.inverse_transformation(inputs,outputs)
             if self.tail_adapt:
-                self.dist.df = torch.exp(self.parameters)
+                self.dist.df = self.parameters.abs()
             return torch.mean(-self.dist.log_prob(U) - logdet)
         else:
             U = model.inverse_transformation(inputs,outputs)
             if self.tail_adapt:
-                self.dist.df = torch.exp(self.parameters)
+                self.dist.df = self.parameters.abs()
             return torch.mean(-self.dist.log_prob(U))
+    
+class propensity_score:
+    
+    def __init__(self,P,policy):
+        self.P = P
+        self.policy = policy
+    """
+    Pij = P(X = i |X* = j) is conditional dist on assignments `post error'
+    given initial policy assignment
+    """
+    def __call__(self,X,V):
+        assert(len(X) == len(V))
+        col_select = self.policy(V,flip_prob = 0)[:,0]
+        row_select = torch.linspace(0,len(X)-1,len(X)).int()
+        conditional_dists = (self.P[...,None] @ torch.ones((1,1,len(V))))[:,col_select,row_select]
+        return conditional_dists[X[:,0].int(),row_select]
+    
+
+class outcome_model:
+    
+    """ 
+    Takes in a cocycle/flow model and defines an outcome model
+    """
+    
+    def __init__(self,model,U_hat):
+        self.model = model
+        self.U_hat = U_hat # sampled noise
+        
+    def __call__(self,inputs, statistic):
+        """
+        Statistic \theta : (m x n) -> (d x m x n) is transformation \theta(Y) of interest
+        """
+        prediction = self.model.transformation_outer(inputs,self.U_hat)
+        return statistic(prediction).mean(-1)
 
 def SCM_intervention_sample(parents,models,base_distributions,intervention,intervention_levels,nsamples,interventional_sample = True):
     """
@@ -86,38 +137,4 @@ def SCM_intervention_sample(parents,models,base_distributions,intervention,inter
     
     else:
         return Xobs
-    
-class propensity_score:
-    
-    def __init__(self,P,policy):
-        self.P = P
-        self.policy = policy
-    """
-    Pij = P(X = i |X* = j) is conditional dist on assignments `post error'
-    given initial policy assignment
-    """
-    def __call__(self,X,V):
-        assert(len(X) == len(V))
-        col_select = self.policy(V,flip_prob = 0)[:,0]
-        row_select = torch.linspace(0,len(X)-1,len(X)).int()
-        conditional_dists = (self.P[...,None] @ torch.ones((1,1,len(V))))[:,col_select,row_select]
-        return conditional_dists[X[:,0].int(),row_select]
-    
-
-class outcome_model:
-    
-    """ 
-    Takes in a cocycle/flow model and defines an outcome model
-    """
-    
-    def __init__(self,model,U_hat):
-        self.model = model
-        self.U_hat = U_hat # sampled noise
-        
-    def __call__(self,inputs, statistic):
-        """
-        Statistic \theta : (m x n) -> (d x m x n) is transformation \theta(Y) of interest
-        """
-        prediction = self.model.transformation_outer(inputs,self.U_hat)
-        return statistic(prediction).mean(-1)
         

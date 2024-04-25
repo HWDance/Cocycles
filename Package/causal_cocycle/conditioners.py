@@ -204,7 +204,37 @@ class NN_Conditioner_FB(nn.Module):
         y = self.stack_backward(x)
         return y
 
-class NN_Conditioner_T(nn.Module):
+
+class Lin_Conditioner_T(nn.Module):
+    """
+    returns class dependent conditioner - needs class variable to be listed first
+    check to ensure class variable X \in \{0,1,...K\}
+    """
+    def __init__(self,input_dims,output_dims = 1,bias = True, init = [],classes = 2):
+        super().__init__()
+        self.classes = classes
+        self.input_dims = output_dims
+        self.output_dims = output_dims
+        self.flatten = nn.Flatten()
+        self.stack = []
+        for i in range(classes):
+            lin_layer = nn.Linear(self.input_dims,self.output_dims,bias)
+            if init!=[]:
+                lin_layer.weight = nn.Parameter(init,
+                                            requires_grad = True)
+            self.stack += [nn.Sequential(lin_layer)]
+
+        
+    def forward(self, x):
+        class_variable = x[:,:1]
+        inputs = x[:,1:]
+        y = torch.zeros((len(inputs),self.output_dims))
+        for i in range(self.classes):
+            inds = torch.where(class_variable==i)[0]
+            y[inds] = self.stack[i](self.flatten(inputs[inds]))
+        return y
+
+class NN_RELU_Conditioner_T(nn.Module):
     """
     returns class dependent conditioner - needs class variable to be listed first
     check to ensure class variable X \in \{0,1,...K\}
