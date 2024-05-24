@@ -1,3 +1,4 @@
 # Causal inference with cocycles
+Code for Causal Inference with Cocycles [(Dance and Bloem-Reddy, 2024)](https://arxiv.org/abs/2405.13844).
 
- [Link to paper](https://arxiv.org/abs/2405.13844).
+
