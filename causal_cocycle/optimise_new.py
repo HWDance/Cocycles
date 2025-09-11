@@ -17,6 +17,18 @@ from torch.utils.data import DataLoader, TensorDataset
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
+# For handling dictionaries
+def index_select_inputs(inputs, indices):
+    if isinstance(inputs, dict):
+        return {k: v[indices] for k, v in inputs.items()}
+    else:
+        return inputs[indices]
+def move_to_device(inputs, device):
+    if isinstance(inputs, dict):
+        return {k: v.to(device) for k, v in inputs.items()}
+    else:
+        return inputs.to(device)
+
 def optimise(model,
                     loss_tr,
                     inputs,
@@ -94,13 +106,13 @@ def optimise(model,
     model.train()
 
     # Move dataset to device.
-    inputs = inputs.to(device)
-    outputs = outputs.to(device)
+    inputs = move_to_device(inputs, device)
+    outputs = move_to_device(outputs, device)
     if inputs_val is not None and outputs_val is not None:
-        inputs_val = inputs_val.to(device)
-        outputs_val = outputs_val.to(device)
+        inputs_val = move_to_device(inputs_val, device)
+        outputs_val = move_to_device(outputs_val, device)
 
-    N = inputs.size(0)
+    N = outputs.size(0)
 
     # Build parameter groups
     param_list = list(model.parameters())
@@ -120,18 +132,18 @@ def optimise(model,
         total_loss = 0.0
         # For each epoch, decide on a fixed number of iterations.
         # Here we take as many iterations as fit the dataset (you can adjust this).
-        num_batches = N // batch_size  
+        num_batches = max(N // batch_size , 1)
         for i in range(num_batches):
             # Sample a new batch of indices (without replacement for the current batch).
             indices = torch.randperm(N)[:batch_size]
-            x_batch = inputs[indices]
+            x_batch = index_select_inputs(inputs, indices)
             y_batch = outputs[indices]
 
             optimizer.zero_grad()
             loss_value = loss_tr(model, x_batch, y_batch)
             loss_value.backward()
             optimizer.step()
-            total_loss += loss_value.item() * x_batch.size(0)
+            total_loss += loss_value.item() * y_batch.size(0)
 
         epoch_loss = total_loss / (num_batches * batch_size)
         losses.append(epoch_loss)
@@ -153,43 +165,73 @@ def optimise(model,
     avg_val_loss = None
     if inputs_val is not None and outputs_val is not None:
         model.eval()
-        total_val_loss = 0.0
-        # Use manual sampling for validation as well
-        num_val_batches = inputs_val.size(0) // val_batch_size
-        for i in range(num_val_batches):
-            indices = torch.randperm(inputs_val.size(0))[:val_batch_size]
-            x_val_batch = inputs_val[indices]
-            y_val_batch = outputs_val[indices]
-            with torch.no_grad():
-                v_loss = loss_val(model, x_val_batch, y_val_batch)
-            total_val_loss += v_loss.item() * x_val_batch.size(0)
-        avg_val_loss = total_val_loss / (num_val_batches * val_batch_size)
+        with torch.no_grad():
+            if outputs_val.size(0) <= val_batch_size:
+                # If the entire validation set fits in one batch, compute loss on all of it.
+                v_loss = loss_val(model, inputs_val, outputs_val)
+                avg_val_loss = v_loss.item()
+            else:
+                total_val_loss = 0.0
+                num_val_batches = max(outputs_val.size(0) // val_batch_size, 1)
+                for i in range(num_val_batches):
+                    indices = torch.randperm(outputs_val.size(0))[:val_batch_size]
+                    x_val_batch = index_select_inputs(inputs_val,indices)
+                    y_val_batch = outputs_val[indices]
+                    v_loss = loss_val(model, x_val_batch, y_val_batch)
+                    total_val_loss += v_loss.item() * y_val_batch.size(0)
+                avg_val_loss = total_val_loss / (num_val_batches * val_batch_size)
         if print_:
             print(f"Validation Loss: {avg_val_loss:.4f}")
 
-    return losses, avg_val_loss
 
+    return losses, avg_val_loss
 
 def get_CV_splits(X, folds=5):
     """
-    Splits tensor X into 'folds' parts for cross-validation.
-    Returns a list of [train_set, test_set] pairs.
+    Splits input X into 'folds' parts for cross-validation.
+    X can be a torch.Tensor or a dict of tensors (with matching first dimensions).
+    
+    Returns a list of (X_train, X_val) pairs, preserving the input structure.
     """
-    n = X.size(0)
+    if isinstance(X, dict):
+        n = list(X.values())[0].size(0)  # assume all values have same batch dim
+    else:
+        n = X.size(0)
+
     n_per_fold = int(np.ceil(n / folds))
     indices = torch.arange(n)
     splits = []
+
     for i in range(folds):
-        test_mask = (indices >= i * n_per_fold) & (indices < (i + 1) * n_per_fold)
-        train_mask = ~test_mask
-        splits.append([X[train_mask], X[test_mask]])
+        idx_val = (indices >= i * n_per_fold) & (indices < (i + 1) * n_per_fold)
+        idx_train = ~idx_val
+        idx_val = idx_val.nonzero(as_tuple=True)[0]
+        idx_train = idx_train.nonzero(as_tuple=True)[0]
+
+        if isinstance(X, dict):
+            X_train, X_val = split_inputs(X, idx_train, idx_val)
+        else:
+            X_train, X_val = X[idx_train], X[idx_val]
+
+        splits.append((X_train, X_val))
+
     return splits
+
 
 def get_optimiser_defaults(opt_func):
     argspec = inspect.getfullargspec(opt_func)
     defaults = argspec.defaults if argspec.defaults is not None else ()
     default_names = argspec.args[-len(defaults):] if defaults else []
     return dict(zip(default_names, defaults))
+
+def split_inputs(inputs, idx_train, idx_val):
+    if isinstance(inputs, dict):
+        return (
+            {k: v[idx_train] for k, v in inputs.items()},
+            {k: v[idx_val] for k, v in inputs.items()}
+        )
+    else:
+        return inputs[idx_train], inputs[idx_val]
 
 def validate(models, loss, inputs, outputs, loss_val=None, method="fixed", train_val_split=0.8,
              opt_kwargs=None, hyper_kwargs=None, choose_best_model="overall", retrain=True):
@@ -246,16 +288,21 @@ def validate(models, loss, inputs, outputs, loss_val=None, method="fixed", train
     final_opts['loss_val'] = loss_val
     
     # Prepare data splits.
-    n = inputs.size(0)
+    n = outputs.size(0)
     if method == "CV":
-        folds = int(np.ceil(1 / (1 - train_val_split)))
-        input_splits = get_CV_splits(inputs, folds)
-        output_splits = get_CV_splits(outputs, folds)
+        folds = int(1/(1-train_val_split))
+        input_splits = get_CV_splits(inputs,folds)
+        output_splits = get_CV_splits(outputs,folds)
     else:
         folds = 1
         n_train = int(train_val_split * n)
-        input_splits = [[inputs[:n_train], inputs[n_train:]]]
-        output_splits = [[outputs[:n_train], outputs[n_train:]]]
+        idx_train = torch.arange(n_train)
+        idx_val = torch.arange(n_train, n)
+        in_train, in_val = split_inputs(inputs, idx_train, idx_val)
+        out_train, out_val = outputs[idx_train], outputs[idx_val]
+        input_splits = [[in_train, in_val]]
+        output_splits = [[out_train, out_val]]
+
     
     # Ensure hyper_kwargs is a list of dictionaries (one per model).
     if hyper_kwargs is None:
@@ -297,6 +344,9 @@ def validate(models, loss, inputs, outputs, loss_val=None, method="fixed", train
         models_store.append(fold_models)
     
     # Choose best model(s).
+    val_losses[torch.isnan(val_losses)] = float('inf')
+    if torch.isinf(val_losses).all():
+        raise RuntimeError("All models produced NaN losses.")
     if choose_best_model == "overall":
         mean_val_losses = val_losses.mean(dim=1)
         best_index = torch.argmin(mean_val_losses).item()
@@ -317,17 +367,20 @@ def validate(models, loss, inputs, outputs, loss_val=None, method="fixed", train
     elif choose_best_model == "per fold":
         final_model = []
         best_losses = []
+        best_index = []
+        
         for k in range(folds):
             fold_losses = val_losses[:, k]
             best_idx = torch.argmin(fold_losses).item()
             final_model.append(models_store[best_idx][k])
+            best_index.append(best_idx)
             best_losses.append(fold_losses[best_idx].item())
         best_avg_loss = best_losses
         print(f"Best model per fold selected with losses: {best_losses}")
     else:
         raise ValueError("choose_best_model must be either 'overall' or 'per fold'")
     
-    return final_model, best_avg_loss
+    return final_model, (best_index, best_avg_loss)
 
     
                 

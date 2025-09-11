@@ -20,17 +20,17 @@ class NWFunctional(Functional):
     def __init__(self, kernel, reg=0.0):
         super().__init__(kernel)
         self.reg = reg
-        self.log_lengthscale = nn.Parameter(torch.tensor(0.0))  # log-scale for stability
 
     @property
-    def lengthscale(self):
-        return torch.exp(self.log_lengthscale)
+    def hyperparameters(self):
+        return [self.kernel.log_lengthscale]
 
     def forward(self, Ytrain, Xtrain, Xtest):
         K_xtestx = self.kernel.get_gram(Xtest, Xtrain) + self.reg
         numer = K_xtestx @ Ytrain
-        denom = K_xtestx.sum(dim=1, keepdim=True) + 1e-8  # avoid division by zero
+        denom = K_xtestx.sum(dim=1, keepdim=True) + 1e-8
         return numer / denom
+
 
 class LLFunctional(Functional):
     def __init__(self, kernel, reg=1e-6):

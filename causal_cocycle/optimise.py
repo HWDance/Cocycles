@@ -241,6 +241,7 @@ def validate(models,loss,inputs,outputs,loss_val =[],method = "CV", train_val_sp
         Models_store.append(models_store)
     
     # Getting best models
+    Val_losses[torch.isnan(Val_losses)] = float('inf') 
     if choose_best_model == "overall":
         best_ind = torch.where(Val_losses.mean(1) ==Val_losses.mean(1).min())[0][0]
         final_model = Models_store[best_ind]
@@ -275,7 +276,7 @@ def validate(models,loss,inputs,outputs,loss_val =[],method = "CV", train_val_sp
     
         # Storing final model and avg val loss
         final_model = model
-        Val_losses = Val_losses.mean(1).min()
+        Val_losses = Val_losses.nanmean(1).min()
 
     return final_model,Val_losses
         

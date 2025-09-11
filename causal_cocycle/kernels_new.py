@@ -14,6 +14,7 @@ class Kernel(nn.Module):
             self.scale = nn.Parameter(torch.tensor([1.0]), requires_grad=False)
         else:
             self.scale = nn.Parameter(scale, requires_grad=False)
+        self.input_dim = lengthscale.numel()
 
     @property
     def lengthscale(self):

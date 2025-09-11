@@ -58,8 +58,10 @@ class ConditionalExpectationRegressor:
     def get_subsample(self, X, Y, subsamples):
         idx = torch.randperm(len(X))[:subsamples]
         return X[idx], Y[idx]
-    
-    def optimise(self, X, Y, maxiter=100, nfold=5, 
+    """
+    MODIFY TO ONLY SUBSAMPLE FROM TRAINING POINTS PER SPLIT
+    """
+    def optimise_old(self, X, Y, maxiter=100, nfold=5, 
                  learn_rate=1e-2, batch_size=None, 
                  norm=2, print_=False):
         """
@@ -97,45 +99,115 @@ class ConditionalExpectationRegressor:
     
             if print_ and i % 10 == 0:
                 print(f"[iter {i}] avg loss: {avg_loss:.6f}")
+                print(f"lengthscale: {self.functional.kernel.lengthscale}")
     
         return torch.tensor(losses)
 
-    def CVgridsearch(self, X, Y, nfold=5, subsample=False, subsamples=1000, 
-                     hyper_grid=[], norm=2):
+
+    def optimise(self, X, Y, maxiter=100, nfold=5, learn_rate=1e-2,
+                 subsamples=None, norm=2, print_=False):
+        """
+        Optimizes the functional hyperparameters using full-data CV splits.
+        
+        For each CV fold, the training set is optionally subsampled (if subsamples is not None
+        and less than the available training points) and predictions are made on the full validation set.
+        
+        Parameters:
+          X, Y: full dataset tensors.
+          maxiter: number of epochs.
+          nfold: number of CV folds.
+          learn_rate: learning rate.
+          subsamples: if provided, maximum number of training points to use in each fold.
+          norm: loss norm (e.g., 2 for MSE).
+          print_: if True, prints loss every 10 epochs.
+          
+        Returns:
+          losses: list of per-epoch average CV losses.
+        """
         X = X.float()
         Y = Y.float()
         device = next(self.functional.parameters()).device
-        X = X.to(device)
-        Y = Y.to(device)
+        X, Y = X.to(device), Y.to(device)
+    
+        optimizer = torch.optim.Adam(self.functional.parameters(), lr=learn_rate)
+        losses = []
+        
+        # Compute CV splits on the full dataset.
+        splits = self.get_CV_splits(X, Y, nfolds=nfold)
+            
+        
+        for i in range(maxiter):
+            total_loss = 0.0
+            
+            
+            # Iterate over each fold.
+            for train_idx, val_idx in splits:
+                Xtrain, Ytrain = X[train_idx], Y[train_idx]
+                Xval, Yval = X[val_idx], Y[val_idx]
+                
+                # Optionally subsample training data for the fold.
+                if subsamples is not None and subsamples < Xtrain.shape[0]:
+                    perm = torch.randperm(Xtrain.shape[0])[:subsamples]
+                    Xtrain = Xtrain[perm]
+                    Ytrain = Ytrain[perm]
+                
+                # Get predictions on the full validation set.
+                Ypred = self.functional(Ytrain, Xtrain, Xval)
+                fold_loss = torch.mean((Yval - Ypred) ** norm)
+                total_loss += fold_loss
+            
+            avg_loss = total_loss / len(splits)
+            
+            optimizer.zero_grad()
+            avg_loss.backward()
+            optimizer.step()
+            
+            losses.append(avg_loss.item())
+            if print_ and i % 10 == 0:
+                print(f"[iter {i}] avg CV loss: {avg_loss.item():.6f}")
+                print(f"lengthscale: {self.functional.kernel.lengthscale}")
+        
+        return losses
 
+
+    def CVgridsearch(self, X, Y, nfold=5, subsample=False, subsamples=1000, 
+                     hyper_grid=[], norm=2):
+        X = X.float().to(next(self.functional.parameters()).device)
+        Y = Y.float().to(X.device)
+    
         if subsample and subsamples < len(Y):
             X, Y = self.get_subsample(X, Y, subsamples)
-
+    
         splits = self.get_CV_splits(X, Y, nfold)
         losses = torch.zeros(len(hyper_grid))
-
+    
         for j, hyperparams in enumerate(hyper_grid):
-            # Assign hyperparameters manually
-            for param, new_val in zip(self.functional.hyperparameters, hyperparams):
-                param.data = new_val.data.clone()
-
+            print(f"Trying hyperparam {j}: lengthscale = {torch.exp(hyperparams[0])}")
+    
+            # Assign hyperparameters
+            with torch.no_grad():
+                for param, new_val in zip(self.functional.hyperparameters, hyperparams):
+                    param.copy_(new_val.detach().clone())
+    
             total_loss = 0.0
             for train_idx, val_idx in splits:
                 Xtrain, Ytrain = X[train_idx], Y[train_idx]
                 Xval, Yval = X[val_idx], Y[val_idx]
                 Ypred = self.functional(Ytrain, Xtrain, Xval)
-                total_loss += torch.mean((Yval - Ypred) ** norm)
-
+                total_loss += torch.mean((Yval - Ypred).abs() ** norm)
+    
             losses[j] = total_loss / nfold
-
+    
         best_idx = torch.argmin(losses)
         best_hyperparams = hyper_grid[best_idx]
-
-        # Set best hyperparameters
-        for param, best_val in zip(self.functional.hyperparameters, best_hyperparams):
-            param.data = best_val.data.clone()
-
+    
+        with torch.no_grad():
+            for param, best_val in zip(self.functional.hyperparameters, best_hyperparams):
+                param.copy_(best_val.detach().clone())
+    
+        print(f"Best CV loss: {losses[best_idx]:.6f} at index {best_idx}")
         return losses
+    
 
 def predict(self, Xtrain, Ytrain, Xtest):
     return self.functional(Ytrain, Xtrain, Xtest)    

@@ -1,6 +1,33 @@
 import torch
 import torch.nn as nn
-from .RQS import unconstrained_RQS
+from causal_cocycle.RQS import unconstrained_RQS
+import torch.nn.functional as F
+
+class Scale_layer(nn.Module):
+    """
+    g(theta, y) -> softplus(theta) * y, using a numerically‑stable softplus
+    """
+    def __init__(self):
+        super().__init__()
+        # F.softplus clamps internally, equivalent to log(1+exp(x)) but stable
+        self.transform = F.softplus
+
+    def forward(self, theta, y, logdet=False):
+        scale = self.transform(theta)
+        if logdet:
+            ld = torch.log(scale.squeeze(-1))
+        else:
+            ld = 0
+        return scale * y, ld
+
+    def backward(self, theta, y, logdet=False):
+        scale = self.transform(theta)
+        if logdet:
+            ld = -torch.log(scale.squeeze(-1))
+        else:
+            ld = 0
+        return y / scale, ld
+
 
 def inv_sigmoid(x):
     return torch.log(x) - torch.log(1 - x)
@@ -59,13 +86,13 @@ class ShiftLayer(nn.Module):
     def backward(self, theta, y, logdet=False):
         ld = torch.zeros(len(y), device=y.device) if logdet else 0
         return y - self.transform(theta), ld
-    
+
 class ScaleLayer(nn.Module):
     """
     g(theta, y) -> transform(theta) * y
     By default transform = log(1+exp(...)) for positivity
     """
-    def __init__(self, transform=lambda x: torch.log(1 + torch.exp(x))):
+    def __init__(self, transform=F.softplus):
         super().__init__()
         self.transform = transform
         
@@ -151,12 +178,13 @@ class RQSLayer(nn.Module):
     g(theta, y) -> RQS spline transformation
     Uses unconstrained_RQS from RQS.py
     """
-    def __init__(self, bins=8, min_width=1e-3, min_height=1e-3, min_derivative=1e-3):
+    def __init__(self, bins=8, min_width=1e-3, min_height=1e-3, min_derivative=1e-3, tail_bound = 3.0):
         super().__init__()
         self.min_width = min_width
         self.min_height = min_height
         self.min_derivative = min_derivative
         self.bins = bins
+        self.tail_bound = tail_bound
         self.inputs_in_mask_itercount = 0
 
     def forward(self, theta, y, logdet=False):
@@ -169,7 +197,7 @@ class RQSLayer(nn.Module):
             theta[:, self.bins:2*self.bins],
             theta[:, 2*self.bins:(3*self.bins+1)],
             inverse=False,
-            tail_bound=theta[:, -1].abs().mean(),
+            tail_bound=self.tail_bound,
             min_bin_width=self.min_width,
             min_bin_height=self.min_height,
             min_derivative=self.min_derivative,
@@ -188,7 +216,7 @@ class RQSLayer(nn.Module):
             theta[:, self.bins:2*self.bins],
             theta[:, 2*self.bins:(3*self.bins+1)],
             inverse=True,
-            tail_bound=theta[:, -1].abs().mean(),
+            tail_bound=self.tail_bound,
             min_bin_width=self.min_width,
             min_bin_height=self.min_height,
             min_derivative=self.min_derivative,
@@ -196,9 +224,6 @@ class RQSLayer(nn.Module):
         )
         self.inputs_in_mask_itercount += in_mask_count
         return u.view(len(y), 1), ld
-
-import torch
-import torch.nn as nn
 
 class KRLayer(nn.Module):
     """
@@ -275,35 +300,32 @@ class KREpsLayer(nn.Module):
       S(z) = 0              if z < -eps,
            = (z+eps)/(2eps)  if z in [-eps, eps],
            = 1              if z > eps.
-    
+
     The smoothed CDF is defined as
         F(x) = sum_{j=1}^n theta_j S_j(x),
     with ∑_j theta_j = 1.
-    
+
     For inversion (the forward mapping Q), given a target t in [0,1] we first find the index j
     so that
          ∑_{i=1}^j theta_i ≤ t ≤ ∑_{i=1}^{j+1} theta_i.
-    
+
     Then we have:
          t = ∑_{i=1}^j theta_i + theta_{j+1} S_{j+1}(x).
-    
+
     Setting s = S_{j+1}(x) = (t - ∑_{i=1}^j theta_i) / theta_{j+1},
     the standard pseudo-inverse on the linear part would be:
          x = Y_{j+1} - eps + 2eps s.
-    
+
     For consistency with the generalized inverse (taking the infimum x with F(x) ≥ t),
-    we modify the pseudo-inverse so that if s == 0 (i.e. t exactly equals the cumulative sum up to j),
-    we return x = Y_{j-1} + eps.
-    
-    For s > 0 we set:
-         x = eps (2s - 1) + Y_{j+1}.
+    we modify the pseudo-inverse so that if s == 0, we would have returned the appropriate boundary.
+    (Note: in our implementation with distinct Y_train values, s==0 is not expected.)
     """
     
     def __init__(self, Y_train: torch.Tensor, epsilon: float):
         """
         Parameters:
             Y_train : torch.Tensor
-                A 1D tensor of sorted training outcomes [Y_1, ..., Y_n].
+                A 1D tensor of SORTED UNIQUE training outcomes [Y_1, ..., Y_n].
             epsilon : float
                 The window half-width.
         """
@@ -318,15 +340,20 @@ class KREpsLayer(nn.Module):
         Window function S(z)= (z+eps)/(2eps) for z in [-eps, eps],
         0 for z < -eps and 1 for z > eps.
         """
-        return torch.where(z < -self.epsilon,
-                           torch.zeros_like(z),
-                           torch.where(z > self.epsilon,
-                                       torch.ones_like(z),
-                                       (z + self.epsilon) / (2 * self.epsilon)))
-    
+        # Convert z to double precision for sensitivity.
+        z = z.double()
+        # Use self.epsilon rather than a global epsilon.
+        if self.epsilon == 0:
+            return (z >= 0).float()
+        else:
+            return torch.where(z < -self.epsilon, torch.zeros_like(z),
+                               torch.where(z > self.epsilon, torch.ones_like(z),
+                                           (z + self.epsilon) / (2 * self.epsilon)))
+
     def forward(self, theta: torch.Tensor, t: torch.Tensor) -> torch.Tensor:
         """
-        Forward mapping Q: [0,1] -> Y-space (i.e. the pseudo-inverse of F).
+        Vectorized forward mapping Q: [0,1] -> Y-space (the pseudo-inverse of F)
+        for a batch of weight vectors.
         
         Parameters:
             theta : torch.Tensor
@@ -338,79 +365,99 @@ class KREpsLayer(nn.Module):
         Returns:
             torch.Tensor of shape (batch_size,) containing the corresponding x values.
         """
-        if t.dim() == 1:
-            t = t.unsqueeze(1)
+        # Ensure t is a tensor on the right device.
+        if not isinstance(t, torch.Tensor):
+            t = torch.tensor(t, device=self.Y_train.device)
+        # If t has an extra singleton dimension, squeeze it.
+        if t.dim() > 1:
+            t = t.reshape(-1)  # now t has shape (batch,)
+            
+        batch_size, n = theta.shape
         
-        # Compute cumulative weights (batch_size, n).
-        cumsum = torch.cumsum(theta, dim=-1)
-        # For each sample, find the smallest index where cumsum exceeds t.
-        indices = torch.searchsorted(cumsum, t).squeeze(-1)
-        indices = torch.clamp(indices, 0, self.Y_train.numel() - 1)
+        # Compute cumulative sum for each batch element along the weights dimension.
+        cumsum = torch.cumsum(theta, dim=1)  # shape: (batch, n)
         
-        # Let j be indices - 1 (cumulative sum strictly below t), and j_next = indices.
-        j = torch.clamp(indices - 1, min=0)
-        j_next = indices
+        # Vectorized searchsorted:
+        indices = torch.searchsorted(cumsum, t.unsqueeze(1)).squeeze(1)
+        indices = torch.clamp(indices, 0, self.Y_train.numel()-1)
         
-        # Cumulative sum up to index j.
-        cumsum_j = torch.gather(cumsum, 1, j.unsqueeze(1))
-        # Weight at index j_next.
-        theta_j_next = torch.gather(theta, 1, j_next.unsqueeze(1))
-        # Define s = S_{j+1}(x) = (t - cumsum_j) / theta_{j+1}.
-        s = (t - cumsum_j) / theta_j_next  # s in [0,1]
+        # j: lower index for each sample.
+        j = indices - 1  # shape: (batch,)
+        j_next = indices  # shape: (batch,)
         
-        # For samples where s == 0, we return the infimum x, i.e. Y_{j-1} + eps.
-        # For s > 0, we return: x = Y_{j+1} - eps + 2eps s = eps(2s - 1) + Y_{j+1}.
-        # Handle the edge case where j==0 (no j-1 exists) by simply using the standard formula.
-        Y_prev = self.Y_train[torch.clamp(j - 1, min=0)]
-        x_candidate = self.Y_train[j_next] - self.epsilon + 2 * self.epsilon * s.squeeze(1)
+        # Prepend zero to each cumulative sum row.
+        zero_vec = torch.zeros(batch_size, 1, device=theta.device, dtype=theta.dtype)
+        cumsum_ext = torch.cat((zero_vec, cumsum), dim=1)  # shape: (batch, n+1)
         
-        x = torch.where(s.squeeze(1) == 0,
-                        torch.where(j > 0, Y_prev + self.epsilon, x_candidate),
-                        x_candidate)
-        return x
+        # For each batch element, select cumsum_ext at index (j+1)
+        # (Because we prepended a zero, index j+1 corresponds to original cumsum at index j.)
+        cumsum_j = cumsum_ext[torch.arange(batch_size), (j + 1).long()]  # shape: (batch,)
+        
+        # Retrieve w_{j_next} from theta.
+        w_j_next = theta[torch.arange(batch_size), j_next.long()]  # shape: (batch,)
+        
+        # Compute interpolation factor s.
+        s = (t - cumsum_j) / w_j_next  # shape: (batch,)
+        
+        # Retrieve the corresponding Y value using batched indexing.
+        Y_j_next = self.Y_train[j_next.long()].double()  # shape: (batch,)
+        
+        # Compute candidate inverse value.
+        result = Y_j_next - self.epsilon + 2 * self.epsilon * s  # shape: (batch,)
+        return result
 
-    def backward(self, theta: torch.Tensor, x: torch.Tensor) -> torch.Tensor:
+    def backward(self, theta: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
         """
-        Backward mapping (CDF): Given x, compute
-            F(x) = sum_{j=1}^n theta_j S_j(x),
-        where S_j(x)=S(x-Y_j).
+        Vectorized backward mapping (CDF): Given y, compute
+           F(y) = sum_{j=1}^n theta_j S(y - Y_j)
+        for a batch of y values.
         
         Parameters:
             theta : torch.Tensor
                 Tensor of shape (batch_size, n) representing normalized weights.
-            x : torch.Tensor
+            y : torch.Tensor
                 Tensor of shape (batch_size,) or (batch_size, 1) representing values in Y-space.
         
         Returns:
-            torch.Tensor of shape (batch_size, 1) containing F(x).
+            torch.Tensor of shape (batch_size, 1) containing F(y).
         """
-        if x.dim() == 1:
-            x = x.unsqueeze(1)
-        Y_train_exp = self.Y_train.unsqueeze(0)  # shape (1, n)
-        z = x - Y_train_exp  # shape (batch_size, n)
-        S_vals = self.S(z)
-        F_val = torch.sum(theta * S_vals, dim=-1, keepdim=True)
-        return F_val
+        if not isinstance(y, torch.Tensor):
+            y = torch.tensor(y, device=self.Y_train.device)
+        if y.dim() == 0:
+            y = y.unsqueeze(0)
+        if y.dim() == 1:
+            y = y.unsqueeze(1)  # Now shape: (batch, 1)
+            
+        # Expand Y_train to shape (1, n) to broadcast against y.
+        Y_exp = self.Y_train.unsqueeze(0)  # shape: (1, n)
+        # Compute the difference (y - Y_train) for each batch element.
+        diff = y - Y_exp  # shape: (batch, n)
+        # Compute S(diff) elementwise.
+        S_vals = self.S(diff)  # shape: (batch, n)
+        # Compute weighted sum for each batch element.
+        F_vals = torch.sum(theta * S_vals, dim=1)  # shape: (batch,)
+        return F_vals.unsqueeze(1)  # Shape: (batch, 1)
 
 # Example usage:
 if __name__ == "__main__":
     # Sorted training outcomes.
-    Y_train = torch.linspace(0.0, 1.0, steps=100)
-    epsilon = 0.05
-    transformer = KRLayerEps(Y_train, epsilon)
+    Y_train = torch.linspace(0.0, 1.0, steps=101)
+    epsilon = 1e-4
+    transformer = KREpsLayer(Y_train, epsilon)
     
     # For a batch of examples, use uniform weights.
     batch_size = 5
     n_train = Y_train.numel()
-    theta = torch.ones((batch_size, n_train)) / n_train  # normalized weights
+    theta = torch.randn((batch_size, n_train)).abs()
+    theta = theta / theta.sum(1)[:,None]  # normalized weights
     
     # Forward mapping: given target t values in [0,1], recover x.
-    t_input = torch.tensor([0.0, 0.1, 0.35, 0.75, 0.95])  # note t=0 is included.
+    t_input = torch.tensor([[0.0, 0.1, 0.35, 0.75, 0.95]]).T  # note t=0 is included.
     x_output = transformer.forward(theta, t_input)
     print("Forward (quantile) output:", x_output)
     
     # Backward mapping: given x, compute F(x).
     F_x = transformer.backward(theta, x_output)
-    print("Backward (CDF) output:", F_x.squeeze())
+    print("Backward (CDF) output:", F_x, "original :", t_input)
 
 

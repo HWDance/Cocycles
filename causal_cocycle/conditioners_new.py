@@ -117,4 +117,127 @@ class NNConditioner(nn.Module):
         x = self.flatten(x)
         return self.net(x)
 
+class NWConditioner(nn.Module):
+    def __init__(self, X_train: torch.Tensor, kernel):
+        """
+        NWConditioner computes weights using a Nadaraya–Watson kernel regression.
+        
+        Parameters:
+          X_train : torch.Tensor
+              A 2D tensor of training inputs of shape (n, d).
+          kernel : a kernel object
+              For example, an instance of GaussianKernel that has a 'lengthscale' attribute.
+        """
+        super().__init__()
+        # Store X_train as a buffer so it moves with the model
+        self.register_buffer("X_train", X_train)
+        self.kernel = kernel
+        
+    def forward(self, X: torch.Tensor) -> torch.Tensor:
+        """
+        For each input in X (of shape (M, d)), compute the kernel similarity
+        to each training point. Return a tensor of shape (M, n) that is normalized along dim=1.
+        """
+        # Compute pairwise distances: shape (M, n)
+        # Here we assume self.kernel.get_gram computes the kernel Gram matrix.
+        K = self.kernel.get_gram(X, self.X_train)
+        # Normalize each row to sum to 1:
+        theta = K / (K.sum(dim=1, keepdim=True) + 1e-8)
+        return theta
+
+
+import numpy as np
+from sklearn.ensemble import RandomForestRegressor
+
+class RFConditioner(nn.Module):
+    def __init__(self, rf_estimator: RandomForestRegressor, X_train: np.ndarray, Y_train: np.ndarray):
+        """
+        A Random Forest Conditioner that outputs normalized weights (theta) over the training outcomes,
+        following a QR forest procedure.
+        
+        Parameters:
+            rf_estimator: Trained scikit-learn RandomForestRegressor acting as a QR forest.
+            X_train: Training features as a NumPy array of shape (n_train, d).
+            Y_train: Training outcomes as a 1D NumPy array of length n_train.
+        
+        The conditioner precomputes, for each tree, a mapping from each leaf index
+        to the list of training indices that fall into that leaf.
+        """
+        super().__init__()
+        self.rf = rf_estimator
+        self.X_train = X_train  # kept as NumPy array for scikit-learn calls
+        self.Y_train = Y_train  # may be used for debugging or further processing
+        self.n_train = X_train.shape[0]
+        
+        # Pre-compute per-tree leaf mappings: for each tree, record a dictionary
+        # mapping leaf id -> array of training indices in that leaf.
+        self.leaf_maps = []
+        for tree in self.rf.estimators_:
+            leaf_ids = tree.apply(self.X_train)  # shape (n_train,)
+            leaf_map = {}
+            for i, leaf in enumerate(leaf_ids):
+                if leaf not in leaf_map:
+                    leaf_map[leaf] = []
+                leaf_map[leaf].append(i)
+            # Convert lists to numpy arrays for convenience
+            for leaf in leaf_map:
+                leaf_map[leaf] = np.array(leaf_map[leaf])
+            self.leaf_maps.append(leaf_map)
+
+    def forward(self, X: torch.Tensor) -> torch.Tensor:
+        """
+        Computes, for each query input in X (shape M x d), a weight vector over the training samples.
+        
+        For each query sample, for each tree in the forest, we determine the leaf node in which the sample falls.
+        Then, we assign a unit count to all training points that reside in that same leaf.
+        Finally, we average over trees and normalize the resulting weight vector so that it sums to 1.
+        
+        Returns:
+            A torch.Tensor of shape (M, n_train) where each row sums to 1.
+        """
+        # Convert X to NumPy for scikit-learn compatibility.
+        X_np = X.detach().cpu().numpy()
+        M = X_np.shape[0]
+        weights = np.zeros((M, self.n_train))
+        
+        # For each tree, determine leaf assignment for each query sample and accumulate counts.
+        for leaf_map, tree in zip(self.leaf_maps, self.rf.estimators_):
+            leaf_ids = tree.apply(X_np)  # shape (M,)
+            for i, leaf in enumerate(leaf_ids):
+                if leaf in leaf_map:
+                    indices = leaf_map[leaf]
+                    weights[i, indices] += 1
+        # Average over the number of trees
+        weights /= len(self.rf.estimators_)
+        # Normalize each row to sum to 1.
+        weights = weights / (np.sum(weights, axis=1, keepdims=True) + 1e-8)
+        # Convert back to a torch.Tensor
+        return torch.tensor(weights, dtype=torch.float32, device=X.device)
+
+
+class AggregateConditioner(torch.nn.Module):
+    def __init__(self, conditioners, domain_key="D", feature_key="X"):
+        super().__init__()
+        self.conditioners = torch.nn.ModuleList(conditioners)
+        self.domain_key = domain_key
+        self.feature_key = feature_key
+
+    def forward(self, input_dict):
+        X_query = input_dict[self.feature_key]  # shape (M, d)
+        D_query = input_dict[self.domain_key]   # shape (M,)
+        
+        M = X_query.shape[0]
+        # Assume all conditioners return same output dim — grab dim from first output
+        with torch.no_grad():
+            sample_output = self.conditioners[0](X_query[:1])
+        output_dim = sample_output.shape[1]
+        
+        theta = torch.zeros(M, output_dim, device=X_query.device)
+        for d in torch.unique(D_query):
+            d_int = d.item()
+            mask = (D_query == d)
+            theta[mask] = self.conditioners[d_int](X_query[mask])
+        return theta
+
+
 pi = torch.acos(torch.zeros(1)).item() * 2

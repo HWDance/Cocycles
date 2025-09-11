@@ -22,6 +22,7 @@ class CocycleLossFactory:
             "CMMD_V": self._cmmd_v,
             "CMMD_U": self._cmmd_u,
             "URR": self._urr,
+            "URR_N": self._urr_n,
             "LS": self._ls
         }
     
@@ -51,7 +52,7 @@ class CocycleLossFactory:
             lower_tri = torch.tril(Dist, diagonal=-1)
             mask = torch.tril(torch.ones_like(lower_tri, dtype=torch.bool), -1)
             self.kernel[1].lengthscale = (lower_tri[mask].median() / 2).sqrt()
-    
+            
     def _hsic(self, model, inputs, outputs):
         """
         Compute the HSIC loss.
@@ -102,14 +103,37 @@ class CocycleLossFactory:
     
     def _urr(self, model, inputs, outputs):
         """
-        Compute the URR loss.
+        URR loss with a single draw per sample (for training with rsample)
         """
-        Dist = Normal(0, 1)
-        output_samples_1 = model.transformation(inputs, Dist.sample((len(inputs), 1)))
-        output_samples_2 = model.transformation(inputs, Dist.sample((len(inputs), 1)))
+        Dist = model.base_distribution # Normal(0, 1)
+        output_samples_1 = model.transformation(inputs, Dist.rsample((len(inputs), 1)))
+        output_samples_2 = model.transformation(inputs, Dist.rsample((len(inputs), 1)))
         K1 = self.kernel[1].get_gram(output_samples_1[..., None], output_samples_2[..., None])
         K2 = self.kernel[1].get_gram(output_samples_1[..., None], outputs[..., None])
         return (K1 - 2 * K2).mean()
+
+    def _urr_n(self, model, inputs, outputs):
+        """
+        URR loss with Monte‑Carlo using n independent draws. (for eval)
+        """
+        n = inputs.size(0)
+        Dist = model.base_distribution   # e.g. Normal(0,1)
+        K = self.kernel[1].get_gram     # shorthand
+
+        def one_draw():
+            # sample two independent noise vectors of shape (n,1)
+            z1 = Dist.sample((n,1))
+            z2 = Dist.sample((n,1))
+            # push through flow
+            y1 = model.transformation(inputs, z1)
+            y2 = model.transformation(inputs, z2)
+            # compute full‐Gram averages
+            return ( K(y1[...,None], y2[...,None])
+                   - 2*K(y1[...,None], outputs[...,None]) ).mean()
+
+        # repeat n times and average
+        vals = torch.stack([one_draw() for _ in range(n)])
+        return vals.mean()
     
     def _ls(self, model, inputs, outputs):
         """

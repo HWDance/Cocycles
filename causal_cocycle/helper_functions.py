@@ -3,24 +3,6 @@ import torch
 from torch import nn
 from torch.distributions import Normal,Uniform
 
-class empirical_KR:
-
-    def __init__(self,X,Y):
-        self.X = X.sort()[0]
-        self.Y = Y.sort()[0]
-
-    def backward(self,y):
-        u = (self.Y<=y.T).float().mean(0)
-        Xind = (u*len(self.X)).int()
-        Xind[u*len(self.X) % 1 == False] -=1
-        return self.X[Xind]
-        
-    def forward(self,x):
-        u = (self.X<=x.T).float().mean(0)
-        Yind = (u*len(self.Y)).int()
-        Yind[u*len(self.Y) % 1 == False] -=1
-        return self.Y[Yind]
-
 class mmd:
     
     def __init__(self,kernel):
@@ -37,7 +19,7 @@ class mmd:
         Dist = torch.cdist(inputs_batch,inputs_batch, p = 2.0)**2
         Lower_tri = torch.tril(Dist, diagonal=-1).view(len(inputs_batch)**2).sort(descending = True)[0]
         Lower_tri = Lower_tri[Lower_tri!=0]
-        self.kernel.lengthscale = (Lower_tri.median()/2).sqrt()
+        self.kernel.log_lengthscale = nn.Parameter((Lower_tri.median()/2).sqrt().log())
             
         return
         
@@ -137,56 +119,53 @@ class propensity_score:
         return conditional_dists[X[:,0].int(),row_select]
     
 
-class outcome_model:
-    
-    """ 
-    Takes in a cocycle/flow model and defines an outcome model
-    """
-    
-    def __init__(self,model,U_hat):
-        self.model = model
-        self.U_hat = U_hat # sampled noise
-        
-    def __call__(self,inputs, statistic):
-        """
-        Statistic \theta : (m x n) -> (d x m x n) is transformation \theta(Y) of interest
-        """
-        prediction = self.model.transformation_outer(inputs,self.U_hat)
-        return statistic(prediction).mean(-1)
 
-def SCM_intervention_sample(parents,models,base_distributions,intervention,intervention_levels,nsamples,interventional_sample = True):
+def ks_statistic(a: torch.Tensor, b: torch.Tensor) -> float:
+    a, b = a.flatten(), b.flatten()
+    a_s, _ = torch.sort(a); b_s, _ = torch.sort(b)
+    all_vs = torch.cat([a_s, b_s]).unique()
+    cdf_a = torch.bucketize(all_vs, a_s, right=True).float() / a_s.numel()
+    cdf_b = torch.bucketize(all_vs, b_s, right=True).float() / b_s.numel()
+    return (torch.abs(cdf_a - cdf_b).max()).item()
+
+
+def rmse(a: torch.Tensor, b: torch.Tensor) -> float:
+    return torch.sqrt(((a - b)**2).mean()).item()
+
+def wasserstein1_repeat(xs, ys):
     """
-    parents, models, base distributions : list of appropriate objects (model is a cocycle model)
-    intervention : function (a,x) -> f_a(x)
-    intervention_levels : l x d list, l levels, d variables
-    nsamples : # MC samples to draw
-    interventional_sample : True = draw interventional samples
+    Compute the 1D Wasserstein-1 distance between two empirical distributions,
+    where len(xs) = m, len(ys) = n, and n = K * m for some integer K.
+    
+    This repeats each x_i K times, sorts both lists, and returns the average L1 difference.
+    
+    Parameters
+    ----------
+    xs : array_like
+        1D array of m samples from the first distribution.
+    ys : array_like
+        1D array of n = K * m samples from the second distribution.
+    
+    Returns
+    -------
+    w1 : float
+        The Wasserstein-1 distance.
     """
     
-    # Getting base samples
-    U = torch.zeros((nsamples,len(parents)))
-    for i in range(len(parents)):
-        U[:,i] = base_distributions[i].sample((nsamples,))
-        
-    # Geting observational samples
-    Xobs = torch.zeros((nsamples,len(parents)))
-    for i in range(len(parents)):
-        Xobs[:,i] = (models[i].transformation(Xobs[:,parents[i]].view(nsamples,len(parents[i])),
-                                                  U[:,i].view(nsamples,1))).view(nsamples,).detach()
-    # Getting interventional samples
-    if interventional_sample:
-        Xint = []
-        for a in range(len(intervention_levels)):
-            xint = torch.zeros((nsamples,len(parents)))
-            for i in range(len(parents)):
-                xint[:,i] = (models[i].transformation(xint[:,parents[i]].view(nsamples,len(parents[i])),
-                                                      U[:,i].view(nsamples,1))).view(nsamples,).detach()
-                if intervention_levels[a][i] != "id":
-                    xint[:,i] = intervention(intervention_levels[a][i],xint[:,i])
-            Xint.append(xint)
+    m = len(xs)
+    n = len(ys)
+    K = n // m
+
+    if n % m != 0:
+        raise ValueError("Sample sizes must satisfy n = K * m for some integer K.")
+
+    # Repeat each x_i K times
+    xs_rep = torch.repeat_interleave(xs, K)
     
-        return Xobs,Xint
-    
-    else:
-        return Xobs
-        
+    # Sort both
+    xs_sorted = torch.sort(xs_rep)[0]
+    ys_sorted = torch.sort(ys)[0]
+
+    # Compute mean absolute difference
+    w1 = torch.mean(torch.abs(xs_sorted - ys_sorted))
+    return w1
