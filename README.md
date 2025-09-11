@@ -1,4 +1,4 @@
 # Causal inference with cocycles
-Code for simulations and application in [Counterfactual Cocycles](https://hwdance.github.io/files/CounterfactualCocycles.pdf) (Dance and Bloem-Reddy, 2025).
+Code for simulations and application in [Counterfactual Cocycles](https://arxiv.org/abs/2405.13844) (Dance and Bloem-Reddy, 2025).
 
 
