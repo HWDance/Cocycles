@@ -1,0 +1,311 @@
+import numpy as np
+import torch
+from causal_cocycle.kernels_new import GaussianKernel, median_heuristic, median_heuristic_ard
+
+def multivariate_laplace(mu = np.zeros(2), corr =0.9, b=1.0, size=1, rng=None):
+    """
+    Sample from a multivariate Laplace distribution using the
+    Gaussian-exponential mixture representation.
+
+    Parameters
+    ----------
+    mu : array_like, shape (d,)
+        Mean vector.
+    Sigma : array_like, shape (d, d)
+        Covariance matrix (positive definite).
+    b : float
+        Scale parameter (Laplace 'spread').
+    size : int
+        Number of samples.
+    rng : np.random.Generator or None
+        Optional RNG for reproducibility.
+
+    Returns
+    -------
+    samples : ndarray, shape (size, d)
+        Multivariate Laplace samples.
+    """
+    rng = np.random.default_rng(rng)
+    mu = np.asarray(mu)
+    d = mu.shape[0]
+
+    # Cholesky of covariance
+    Sigma = np.ones((d,d))*corr + (1-corr)*np.eye(d)
+    L = np.linalg.cholesky(Sigma)
+
+    # Exponential mixture variable
+    W = rng.exponential(scale=b, size=size)
+
+    # Multivariate normal samples
+    Z = rng.normal(size=(size, d)) @ L.T
+
+    # Combine
+    return mu + np.sqrt(W)[:, None] * Z
+
+
+# SCM map: Y(x) = mu(x) + A(x) @ xi
+def affine_ot_map(m_src, S_src, m_tgt, S_tgt):
+    L_src = np.linalg.cholesky(S_src)
+    L_tgt = np.linalg.cholesky(S_tgt)
+    A = L_tgt @ np.linalg.inv(L_src)
+    b = m_tgt - A @ m_src
+    return A, b
+
+# ----------------------------
+# Helper functions
+# ----------------------------
+
+def compute_weights_from_kernel(kernel, X1, x1_query):
+    """
+    Returns normalized weights w_i(x1_query) using kernel.get_gram().
+    X1 is a 1D tensor of training values.s
+    x1_query is a scalar (or 0D tensor).
+    """
+    if x1_query.dim() == 0:
+        x1_query = x1_query.view(1, 1)
+    elif x1_query.dim() == 1:
+        x1_query = x1_query.unsqueeze(0)
+    if X1.dim() == 1:
+        X1 = X1.unsqueeze(1)
+    K_vals = kernel.get_gram(x1_query, X1).flatten()
+    return K_vals / K_vals.sum()
+
+# Modified KR transport (1D) with provided weights
+def build_KR_map(X: torch.Tensor, Y: torch.Tensor, 
+                w_src: torch.Tensor = None, w_tgt: torch.Tensor = None, epsilon: float = 1e-8):
+
+    # Get weights if not provided
+    if w_src is None:
+        n_src = X.numel()
+        w_src = torch.ones(n_src, device=X.device) / n_src
+    if w_tgt is None:
+        n_tgt = Y.numel()
+        w_tgt = torch.ones(n_tgt, device=Y.device) / n_tgt
+    
+    # Sort X and Y first
+    X_sorted_full, idx_X = torch.sort(X)
+    Y_sorted_full, idx_Y = torch.sort(Y)
+    w_src_sorted_full = w_src[idx_X]
+    w_tgt_sorted_full = w_tgt[idx_Y]
+    
+    # Get unique sorted values for X, and sum the weights of duplicates.
+    X_sorted, inverse_idx_X = torch.unique(X_sorted_full, sorted=True, return_inverse=True)
+    w_src_sorted = torch.zeros_like(X_sorted, dtype=w_src.dtype)
+    w_src_sorted = w_src_sorted.scatter_add_(0, inverse_idx_X, w_src_sorted_full)
+    
+    # Do the same for Y.
+    Y_sorted, inverse_idx_Y = torch.unique(Y_sorted_full, sorted=True, return_inverse=True)
+    w_tgt_sorted = torch.zeros_like(Y_sorted, dtype=w_tgt.dtype)
+    w_tgt_sorted = w_tgt_sorted.scatter_add_(0, inverse_idx_Y, w_tgt_sorted_full)
+    
+    # Normalize the weights.
+    w_src_sorted = w_src_sorted / w_src_sorted.sum()
+    w_tgt_sorted = w_tgt_sorted / w_tgt_sorted.sum()
+
+    def S(z):
+        z = z.double()
+        if epsilon == 0:
+            return (z>=0).float()
+        else:
+            return torch.where(z < -epsilon, torch.zeros_like(z),
+                               torch.where(z > epsilon, torch.ones_like(z),
+                                           (z + epsilon) / (2 * epsilon)))
+    def F_src(y):
+        if not isinstance(y, torch.Tensor):
+            y = torch.tensor(y, device=X_sorted.device)
+        if y.dim() == 0:
+            y = y.unsqueeze(0)
+        if y.dim() == 1:
+            y = y.unsqueeze(1)
+        X_exp = X_sorted.unsqueeze(0)
+        S_vals = S(y - X_exp)
+        return torch.sum(w_src_sorted * S_vals, dim=-1)
+    def Q_tgt(t):
+        if not isinstance(t, torch.Tensor):
+            t = torch.tensor(t, device=Y_sorted.device)
+        if t.dim() > 1:
+            t = t.squeeze(-1)
+        cumsum = torch.cumsum(w_tgt_sorted, dim=0)
+        indices = torch.searchsorted(cumsum, t.unsqueeze(1)).squeeze(1)
+        indices = torch.clamp(indices, 0, Y_sorted.numel()-1)
+        j = indices-1
+        j_next = indices
+        cumsum = torch.concatenate((torch.zeros(1),cumsum))
+        cumsum_j = cumsum[j+1]
+        w_j_next = w_tgt_sorted[j_next]
+        s = (t - cumsum_j) / w_j_next
+        Y_j_next = Y_sorted[j_next].double()
+        Y_prev = Y_sorted[torch.clamp(j, min=0)].double()
+        return Y_j_next - epsilon + 2 * epsilon * s        
+    def KR(y):
+        t_val = F_src(y)
+        return Q_tgt(t_val)
+    return KR
+
+# ----------------------------
+# End-to-end KR transport procedure
+# ----------------------------
+
+def run(seed, n = None, m = None, epsilon = 0, wrongorder = False, affine = True, additive = True, corr = 0.5, multivariate_noise = False):
+
+    np.random.seed(seed)
+    n0 = n1 = n2 = n or 250
+    if m is not None:
+        n1 = m
+
+    # Sample from the DGP
+    m0 = np.array([0.0, 0.0])
+    m1 = np.array([1.0, 1.0])
+    m2 = np.array([2.0, 2.0])
+
+    if not additive:
+        S0 = np.array([[1.0, 0.0], [0.0, 1.0]])
+        S1 = np.array([[1.0, -corr], [-corr, 1.0]])
+        S2 = np.array([[1.0, 0.0], [0.0, 1.0]])
+
+    else:
+        S0 = np.array([[1.0, 0.0], [0.0, 1.0]])
+        S1 = np.array([[1.0, 0.0], [0.0, 1.0]])
+        S2 = np.array([[1.0, 0.0], [0.0, 1.0]])
+        
+    L0 = np.linalg.cholesky(S0)
+    L1 = np.linalg.cholesky(S1)
+    L2 = np.linalg.cholesky(S2)
+
+    if multivariate_noise:
+        xi0,xi1,xi2 = (
+            multivariate_laplace(size = n0, rng = seed, corr = corr),
+            multivariate_laplace(size = n1, rng = seed+1, corr = corr),
+            multivariate_laplace(size = n2, rng = seed+2, corr = corr)
+        )
+        if additive:
+            xi0[:,1] = xi0[:,0] + xi0[:,1]
+            xi1[:,1] = xi1[:,0] + xi1[:,1]
+            xi2[:,1] = xi2[:,0] + xi2[:,1]
+    else:
+        xi0,xi1,xi2 = (
+            np.random.laplace(size = (n0,2)),
+            np.random.laplace(size = (n1,2)),
+            np.random.laplace(size = (n2,2))
+        )
+        
+    P0 = m0 + xi0 @ L0.T
+    P1 = m1 + xi1 @ L1.T
+    P2 = m2 + xi2 @ L2.T
+
+    if not affine:
+        P1 = 1/(1+np.exp(-P1))*5
+        P2 = 1/(1+np.exp(-P2))*10
+
+    
+    # Convert to torch tensors
+    Y0 = torch.tensor(P0, dtype=torch.float64)
+    Y1 = torch.tensor(P1, dtype=torch.float64)
+    Y2 = torch.tensor(P2, dtype=torch.float64)
+
+    
+    # wrong order adjustment
+    if wrongorder:
+        Y0 = Y0.flip(dims=[1])
+        Y1 = Y1.flip(dims=[1])
+        Y2 = Y2.flip(dims=[1])
+
+    # Merging for sparsification 
+    Y = torch.column_stack((Y0,Y1,Y2))
+    
+    # ----------------------------
+    # KR transport for the first dimension (1D maps)
+    # Use uniform weights here (empirical CDF)
+    KR10 = build_KR_map(Y0[:,0], Y1[:,0], epsilon=epsilon)
+    KR21 = build_KR_map(Y1[:,0], Y2[:,0], epsilon=epsilon)
+    KR20 = build_KR_map(Y0[:,0], Y2[:,0], epsilon=epsilon)
+    
+    Yhat1 = KR10(Y0[:,0])           # Transport P0 -> P1, first coordinate
+    Yhat2_direct = KR20(Y0[:,0])      # Direct transport P0 -> P2, first coordinate
+    Yhat2_composite = KR21(Yhat1)     # Composite transport P0 -> P1 -> P2, first coordinate
+
+    # KR transport for the second dimension (1D maps)
+    # Use uniform weights here (empirical CDF)
+    KR10 = build_KR_map(Y0[:,1], Y1[:,1], epsilon=epsilon)
+    KR21 = build_KR_map(Y1[:,1], Y2[:,1], epsilon=epsilon)
+    KR20 = build_KR_map(Y0[:,1], Y2[:,1], epsilon=epsilon)
+    
+    mapped_second_1 = KR10(Y0[:,1])           # Transport P0 -> P1, first coordinate
+    mapped_second_direct = KR20(Y0[:,1])      # Direct transport P0 -> P2, first coordinate
+    mapped_second_composite = KR21(mapped_second_1)     # Composite transport P0 -> P1 -> P2, first coordinate
+    
+    # Construct full 2D transported points:
+    Yhat1_2d = torch.stack([Yhat1, mapped_second_1], dim=1)
+    Yhat2_direct_2d = torch.stack([Yhat2_direct, mapped_second_direct], dim=1)
+    Yhat2_composite_2d = torch.stack([Yhat2_composite, mapped_second_composite], dim=1)
+
+    # ------------------------------
+    # Ground truth from SCM model
+
+    # Recover latent noise ξ from P0
+    L0inv = np.linalg.inv(L0)
+    xi_hat = (P0 - m0) @ L0inv.T  # each row is a ξ sample
+
+    # Compute counterfactual outcomes using shared ξ
+    Y1_cf = m1 + xi_hat @ L1.T
+    Y2_cf = m2 + xi_hat @ L2.T
+
+    # True counterfactual shifts
+    true_shift_10 = Y1_cf - P0
+    true_shift_21 = Y2_cf - Y1_cf
+    true_shift_20 = Y2_cf - P0
+    
+    # ----------------------------
+    # Compute error statistics relative to the true shifts
+    
+    # Compute error for P0 -> P1:
+    # Estimated shift for P0 -> P1 (full 2D) is Yhat1_2d - Y0.
+    delta_10 = (Yhat1_2d - Y0).numpy()     # shape: (n, 2)
+    error_10 = delta_10 - true_shift_10      # error compared to [3, 3]
+    norm_error_10 = np.linalg.norm(error_10, axis=1)  # L2 norm per sample
+    
+    # Compute error for P1 -> P2:
+    # For the direct KR transport, the estimated shift is (Yhat2_direct_2d - Yhat1_2d)
+    delta_21_direct = (Yhat2_direct_2d - Yhat1_2d).numpy()
+    error_21_direct = delta_21_direct - true_shift_21
+    norm_error_21_direct = np.linalg.norm(error_21_direct, axis=1)
+    
+    # For the composite KR transport, the estimated shift is (Yhat2_composite_2d - Yhat1_2d)
+    delta_21_composite = (Yhat2_composite_2d - Yhat1_2d).numpy()
+    error_21_composite = delta_21_composite - true_shift_21
+    norm_error_21_composite = np.linalg.norm(error_21_composite, axis=1)
+    
+    # Compute error for P1 -> P2:
+    # For the direct KR transport, the estimated shift is (Yhat2_direct_2d - Yhat1_2d)
+    delta_20_direct = (Yhat2_direct_2d - Y0).numpy()
+    error_20_direct = delta_20_direct - true_shift_20
+    norm_error_20_direct = np.linalg.norm(error_20_direct, axis=1)
+    
+    # For the composite KR transport, the estimated shift is (Yhat2_composite_2d - Yhat1_2d)
+    delta_20_composite = (Yhat2_composite_2d - Y0).numpy()
+    error_20_composite = delta_20_composite - true_shift_20
+    norm_error_20_composite = np.linalg.norm(error_20_composite, axis=1)
+
+    # Compute inconsistency
+    norm_inconsistency = np.linalg.norm(Yhat2_direct_2d-Yhat2_composite_2d, axis = 1)
+    
+    obj = {
+        "seed": seed,
+        "name": "KReps{0}".format(epsilon),
+        "corr": corr,
+        "additive": additive,
+        "wrongorder" : wrongorder,
+        "RMSE10" : norm_error_10.mean(),
+        "RMSE21direct" : norm_error_21_direct.mean(),
+        "RMSE21composite" : norm_error_21_composite.mean(),
+        "RMSE20direct" : norm_error_20_direct.mean(),
+        "RMSE20composite" : norm_error_20_composite.mean(),
+        "RMSEinconsistency" : norm_inconsistency.mean(),
+        "ATE10" :  ((error_10.mean(0))**2).mean()**0.5,
+        "ATE21direct" : ((error_21_direct.mean(0))**2).mean()**0.5,
+        "ATE21composite" :  ((error_21_composite.mean(0))**2).mean()**0.5,
+        "ATE20direct" :  ((error_20_direct.mean(0))**2).mean()**0.5,
+        "ATE20composite" :  ((error_20_composite.mean(0))**2).mean()**0.5,
+    }
+    
+    return obj
