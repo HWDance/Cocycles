@@ -114,7 +114,6 @@ def run_experiment(seed, N, noise_type="rademacher"):
     ML_normal = train_model("ML", X, Y, model_class=FlowModel, base="Normal",use_flow_loss=True)
     ML_laplace = train_model("ML", X, Y, model_class=FlowModel, base="Laplace",use_flow_loss=True)
 
-
     # URR
     URR_normal = train_model("URR", X, Y, model_class=FlowModel, base="Normal",use_flow_loss=False)
     URR_laplace = train_model("URR", X, Y, model_class=FlowModel, base="Laplace",use_flow_loss=False)
