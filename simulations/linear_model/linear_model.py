@@ -29,8 +29,8 @@ def run_experiment(seed, N, noise_type="rademacher"):
     bias = False
 
     names = [
-      "ML-N", "ML-L", "ML-T",
-      "URR-N", "URR-L", "URR-T",
+      "ML-N", "ML-L",
+      "URR-N", "URR-L",
       "CMMD-V", "CMMD-U",
       "True"
     ]    
@@ -63,11 +63,7 @@ def run_experiment(seed, N, noise_type="rademacher"):
                     model_class=CocycleModel,
                     base="Normal",
                     use_flow_loss=False):
-        """
-        loss_type: str, one of {"HSIC","URR","CMMD_V","CMMD_U"}, or "L1" if
-                   use_flow_loss=True
-        use_flow_loss: bool, if True, train a FlowModel with FlowLoss(log_det=False)
-        """
+        
         # build conditioner & transformer
         conditioner = CompositeConditioner([LinConditioner(D, 1, bias=bias)])
         transformer = Transformer([ShiftLayer()])
@@ -117,13 +113,11 @@ def run_experiment(seed, N, noise_type="rademacher"):
     # ML
     ML_normal = train_model("ML", X, Y, model_class=FlowModel, base="Normal",use_flow_loss=True)
     ML_laplace = train_model("ML", X, Y, model_class=FlowModel, base="Laplace",use_flow_loss=True)
-    ML_studentT = train_model("ML", X, Y, model_class=FlowModel, base="StudentT",use_flow_loss=True)
 
 
     # URR
     URR_normal = train_model("URR", X, Y, model_class=FlowModel, base="Normal",use_flow_loss=False)
     URR_laplace = train_model("URR", X, Y, model_class=FlowModel, base="Laplace",use_flow_loss=False)
-    URR_studentT = train_model("URR", X, Y, model_class=FlowModel, base="StudentT",use_flow_loss=False)
 
     # Cocycles
     CMMDV = train_model("CMMD_V", X, Y)
@@ -135,13 +129,11 @@ def run_experiment(seed, N, noise_type="rademacher"):
 
     Coeffs[:, 0] = extract_weight(ML_normal)
     Coeffs[:, 1] = extract_weight(ML_laplace)
-    Coeffs[:, 2] = extract_weight(ML_studentT)
-    Coeffs[:, 3] = extract_weight(URR_normal)
-    Coeffs[:, 4] = extract_weight(URR_laplace)
-    Coeffs[:, 5] = extract_weight(URR_studentT)
-    Coeffs[:, 6] = extract_weight(CMMDV)
-    Coeffs[:, 7] = extract_weight(CMMDU)
-    Coeffs[:, 8] = B.T
+    Coeffs[:, 2] = extract_weight(URR_normal)
+    Coeffs[:, 3] = extract_weight(URR_laplace)
+    Coeffs[:, 4] = extract_weight(CMMDV)
+    Coeffs[:, 5] = extract_weight(CMMDU)
+    Coeffs[:, 6] = B.T
     
     return {
         "seed": seed,

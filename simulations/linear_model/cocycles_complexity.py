@@ -205,26 +205,7 @@ def run_experiment(seed=0, N=1000, noise_dist = "normal"):
             hyper_kwargs=hyper_args,
             choose_best_model="overall",
             retrain=True,
-        )
-
-    # Training with hsic
-    kernel = [gaussian_kernel()] * 2
-    loss_factory = CocycleLossFactory(kernel)
-    Uhat = final_model_l2.inverse_transformation(X,Y)[0].detach()
-    loss= loss_factory.build_loss("HSIC", X, Uhat, subsamples=10**4)
-    final_model_hsic, (best_index_hsic, val_loss_hsic) = validate(
-            models,
-            loss,
-            X,
-            Y,
-            loss_val=loss,
-            method="CV",
-            train_val_split=0.5,
-            opt_kwargs=opt_config,
-            hyper_kwargs=hyper_args,
-            choose_best_model="overall",
-            retrain=True,
-        )    
+        ) 
 
     # Training with urr
     kernel = [gaussian_kernel()] * 2
