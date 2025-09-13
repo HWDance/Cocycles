@@ -29,59 +29,7 @@ class mmd:
         return (self.kernel.get_gram(X[:mmd_samples],X[:mmd_samples]).mean() 
                 + self.kernel.get_gram(Y[:mmd_samples],Y[:mmd_samples]).mean()
                 -2*self.kernel.get_gram(X[:mmd_samples],Y[:mmd_samples]).mean())**0.5
-
-def kolmogorov_distance(X, Y):
-    """
-    Compute the two-sample Kolmogorov distance between samples X and Y.
-    
-    This is the maximum absolute difference between their empirical CDFs.
-    """
-    X_sorted = sorted(X)
-    Y_sorted = sorted(Y)
-
-    n_x, n_y = len(X_sorted), len(Y_sorted)
-    i = j = 0      # Pointers
-    cdf_x = cdf_y = 0.0
-    max_diff = 0.0
-
-    # "Walk" through both sorted samples
-    while i < n_x and j < n_y:
-        # Whichever sample has the smaller current value advances
-        if X_sorted[i] < Y_sorted[j]:
-            i += 1
-            cdf_x = i / n_x
-        elif X_sorted[i] > Y_sorted[j]:
-            j += 1
-            cdf_y = j / n_y
-        else:
-            # Values are equal, so increment both
-            i += 1
-            j += 1
-            cdf_x = i / n_x
-            cdf_y = j / n_y
-
-        diff = abs(cdf_x - cdf_y)
-        if diff > max_diff:
-            max_diff = diff
-
-    # If one sample is exhausted, the other might still have elements left
-    while i < n_x:
-        i += 1
-        cdf_x = i / n_x
-        diff = abs(cdf_x - cdf_y)
-        if diff > max_diff:
-            max_diff = diff
-
-    while j < n_y:
-        j += 1
-        cdf_y = j / n_y
-        diff = abs(cdf_x - cdf_y)
-        if diff > max_diff:
-            max_diff = diff
-
-    return max_diff
-
-
+        
 class likelihood_loss:
     
     def __init__(self,dist, tail_adapt = False,tail_init = 10.0,log_det = True):
