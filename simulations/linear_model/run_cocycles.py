@@ -234,7 +234,7 @@ def run_experiment(
 
     # Cross-validate each family
     # Cocycle CMMD (flow-specific LR's_
-    hyper_kwargs = [{'learn_rate': lr}] + [{'learn_rate': lr * 1}] * (len(cocycle_models)-1)
+    hyper_kwargs = [{'learn_rate': lr}] * (len(cocycle_models)-1) + [{'learn_rate': lr * 0.1}]
     cmmdv = loss_factory.build_loss("CMMD_V", X, Y)
     final_v, (idx_v, _) = validate(cocycle_models, cmmdv, X, Y, method="CV",
                                    train_val_split=0.5, opt_kwargs=opt_config,

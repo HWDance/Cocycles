@@ -2,9 +2,8 @@ import torch
 from torch.distributions import (
     Distribution, Normal, Laplace, Cauchy, Gamma, Uniform
 )
-from csuite import SCMS, SCM_DIMS, SCM_MASKS
-from architectures import get_stock_coupling_transforms
-from zuko.flows import UnconditionalDistribution
+from csuite_mixed import SCMS, SCM_DIMS, SCM_MASKS
+from architectures import get_stock_transforms
 from causalflows.flows import CausalFlow
 from causal_cocycle.causalflow_helper import select_and_train_flow, sample_do, sample_cf
 from causal_cocycle.causalflow_helper import LearnableNormal, LearnableLaplace, LearnableStudentT
@@ -16,12 +15,9 @@ def evaluate_models(
     sc_fun: callable,
     X: torch.Tensor,
     Y: torch.Tensor,
-    noisedist: Distribution,
-    noisetransform: callable,
     seed: int = None,
     N_true: int = 10**5,
     intervention_node: int = 1,
-    intervention_fn: callable = torch.full_like,
     intervention_value: float = 0.0,
 ) -> dict:
     """
@@ -41,8 +37,6 @@ def evaluate_models(
         seed=seed,
         intervention_node=None,
         return_u=True,
-        noise_dists=[Normal(0,1)] + [noisedist],
-        noise_transforms = [lambda x : x] + [noisetransform]
     )
     X_obs_true = X_obs_true.to(device)
     torch.manual_seed(seed)
@@ -50,11 +44,8 @@ def evaluate_models(
         N_true,
         seed=seed,
         intervention_node=intervention_node,
-        intervention_fn=intervention_fn,
-       intervention_value=intervention_value,
+        intervention_value=intervention_value,
         return_u=True,
-        noise_dists=[Normal(0,1)] + [noisedist],
-        noise_transforms = [lambda x : x] + [noisetransform]
     )
     X_cf_true = X_cf_true.to(device)
     # check same noise
@@ -83,7 +74,7 @@ def evaluate_models(
             X_cf_model = sample_do(
                 flow.to(device),
                 index=intervention_node-1,
-                intervention_fn=lambda x : intervention_fn(x,intervention_value),
+                intervention_fn=lambda old: intervention_value,
                 sample_shape=torch.Size([N_true])
             )
             Y_model = X_model[:, 1:]
@@ -120,8 +111,6 @@ def evaluate_models(
                 seed=seed,
                 intervention_node=None,
                 return_u=True,
-                noise_dists=[Normal(0,1)] + [noisedist],
-                noise_transforms = [lambda x : x] + [noisetransform]
             )
             X_obs = X_obs.to(device)
             Y_obs = X_obs[:, 1:].to(device)
@@ -130,11 +119,8 @@ def evaluate_models(
                 N,
                 seed=seed,
                 intervention_node=intervention_node,
-                intervention_fn=intervention_fn,
                 intervention_value=intervention_value,
                 return_u=True,
-                noise_dists=[Normal(0,1)] + [noisedist],
-                noise_transforms = [lambda x : x] + [noisetransform]
             )
             X_cf = X_cf.to(device)
             Y_cf_true = X_cf[:, 1:]
@@ -147,7 +133,7 @@ def evaluate_models(
                 flow.to(device),
                 x_obs=Z,
                 index=intervention_node - 1,
-                intervention_fn=lambda x : intervention_fn(x,intervention_value),
+                intervention_fn=lambda old: intervention_value
             )
             rmse_cf_vals = [
                 rmse(Z_cf[:, 1:][:,j].cpu(), Y_cf_true[:, j].cpu())
@@ -171,7 +157,6 @@ base_map = {
 
 def run_experiment(
     sc_name: str = "chain5_linear",
-    noise_dist: str = "normal",
     corr = 0.0,
     seed: int = 0,
     N: int = 1000,
@@ -181,7 +166,8 @@ def run_experiment(
     k_folds: int = 2,
     batch_size: int = 128,
     lr: float = 1e-2,
-    learn_flow = True,
+    affine = False,
+    consistent = False,
 ) -> dict:
     """
     Runs joint causal-flow experiments for a single noise_dist.
@@ -195,47 +181,22 @@ def run_experiment(
     d = SCM_DIMS[sc_name]
     mask = SCM_MASKS[sc_name] if use_dag else None
 
-    # Getting transformation
-    Σ = (1-corr) * torch.eye(d-1) + corr * torch.ones(d-1, d-1)
-    L = torch.linalg.cholesky(Σ)
-
-    # set up noise and transforms
-    if noise_dist == 'normal':
-        noisedist, noisetransform = Normal(0,1), lambda x: x @ L.t()
-    elif noise_dist == 'rademacher':
-        noisedist, noisetransform = Uniform(-1,1), lambda x: torch.sign(x) @ L.t()
-    elif noise_dist == 'cauchy':
-        noisedist, noisetransform = Cauchy(0,1), lambda x: x @ L.t()
-    elif noise_dist == 'gamma':
-        noisedist, noisetransform = Gamma(1,1), lambda x: x @ L.t()
-    elif noise_dist == 'inversegamma':
-        noisedist, noisetransform = Gamma(1,1), lambda x: 1/x @ L.t()
-    else:
-        raise ValueError(noise_dist)
-
     results = {}
-
-    # Intevention_fn
-    intervention_fn = torch.full_like #lambda x,a: x+a
-    intervention_value = 0.0 # 1.0
     
     # generate data
     V, U = sc_fun(
         N, seed=seed, return_u=True,
-        noise_dists=[Normal(0,1)]+[noisedist],
-        noise_transforms=[lambda x:x]+[noisetransform]
     )
     V = V.to(device)
     X, Y = V[:,:1], V[:,1:]
 
     # build candidate flows per base
-    transforms = get_stock_coupling_transforms(x_dim=1, y_dim=d-1, mask = mask)
-    
-    # Lin architecture
-    if not learn_flow:
-        transforms = transforms[:1]
-    
-    flow_lrs = [1 * lr] + [1 * lr]* (len(transforms)-1) # smaller lr for NNs 
+    transforms = get_stock_transforms(x_dim=0, y_dim=d, mask = mask)
+    if consistent:
+        transforms[-1] = [transforms[-1][1]]
+    if affine:
+        transforms = transforms[:-1]
+    flow_lrs = [1 * lr] * (len(transforms)-1)  + [0.1 * lr] # smaller lr for nsf
     for base_type in bases:
         if base_type not in base_map:
             raise ValueError(f"Unknown base type: {base_type}")
@@ -259,10 +220,7 @@ def run_experiment(
                 {key:(best_flow,'flow')},
                 {key:(best_idx,'flow')},
                 sc_fun, X, Y,
-                noisedist, noisetransform,
-                seed=seed,
-                intervention_fn = intervention_fn,
-                intervention_value = intervention_value,
+                seed=seed
             )
         
         results[key] = {
@@ -273,7 +231,6 @@ def run_experiment(
 
     # add metadata
     results.update({
-            'noise':      noise_dist,
             'scm':        sc_name,
         })
     return results
@@ -281,8 +238,6 @@ def run_experiment(
 
 if __name__ == '__main__':
     # Example: run for two different true noise dists
-    for nd in ['normal','cauchy']:
-        print(f"\n=== RESULTS for true noise = {nd} ===")
-        res = run_experiment(noise_dist=nd, seed=0, N=100)
-        print(res)
+    res = run_experiment(seed=0)
+    print(res)
 

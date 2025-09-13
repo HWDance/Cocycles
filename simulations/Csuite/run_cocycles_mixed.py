@@ -5,7 +5,7 @@ from torch.distributions import (
     Distribution, Normal, Laplace, Cauchy, Gamma, Uniform
 )
 # Csuite Imports
-from csuite import SCMS, SCM_DIMS, SCM_MASKS
+from csuite_mixed import SCMS, SCM_DIMS, SCM_MASKS
 from architectures import get_stock_transforms
 from causal_cocycle.loss_factory import CocycleLossFactory
 from causal_cocycle.optimise_new import validate
@@ -20,12 +20,9 @@ def evaluate_models(
     sc_fun: callable,
     X: torch.Tensor,
     Y: torch.Tensor,
-    noisedist: Distribution,
-    noisetransform: callable,
     seed: int = None,
     N_true: int = 10**5,
     intervention_node: int = 1,
-    intervention_fn: callable = torch.full_like,
     intervention_value: float = 0.0,
 ) -> dict:
     """
@@ -45,8 +42,6 @@ def evaluate_models(
         seed=seed,
         intervention_node=None,
         return_u=True,
-        noise_dists=[Normal(0,1)] + [noisedist],
-        noise_transforms = [lambda x : x] + [noisetransform]
     )
     X_obs_true = X_obs_true.to(device)
     torch.manual_seed(seed)
@@ -54,11 +49,8 @@ def evaluate_models(
         N_true,
         seed=seed,
         intervention_node=intervention_node,
-        intervention_fn=intervention_fn,
         intervention_value=intervention_value,
         return_u=True,
-        noise_dists=[Normal(0,1)] + [noisedist],
-        noise_transforms = [lambda x : x] + [noisetransform]
     )
     X_cf_true = X_cf_true.to(device)
     # check same noise
@@ -78,7 +70,7 @@ def evaluate_models(
     
             # Counterfactuals with cocycle(X', X, Y)
             Y_model = model.cocycle(X, X, Y)
-            Y_cf_model = model.cocycle(intervention_fn(X, intervention_value), X, Y)
+            Y_cf_model = model.cocycle(X*0 + intervention_value, X, Y)
             diff_model = Y_cf_model - Y_model  # shape (N, p)
             
             # --- Marginal KS values for each Y dimension ---
@@ -110,8 +102,6 @@ def evaluate_models(
                 seed=seed,
                 intervention_node=None,
                 return_u=True,
-                noise_dists=[Normal(0,1)] + [noisedist],
-                noise_transforms = [lambda x : x] + [noisetransform]
             )
             X_obs = X_obs.to(device)
             Y_obs = X_obs[:, 1:].to(device)
@@ -121,11 +111,8 @@ def evaluate_models(
                 N,
                 seed=seed,
                 intervention_node=intervention_node,
-                intervention_fn=intervention_fn,
                 intervention_value=intervention_value,
                 return_u=True,
-                noise_dists=[Normal(0,1)] + [noisedist],
-                noise_transforms = [lambda x : x] + [noisetransform]
             )
             X_cf = X_cf.to(device)
             Y_cf_true = X_cf[:, 1:]
@@ -152,7 +139,6 @@ def evaluate_models(
 
 def run_experiment(
     sc_name: str = "chain5_linear",
-    noise_dist: str = "normal",
     corr = 0.0,
     seed: int = 0,
     N: int = 1000,
@@ -161,7 +147,6 @@ def run_experiment(
     k_folds: int = 2,
     batch_size: int = 128,
     lr: float = 1e-2,
-    learn_flow = True,
 ) -> dict:
     """
     Runs experiments across all SCMs for a given noise distribution, seed, and sample size N.
@@ -185,48 +170,18 @@ def run_experiment(
     d = SCM_DIMS[sc_name]
     mask = SCM_MASKS[sc_name][1:][:,1:] if (use_dag and d > 2) else None
     
-
-    # Getting transformation
-    Σ = (1-corr) * torch.eye(d-1) + corr * torch.ones(d-1, d-1)
-    L = torch.linalg.cholesky(Σ)
-
-    # set up noise and transforms
-    if noise_dist == 'normal':
-        noisedist, noisetransform = Normal(0,1), lambda x: x @ L.t()
-    elif noise_dist == 'rademacher':
-        noisedist, noisetransform = Uniform(-1,1), lambda x: torch.sign(x) @ L.t()
-    elif noise_dist == 'cauchy':
-        noisedist, noisetransform = Cauchy(0,1), lambda x: x @ L.t()
-    elif noise_dist == 'gamma':
-        noisedist, noisetransform = Gamma(1,1), lambda x: x @ L.t()
-    elif noise_dist == 'inversegamma':
-        noisedist, noisetransform = Gamma(1,1), lambda x: 1/x @ L.t()
-    else:
-        raise ValueError(noise_dist)
-    
     # generate data
     V, U = sc_fun(
         N, seed=seed, return_u=True,
-        noise_dists=[Normal(0,1)]+[noisedist],
-        noise_transforms=[lambda x:x]+[noisetransform]
     )
     V = V.to(device)
     X, Y = V[:,:1], V[:,1:]
 
-    # Intevention_fn
-    intervention_fn = torch.full_like #lambda x,a: x+a
-    intervention_value = 0.0 # 1.0
-    
-    
     # Build architectures
     transforms = get_stock_transforms(x_dim = 1, y_dim = d-1, mask = mask)
 
     # Cocycle models
     cocycle_models = [ZukoCocycleModel(nn.ModuleList(t)) for t in transforms]
-
-    # Lin architecture
-    if not learn_flow:
-        cocycle_models = cocycle_models[:1]
 
     # Set up loss factories
     kernel = [gaussian_kernel()] * 2
@@ -234,32 +189,22 @@ def run_experiment(
 
     # Cross-validate each family
     # Cocycle CMMD (flow-specific LR's_
-    hyper_kwargs = [{'learn_rate': lr}] + [{'learn_rate': lr * 1}] * (len(cocycle_models)-1)
+    hyper_kwargs = [{'learn_rate': lr}] * (len(cocycle_models)-1) + [{'learn_rate': lr * 0.1}] 
     cmmdv = loss_factory.build_loss("CMMD_V", X, Y)
     final_v, (idx_v, _) = validate(cocycle_models, cmmdv, X, Y, method="CV",
-                                   train_val_split=0.5, opt_kwargs=opt_config,
-                                   hyper_kwargs=hyper_kwargs, choose_best_model="overall", retrain=True)
-    cmmdu = loss_factory.build_loss("CMMD_U", X, Y)
-    final_u, (idx_u, _) = validate(cocycle_models, cmmdu, X, Y, method="CV",
                                    train_val_split=0.5, opt_kwargs=opt_config,
                                    hyper_kwargs=hyper_kwargs, choose_best_model="overall", retrain=True)
 
     # Collect models & indices
     models = {
         'Cocycle_CMMD_V': (final_v, 'cmmdv'),
-        'Cocycle_CMMD_U': (final_u, 'cmmdu'),
     }
     idxs = {
         'Cocycle_CMMD_V': (idx_v, 'cmmdv'),
-        'Cocycle_CMMD_U': (idx_u, 'cmmdu'),
     }
 
-    metrics = evaluate_models(models, idxs, sc_fun, X, Y,
-                              noisedist, noisetransform, seed=seed,
-                             intervention_fn=intervention_fn, 
-                            intervention_value=intervention_value,
-                             )
-    metrics.update({'noise': noise_dist, 'scm': sc_name})
+    metrics = evaluate_models(models, idxs, sc_fun, X, Y, seed=seed)
+    metrics.update({'scm': sc_name})
 
     return metrics
 
