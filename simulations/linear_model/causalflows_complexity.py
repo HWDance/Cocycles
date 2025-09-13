@@ -256,8 +256,8 @@ def run_experiment(seed=0, N=1000, noise_dist = "normal", lin_model = False):
         k_folds=2,
         num_epochs=1000,
         batch_size=128,
-        lr=1e-2,
-        device=XY.device
+        device=XY.device,
+        flow_lrs = [1e-2,1e-2,1e-2,1e-3]
     )
 
     # Laplace‐base
@@ -268,8 +268,8 @@ def run_experiment(seed=0, N=1000, noise_dist = "normal", lin_model = False):
         k_folds=2,
         num_epochs=1000,
         batch_size=128,
-        lr=1e-2,
         device=XY.device
+        flow_lrs = [1e-2,1e-2,1e-2,1e-3]
     )
 
     """
