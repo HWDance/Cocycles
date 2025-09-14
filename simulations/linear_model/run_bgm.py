@@ -235,7 +235,7 @@ def run_experiment(
     if not learn_flow:
         transforms = transforms[:1]
     
-    flow_lrs = [1 * lr] * (len(transforms)-1) + [0.1 * lr] # smaller lr for NNs 
+    flow_lrs = [1 * lr] * (len(transforms)-1) + [0.1 * lr] # smaller lr for nsf 
     for base_type in bases:
         if base_type not in base_map:
             raise ValueError(f"Unknown base type: {base_type}")
