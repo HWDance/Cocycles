@@ -1,5 +1,6 @@
 import numpy as np
 import ot
+from helpers import multivariate_laplace
 
 # SCM map: Y(x) = mu(x) + A(x) @ xi
 def affine_ot_map(m_src, S_src, m_tgt, S_tgt):
@@ -9,7 +10,7 @@ def affine_ot_map(m_src, S_src, m_tgt, S_tgt):
     b = m_tgt - A @ m_src
     return A, b
 
-def run(seed, n=None, m=None, dist="sqeuclidean", corr = True, affine = True):
+def run(seed, n=None, m=None, Dist="sqeuclidean", corr = 0.5, additive = True, multivariate_noise = False, dist = "laplace"):
     np.random.seed(seed)
     n0 = n1 = n2 = n or 250
     if m is not None:
@@ -18,12 +19,12 @@ def run(seed, n=None, m=None, dist="sqeuclidean", corr = True, affine = True):
     # Sample from the DGP
     m0 = np.array([0.0, 0.0])
     m1 = np.array([1.0, 1.0])
-    m2 = np.array([-1.0, 2.0])
+    m2 = np.array([2.0, 2.0])
 
-    if corr:
+    if not additive:
         S0 = np.array([[1.0, 0.0], [0.0, 1.0]])
-        S1 = np.array([[1.0, -0.9], [-0.9, 1.0]])
-        S2 = np.array([[0.5, 0.5], [0.5, 5.0]])
+        S1 = np.array([[1.0, -corr], [-corr, 1.0]])
+        S2 = np.array([[(1+corr), 0.0], [0.0, (1/(1+corr))]])
 
     else:
         S0 = np.array([[1.0, 0.0], [0.0, 1.0]])
@@ -34,14 +35,40 @@ def run(seed, n=None, m=None, dist="sqeuclidean", corr = True, affine = True):
     L1 = np.linalg.cholesky(S1)
     L2 = np.linalg.cholesky(S2)
 
-    xi0,xi1,xi2 = np.random.laplace(size = (n0,2)),np.random.laplace(size = (n1,2)),np.random.laplace(size = (n2,2))
+    if multivariate_noise:
+        if dist == "laplace":
+            xi0,xi1,xi2 = (
+                multivariate_laplace(size = n0, rng = seed, corr = corr),
+                multivariate_laplace(size = n1, rng = seed+1, corr = corr),
+                multivariate_laplace(size = n2, rng = seed+2, corr = corr)
+            )
+        else:
+            cov = np.ones((2,2))*corr + (1-corr)*np.eye(2)
+            xi0,xi1,xi2 = (
+                np.random.multivariate_normal(size = n0, mean = np.zeros(2), cov = cov),
+                np.random.multivariate_normal(size = n0, mean = np.zeros(2), cov = cov),
+                np.random.multivariate_normal(size = n0, mean = np.zeros(2), cov = cov),
+            )                
+        
+        xi0[:,1] = xi0[:,0] + xi0[:,1]
+        xi1[:,1] = xi1[:,0] + xi1[:,1]
+        xi2[:,1] = xi2[:,0] + xi2[:,1]
+    else:
+        if dist == "laplace":
+            xi0,xi1,xi2 = ( 
+                np.random.laplace(size = (n0,2)),
+                np.random.laplace(size = (n1,2)),
+                np.random.laplace(size = (n2,2))
+            )
+        else:
+            xi0,xi1,xi2 = ( 
+                np.random.normal(size = (n0,2)),
+                np.random.normal(size = (n1,2)),
+                np.random.normal(size = (n2,2))
+            )
     P0 = m0 + xi0 @ L0.T
     P1 = m1 + xi1 @ L1.T
     P2 = m2 + xi2 @ L2.T
-
-    if not affine:
-        P1 = 1/(1+np.exp(-P1))*5
-        P2 = 1/(1+np.exp(-P2))*10
 
     # Uniform weights
     a0 = np.ones(n0) / n0
@@ -49,9 +76,9 @@ def run(seed, n=None, m=None, dist="sqeuclidean", corr = True, affine = True):
     a2 = np.ones(n2) / n2
 
     # Cost matrices
-    C01 = ot.dist(P0, P1, dist)
-    C02 = ot.dist(P0, P2, dist)
-    C12 = ot.dist(P1, P2, dist)
+    C01 = ot.dist(P0, P1, Dist)
+    C02 = ot.dist(P0, P2, Dist)
+    C12 = ot.dist(P1, P2, Dist)
 
     # Transport plans (exact OT)
     T01 = ot.emd(a0, a1, C01) / a0[:, None]
@@ -115,7 +142,9 @@ def run(seed, n=None, m=None, dist="sqeuclidean", corr = True, affine = True):
     # ------------------------------
     return {
         "seed": seed,
-        "name": f"OT_dist={dist}",
+        "name": f"OT_dist={Dist}",
+        "corr": corr,
+        "additive": additive,
         "RMSE10": norm_error_10.mean(),
         "RMSE21direct": norm_error_21_direct.mean(),
         "RMSE21composite": norm_error_21_composite.mean(),
@@ -130,7 +159,7 @@ def run(seed, n=None, m=None, dist="sqeuclidean", corr = True, affine = True):
     }
 
 if __name__ == "__main__":
-    result = run(seed=0, n=250)
+    result = run(seed=0, n=500, corr = False, multivariate_noise = True)
     print("\n===== OT vs SCM Test Results =====")
     for k, v in result.items():
         if isinstance(v, float):

@@ -8,46 +8,7 @@ from causal_cocycle.kernels import gaussian_kernel
 from architectures import get_anchored_discrete_flows_single
 import os
 import math
-
-def multivariate_laplace(mu = np.zeros(2), corr = 0.25, b=1.0, size=1, rng=None):
-    """
-    Sample from a multivariate Laplace distribution using the
-    Gaussian-exponential mixture representation.
-
-    Parameters
-    ----------
-    mu : array_like, shape (d,)
-        Mean vector.
-    Sigma : array_like, shape (d, d)
-        Covariance matrix (positive definite).
-    b : float
-        Scale parameter (Laplace 'spread').
-    size : int
-        Number of samples.
-    rng : np.random.Generator or None
-        Optional RNG for reproducibility.
-
-    Returns
-    -------
-    samples : ndarray, shape (size, d)
-        Multivariate Laplace samples.
-    """
-    rng = np.random.default_rng(rng)
-    mu = np.asarray(mu)
-    d = mu.shape[0]
-
-    # Cholesky of covariance
-    Sigma = np.ones((d,d))*corr + (1-corr)*np.eye(d)
-    L = np.linalg.cholesky(Sigma)
-
-    # Exponential mixture variable
-    W = rng.exponential(scale=b, size=size)
-
-    # Multivariate normal samples
-    Z = rng.normal(size=(size, d)) @ L.T
-
-    # Combine
-    return mu + np.sqrt(W)[:, None] * Z
+from helpers import multivariate_laplace
 
 # === Step 1: Set up SCM ground truth for Y(x) ===
 

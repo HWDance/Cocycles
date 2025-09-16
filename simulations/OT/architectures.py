@@ -222,7 +222,7 @@ class DiscreteSelectorTransform(nn.Module):
             """
             return self.forward(tensor)
     
-def get_anchored_discrete_flows_single(y_dim: int = 2, hidden: tuple = (64,64), mask = None) -> DiscreteSelectorTransform:
+def get_anchored_discrete_flows_single(y_dim: int = 2, hidden: tuple = (32,32), mask = None) -> DiscreteSelectorTransform:
     """
     Constructs three unconditional flows and wraps them in DiscreteSelectorTransform:
       - flow0 = IdentityTransform()   (anchors domain 0 → identity)
