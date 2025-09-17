@@ -59,16 +59,15 @@ Cocycles/
 ## Reproducing Experiments in the Paper
 
 ### Examples
-Code for Examples 1 and 2 in the paper can be found in the ```examples``` folder in Jupyter notebooks. To run these, you will need to first open a jupyter notebook:
-``` bash
-jupyter notebook
-```
+Code for Examples 1 and 2 in the paper can be found in the ```examples``` folder in Jupyter notebooks. To run these, you will need to first open a ```bash jupyter notebook```.
 
 - To replicate the causal normalizing flows on the binary noise SCM in Example 1, run ```gaussian_flow_binary_example.ipynb``` and ```laplace_flow_binary_example.ipynb``` in the ```scm_example``` subfolder
 - To replicate the causal normalizing flows on the mixed tailed noise SCM in Example 1, run ```gaussian_flow_mixed_example.ipynb``` and ```laplace_flow_mixed_example.ipynb``` in the ```scm_example``` subfolder
 - To replicate the Gaussian Optimal transport Example 2 and Figure 2, run ```OT_inconsistency.ipynb``` in the ```ot_example``` subfolder
 - To replicate counterfactual cocycles on the binary noise SCM and mixed tailed noise SCM in Example 1, run ```cocycles_binary_example.ipynb``` and ```cocycles_mixedtails_example.ipynb``` respectively in the ```scm_example``` subfolder.
 
+### 401(k) application
+Code for the 401(k) application can be found in the ```applications``` folder in Jupyter notebooks. To run these, you will need to open a ```jupyter notebook``` and run ```e401k-Cocycles-NF.ipynb```.
 
 ## License
 This project is licensed under the Apache 2.0 License. See the LICENSE file for details.
