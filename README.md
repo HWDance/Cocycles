@@ -1,16 +1,22 @@
 # Counterfactual Cocycles
 Code for simulations and application in [Counterfactual Cocycles](https://arxiv.org/abs/2405.13844) (Dance and Bloem-Reddy, 2025).
 
-# 
+We model counterfactuals via a **system of transports** between treatment levels that satisfy
+identity and path-independence (cocycle), giving a **globally coherent** counterfactual model.
+Each transport is implemented with an $x$-indexed **normalizing flow**, and we train flows so their
+**latent representations match across treatments** via **CMMD**. This implicitly learns a **shared
+noise distribution**—avoiding fragile choices of fixed base densities (e.g., Gaussian/Laplace) used
+in standard causal flows. After fitting, counterfactuals are imputed by transport, and quantities
+like the **dose–response treatment harm rate** and **conditional quantiles** are estimated with simple
+kernel-weighted empirical summaries.
 
 ## Table of Contents
-
 1. [Installation](#installation)  
-2. [Repository Structure](#repository-structure)  
-3. [Reproducing Experiments](#reproducing-experiments)
-4. [Citation](#citation)
-5. [License](#license)
-6. [Contact](#contact)
+3. [Repository Structure](#repository-structure)  
+4. [Reproducing Experiments](#reproducing-experiments)
+5. [Citation](#citation)
+6. [License](#license)
+7. [Contact](#contact)
 
 ## Installation
 
