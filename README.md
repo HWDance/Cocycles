@@ -70,7 +70,7 @@ Code for Examples 1 and 2 in the paper can be found in the ```examples``` folder
 - To replicate counterfactual cocycles on the binary noise SCM and mixed tailed noise SCM in Example 1, run ```cocycles_binary_example.ipynb``` and ```cocycles_mixedtails_example.ipynb``` respectively in the ```scm_example``` subfolder.
 
 ### 401(k) application
-To run the 401(k) application open a ```jupyter notebook``` and run ```e401k-Cocycles-NF.ipynb``` in the ```applications``` folder.
+To replicate the resuls of the 401(k) application open a ```jupyter notebook``` and run ```e401k-Cocycles-NF.ipynb``` in the ```applications``` folder.
 
 ## License
 This project is licensed under the Apache 2.0 License. See the LICENSE file for details.
