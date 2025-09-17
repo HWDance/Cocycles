@@ -6,10 +6,10 @@ This is the repository to reproduce the results of the article [Counterfactual C
 > Prereqs: Conda (miniconda/mambaforge) installed; Git available.
 
 1. **Clone the repository**
-   ```bash
-   git clone https://github.com/HWDance/Cocycles.git
-   cd Cocycles
-   ```
+```bash
+git clone https://github.com/HWDance/Cocycles.git
+cd Cocycles
+```
    
 2. **Create and activate the environment**
   ```bash
