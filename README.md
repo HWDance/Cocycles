@@ -1,5 +1,5 @@
 # Counterfactual Cocycles
-This is the repository to reproduce the results of [Counterfactual Cocycles](https://arxiv.org/abs/2405.13844) (Dance and Bloem-Reddy, 2025). It includes the full source code for simulations, examples, and the 401(k) application used in the paper. Thanks for your interest and we hope you find it useful.
+This is the repository to reproduce the results of [Counterfactual Cocycles](https://arxiv.org/abs/2405.13844) (Dance and Bloem-Reddy, 2025). It includes the full source code for simulations, examples, and the 401(k) application used in the paper. Thank you for your interest and we hope you find it useful.
 
 ## Installation
 
