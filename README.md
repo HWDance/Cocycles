@@ -1,20 +1,19 @@
 # Counterfactual Cocycles
 Code for simulations and application in [Counterfactual Cocycles](https://arxiv.org/abs/2405.13844) (Dance and Bloem-Reddy, 2025).
 
-```latex
-\paragraph{Overview.}
+### Overview
 We model counterfactuals via a \emph{system of transports} between treatment levels, written
-\(T_{x',x}:\mathcal{Y}\to\mathcal{Y}\) with \(T_{x',x}(Y(x))=Y(x')\).
-These maps satisfy the axioms of a coherent counterfactual model:
-\emph{identity} \(T_{x,x}=\mathrm{id}\) and the \emph{cocycle (path independence)}
-\(T_{z,x}=T_{z,y}\circ T_{y,x}\).
+$T_{x',x}:\mathcal{Y}\to\mathcal{Y}\$ with $T_{x',x}(Y(x))=Y(x')$.
+These maps satisfy the cocycle axioms of a coherent counterfactual model:
+\emph{identity} $T_{x,x}=\mathrm{id}$ and \emph{(path independence)}
+$T_{z,x}=T_{z,y}\circ T_{y,x}$.
 (Enforcing these axioms addresses the path–dependence that can arise when fitting transports
 \emph{pairwise}—e.g.\ with OT—without global consistency constraints.)
 
 Each transport is implemented with \emph{treatment–conditioned autoregressive normalizing flows}
 and trained via \emph{conditional MMD (CMMD)} to match the relevant interventional/observational
 marginals. By factoring transports as
-\(T_{x',x}=f_{x'}\circ f_x^{-1}\),
+$T_{x',x}=f_{x'}\circ f_x^{-1}$,
 the model behaves like an SCM with a \emph{shared exogenous noise} learned \emph{implicitly} in
 latent space—so no fixed base density (e.g.\ Gaussian/Laplace) needs to be chosen, avoiding
 tail/support mis–specification sensitivity in flow–based SCMs. After fitting, counterfactuals are
