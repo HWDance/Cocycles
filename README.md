@@ -1,28 +1,5 @@
 # Counterfactual Cocycles
-Code for simulations and application in [Counterfactual Cocycles](https://arxiv.org/abs/2405.13844) (Dance and Bloem-Reddy, 2025).
-
-### Overview
-We model counterfactuals via a system of transports $\(T_{x',x}:\mathcal{Y}\to\mathcal{Y}\)_{x,x'}$ between counterfactuals under different treatment level pairs $(x,x')$,
-
-$$T_{x',x}(Y(x))=Y(x')$$
-
-These maps satisfy the (cocycle) axioms of a coherent counterfactual model:
-*identity* $T_{x,x}=\mathrm{id}$ and *path independence*
-$T_{z,x}=T_{z,y}\circ T_{y,x}$. Enforcing these axioms addresses the model incoherence that can arise when fitting transports without global consistency constraints.
-
-Each transport is implemented with autoregressive normalizing flows conditioned on the treatment level, i.e.  $T_{x',x}=f_{x'}\circ f_x^{-1}$,
-and trained via conditional MMD (CMMD) to match the relevant counterfactual
-marginals. The resulting model behaves like an SCM with a latent noise distribution learned implicitly. Thus, no fixed base density (e.g., Gaussian/Laplace) needs to be chosen, avoiding
-tail/support mis–specification sensitivity in typical causal normalizing flows. After fitting, counterfactuals are
-imputed by transport, and quantities of interest are estimated with simple empirical or kernel–weighted summaries.
-
-## Table of Contents
-1. [Installation](#installation)  
-3. [Repository Structure](#repository-structure)  
-4. [Reproducing Experiments](#reproducing-experiments)
-5. [Citation](#citation)
-6. [License](#license)
-7. [Contact](#contact)
+Welcome to the repository to repdoduce the results of the article [Counterfactual Cocycles](https://arxiv.org/abs/2405.13844) (Dance and Bloem-Reddy, 2025). This repository contains all the source code used in our experiments. We appreciate your interest in our work and hope you find it valuable.
 
 ## Installation
 
