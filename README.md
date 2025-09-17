@@ -36,7 +36,7 @@ Cocycles/
 @article{dance2025counterfactualcocycles,
   title   = {Counterfactual Cocycles: A Framework for Robust and Coherent Counterfactual Transports},
   author  = {Dance, Hugh and Bloem-Reddy, Benjamin},
-  journal = {Journal of Machine Learning Research},
+  journal = {arXiv:2405.13844},
   year    = {2025}
 }
 
