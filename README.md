@@ -33,6 +33,7 @@ Cocycles/
 ```
 
 ## Citation
+```bibtex
 @article{dance2025cocycles,
   title   = {Counterfactual Cocycles: A Framework for Robust and Coherent Counterfactual Transports},
   author  = {Dance, Hugh and Bloem-Reddy, Benjamin},
@@ -40,6 +41,7 @@ Cocycles/
   year    = {2025},
   url     = {https://arxiv.org/abs/2405.13844}
 }
+```
 
 
 
