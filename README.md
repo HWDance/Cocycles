@@ -30,6 +30,11 @@ cd Cocycles
   conda env create -f environment.yml
   conda activate cocycles
   ```
+
+To run the examples and application, you will need ```ipykernel``` to be able to run the .ipynb notebooks
+```bash
+pip install notebook ipykernel
+```
 ## Repository Structure
 Below we show the basic structure of the repo. The source code is in the ```causal_cocycle``` folder. Code to run the ```simulations```, ```examples``` and ```applications``` is in those folders respectively. 
 ```bash
@@ -47,7 +52,12 @@ Cocycles/
 ## Reproducing Experiments in the Paper
 
 ### Examples
-Code for Examples 1 and 2 in the paper can be found in the ```examples``` folder in Jupyter notebooks. 
+Code for Examples 1 and 2 in the paper can be found in the ```examples``` folder in Jupyter notebooks. To run these, you will need to first open a jupyter notebook:
+``` bash
+python -m ipykernel install --user --name=cocycles --display-name "cocycles"
+jupyter notebook
+```
+
 - To replicate the causal normalizing flows on the binary noise SCM in Example 1, run ```gaussian_flow_binary_example.ipynb``` and ```laplace_flow_binary_example.ipynb``` in the ```scm_example``` subfolder
 - To replicate the causal normalizing flows on the mixed tailed noise SCM in Example 1, run ```gaussian_flow_mixed_example.ipynb``` and ```laplace_flow_mixed_example.ipynb``` in the ```scm_example``` subfolder
 - To replicate the Gaussian Optimal transport Example 2 and Figure 2, run ```OT_inconsistency.ipynb``` in the ```ot_example``` subfolder
