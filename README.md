@@ -5,7 +5,7 @@ Code for simulations and application in [Counterfactual Cocycles](https://arxiv.
 
 ## Table of Contents
 
-1. [TL;DR](#tldr)
+1. [Method at a Glance](#method-at-a-glance)
 2. [Installation](#installation)  
 3. [Repository Structure](#repository-structure)  
 4. [Reproducing Experiments](#reproducing-experiments)
@@ -13,7 +13,7 @@ Code for simulations and application in [Counterfactual Cocycles](https://arxiv.
 6. [License](#license)
 7. [Contact](#contact)
 
-## TL;DR
+## Method at a Glance
 
 
 ## Installation
