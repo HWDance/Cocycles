@@ -43,12 +43,15 @@ python -m ipykernel install --user --name=cocycles --display-name "cocycles"
 Below we show the basic structure of the repo. The source code is in the ```causal_cocycle``` folder. Code to run the ```simulations```, ```examples``` and ```applications``` is in those folders respectively. 
 ```bash
 Cocycles/
-├── simulations/                    # .py runners (and *_hpc.py for clusters)
-├── examples/                       # notebooks + figure code
-  └── scm_example                   # code for example 1
-  └── ot_example                    # Code for example 2
-  └── illustrative examples         # Code for illustrative figures
-├── applications/                   # 401k example
+├── simulations/                    # .py runners for simulation experiments (and *_hpc.py for clusters)
+│   ├── linear_model/               # code for Experiment 8.1
+│   ├── OT/                         # code for Experiment 8.2
+│   └── Csuite/                     # code for Experiment 8.3
+├── examples/                       # notebooks and code for figures and examples
+│   ├── scm_example/                # code for Example 1
+│   ├── ot_example/                 # code for Example 2
+│   └── illustrative examples/      # code for illustrative figures
+├── applications/                   # code for 401k example
 ├── causal_cocycle/                 # core library (models, training, kernels)
 ├── environment.yml
 ├── requirements.txt
