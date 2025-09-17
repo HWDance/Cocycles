@@ -31,9 +31,6 @@ Cocycles/
 ├── setup.py
 └── README.md
 
-```
-## Reproducing Experiments 
-
 ## Citation
 If you use the code or the results of our article and/or this repo in your work, please cite the following entry:
 ```bibtex
