@@ -7,4 +7,5 @@ dependencies:
   - numpy
   - pytorch
   - matplotlib
-
+  - pip:
+      - -e .
