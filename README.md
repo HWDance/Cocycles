@@ -3,6 +3,8 @@ This is the repository to reproduce the results of the article [Counterfactual C
 
 ## Installation
 
+To get started, please follow the installation instructions below.
+
 > Prereqs: Conda (miniconda/mambaforge) installed; Git available.
 
 1. **Clone the repository**
