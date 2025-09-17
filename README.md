@@ -17,7 +17,6 @@ latent space—so no fixed base density (e.g.\ Gaussian/Laplace) needs to be cho
 tail/support mis–specification sensitivity in flow–based SCMs. After fitting, counterfactuals are
 imputed by transport, and quantities of interest (e.g.\ dose–response treatment harm rate and
 conditional quantiles/means) are estimated with simple empirical or kernel–weighted summaries.
-```
 
 ## Table of Contents
 1. [Installation](#installation)  
