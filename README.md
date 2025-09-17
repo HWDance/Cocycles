@@ -21,11 +21,9 @@ Code for simulations and application in [Counterfactual Cocycles](https://arxiv.
 **Motivating Example.** For a dosage $x$ (vs. baseline $0$), quantify *treatment harm* via the **dose–response harm rate**
 
 $$
-\mathrm{THR}(x) := \mathbb{P}(\,Y(x)-Y(0) < 0\,),
+\mathrm{THR}(x) := \mathbb{P}(Y(x)-Y(0) < 0),
 $$
-
-and, with covariates $Z$, $\mathrm{THR}(x\mid z)=\mathbb{P}\{Y(x)-Y(0)<0\mid Z=z\}$.
-This requires coherent counterfactuals for the *same unit* across dosages.
+This requires counterfactuals for the *same unit* across dosages.
 
 ### Coherent counterfactual transports
 We learn a family of transports between dosages,
