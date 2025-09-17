@@ -114,7 +114,8 @@ python simulations/Csuite/run_simcsuite_bgm.py # for BGM
 
 
 ### 401(k) application
-To replicate the results of the 401(k) application open a ```jupyter notebook``` and run ```e401k-Cocycles-NF.ipynb``` in the ```applications``` folder.
+To replicate the results of the 401(k) application open a ```jupyter notebook``` and run ```e401k-Cocycles-NF.ipynb``` in the ```applications``` folder. Note, no separate data files are needed. The notebook loads the 401(k) dataset directly via `doubleml.datasets`, which is bundled with the `doubleml` package (which is loaded via ```environment.yml```).
+
 
 ## License
 This project is licensed under the Apache 2.0 License. See the LICENSE file for details.
