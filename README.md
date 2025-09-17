@@ -98,6 +98,7 @@ python simulations/OT/run_simot_ot.py # for OT and sequential OT
 ```
 
 ** Experiment 8.3 (SCM Benchmarks)**
+
 For the simulations on SCM benchmarks, run the following files:
 ```bash
 python simulations/Csuite/run_simcsuite_cocycles.py # for cocycles
