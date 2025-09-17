@@ -32,6 +32,7 @@ Cocycles/
 ## Reproducing Experiments 
 
 ## Citation
+If you use the code or the results of our article and/or this repo in your work, please cite the following entry:
 ```bibtex
 @article{dance2025cocycles,
   title   = {Counterfactual Cocycles: A Framework for Robust and Coherent Counterfactual Transports},
