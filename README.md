@@ -1,14 +1,26 @@
 # Counterfactual Cocycles
 Code for simulations and application in [Counterfactual Cocycles](https://arxiv.org/abs/2405.13844) (Dance and Bloem-Reddy, 2025).
 
-We model counterfactuals via a **system of transports** between treatment levels that satisfy
-identity and path-independence (cocycle), giving a **globally coherent** counterfactual model.
-Each transport is implemented with an $x$-indexed **normalizing flow**, and we train flows so their
-**latent representations match across treatments** via **CMMD**. This implicitly learns a **shared
-noise distribution**—avoiding fragile choices of fixed base densities (e.g., Gaussian/Laplace) used
-in standard causal flows. After fitting, counterfactuals are imputed by transport, and quantities
-like the **dose–response treatment harm rate** and **conditional quantiles** are estimated with simple
-kernel-weighted empirical summaries.
+\paragraph{Overview.}
+We model counterfactuals via a \emph{system of transports} between treatment levels, written
+\(T_{x',x}:\mathcal{Y}\to\mathcal{Y}\) with \(T_{x',x}(Y(x))=Y(x')\).
+These maps satisfy the axioms of a coherent counterfactual model:
+\emph{identity} \(T_{x,x}=\mathrm{id}\) and the \emph{cocycle (path independence)}
+\(T_{z,x}=T_{z,y}\circ T_{y,x}\).
+(Enforcing these axioms addresses the path–dependence that can arise when fitting transports
+\emph{pairwise}—e.g.\ with OT—without global consistency constraints.)
+
+\smallskip
+Each transport is implemented with \emph{treatment–conditioned autoregressive normalizing flows}
+and trained via \emph{conditional MMD (CMMD)} to match the relevant interventional/observational
+marginals. By factoring transports as
+\(T_{x',x}=f_{x'}\circ f_x^{-1}\),
+the model behaves like an SCM with a \emph{shared exogenous noise} learned \emph{implicitly} in
+latent space—so no fixed base density (e.g.\ Gaussian/Laplace) needs to be chosen, avoiding
+tail/support mis–specification sensitivity in flow–based SCMs. After fitting, counterfactuals are
+imputed by transport, and quantities of interest (e.g.\ dose–response treatment harm rate and
+conditional quantiles/means) are estimated with simple empirical or kernel–weighted summaries.
+
 
 ## Table of Contents
 1. [Installation](#installation)  
