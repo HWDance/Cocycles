@@ -35,7 +35,7 @@ To run the examples and application, you will need ```ipykernel``` to be able to
 ```bash
 pip install notebook ipykernel
 ```
-(Optional) Fegister this env as a selectable Jupyter kernel
+(Optional) Register this env as a selectable Jupyter kernel
 ```bash
 python -m ipykernel install --user --name=cocycles --display-name "cocycles"
 ```
@@ -85,13 +85,13 @@ python simulations/linear_model/run_simlin_linearfixed.py # Run cocycles, maximu
 
 ** Experiment 8.2 (Confounding and Path-Consistency Ablation)**
 
-For the simulalions on the confounded chain DAG, run the following files:
+For the simulations on the confounded chain DAG, run the following files:
 ```bash
 python simulations/OT/run_simot_chain_cocycles.py # for cocycles (MAF flow)
 python simulations/OT/run_simot_chain_ot.py # for OT and sequential OT
 ```
 
-For the simulalions on the non-additive triangle DAG, run the following files:
+For the simulations on the non-additive triangle DAG, run the following files:
 ```bash
 python simulations/OT/run_simot_cocycles.py # for cocycles (MAF flow)
 python simulations/OT/run_simot_ot.py # for OT and sequential OT
@@ -109,7 +109,7 @@ python simulations/Csuite/run_simcsuite_bgm.py # for BGM
 
 
 ### 401(k) application
-To replicate the resuls of the 401(k) application open a ```jupyter notebook``` and run ```e401k-Cocycles-NF.ipynb``` in the ```applications``` folder.
+To replicate the results of the 401(k) application open a ```jupyter notebook``` and run ```e401k-Cocycles-NF.ipynb``` in the ```applications``` folder.
 
 ## License
 This project is licensed under the Apache 2.0 License. See the LICENSE file for details.
