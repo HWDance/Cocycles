@@ -71,13 +71,13 @@ Code for Examples 1 and 2 in the paper can be found in the ```examples``` folder
 
 ### Simulations
 
-#### Experiment 8.1 (Linear Model)
+**Experiment 8.1 (Linear Model)**
 To run the simulations on the linear model with cross-validation over flow architectures (i.e., Table 3), run the following files:
 ```bash
 python simulations/linear_model/run_simlin_cocycles.py # for cocycles (CMMD-V/CMMD-U)
 python simulations/linear_model/run_simlin_bgm.py # for bijective causal models with different base distributions
 ```
-To run the simulations on the linea model with the fxed linear architecture (i.e., Figure XX), run the following file:
+To run the simulations on the linear model with the fxed linear architecture (i.e., Figure 10), run the following file:
 ```bash
 python simulations/linear_model/run_simlin_linearfixed.py # Run cocycles, maximum-likelihood BGMs and URR BGMs with fixed linear architecture
 ```
