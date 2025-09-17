@@ -72,6 +72,7 @@ Code for Examples 1 and 2 in the paper can be found in the ```examples``` folder
 ### Simulations
 
 **Experiment 8.1 (Linear Model)**
+
 To run the simulations on the linear model with cross-validation over flow architectures (i.e., Table 3), run the following files:
 ```bash
 python simulations/linear_model/run_simlin_cocycles.py # for cocycles (CMMD-V/CMMD-U)
