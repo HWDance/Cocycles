@@ -8,8 +8,7 @@ $$T_{x',x}(Y(x))=Y(x')$$
 
 These maps satisfy the (cocycle) axioms of a coherent counterfactual model:
 *identity* $T_{x,x}=\mathrm{id}$ and *path independence*
-$T_{z,x}=T_{z,y}\circ T_{y,x}$. Enforcing these axioms addresses the path–dependence that can arise when fitting transports
-\emph{pairwise}—e.g.\ with OT—without global consistency constraints.
+$T_{z,x}=T_{z,y}\circ T_{y,x}$. Enforcing these axioms addresses the model incoherence that can arise when fitting transports without global consistency constraints.
 
 Each transport is implemented with autoregressive normalizing flows conditioned on the treatment level, i.e.  $T_{x',x}=f_{x'}\circ f_x^{-1}$,
 and trained via conditional MMD (CMMD) to match the relevant counterfactual
