@@ -1,6 +1,18 @@
 # Counterfactual Cocycles
 This is the repository to reproduce the results of [Counterfactual Cocycles](https://arxiv.org/abs/2405.13844) (Dance and Bloem-Reddy, 2025). It includes the full source code for simulations, examples, and the 401(k) application used in the paper. Thank you for your interest and we hope you find it useful.
 
+## Citation
+If you use the code or the results of our article and/or this repo in your work, please cite the following entry:
+```bibtex
+@article{dance2025cocycles,
+  title   = {Counterfactual Cocycles: A Framework for Robust and Coherent Counterfactual Transports},
+  author  = {Dance, Hugh and Bloem-Reddy, Benjamin},
+  journal = {arXiv preprint arXiv:2405.13844},
+  year    = {2025},
+  url     = {https://arxiv.org/abs/2405.13844}
+}
+```
+
 ## Installation
 
 To get started, please follow the installation instructions below.
@@ -30,18 +42,17 @@ Cocycles/
 ├── requirements.txt
 ├── setup.py
 └── README.md
-
-## Citation
-If you use the code or the results of our article and/or this repo in your work, please cite the following entry:
-```bibtex
-@article{dance2025cocycles,
-  title   = {Counterfactual Cocycles: A Framework for Robust and Coherent Counterfactual Transports},
-  author  = {Dance, Hugh and Bloem-Reddy, Benjamin},
-  journal = {arXiv preprint arXiv:2405.13844},
-  year    = {2025},
-  url     = {https://arxiv.org/abs/2405.13844}
-}
 ```
+
+## Reproducing Experiments in the Paper
+
+### Examples
+Code for Examples 1 and 2 in the paper can be found in the ```examples``` folder in Jupyter notebooks. 
+- To replicate the causal normalizing flows on the binary noise SCM in Example 1, run ```gaussian_flow_binary_example.ipynb``` and ```laplace_flow_binary_example.ipynb``` in the ```scm_example``` subfolder
+- To replicate the causal normalizing flows on the mixed tailed noise SCM in Example 1, run ```gaussian_flow_mixed_example.ipynb``` and ```laplace_flow_mixed_example.ipynb``` in the ```scm_example``` subfolder
+- To replicate the Gaussian Optimal transport Example 2 and Figure 2, run ```OT_inconsistency.ipynb``` in the ```ot_example``` subfolder
+- To replicate counterfactual cocycles on the binary noise SCM and mixed tailed noise SCM in Example 1, run ```cocycles_binary_example.ipynb``` and ```cocycles_mixedtails_example.ipynb``` respectively in the ```scm_example``` subfolder.
+
 
 ## License
 This project is licensed under the Apache 2.0 License. See the LICENSE file for details.
