@@ -21,7 +21,7 @@ Code for simulations and application in [Counterfactual Cocycles](https://arxiv.
 **Motivating Example.** For a dosage $x$ (vs. baseline $0$), quantify *treatment harm* via the **dose–response harm rate**
 
 $$
-\mathrm{THR}(x) := \mathbb{P}\{\,Y(x)-Y(0) < 0\,\},
+\mathrm{THR}(x) := \mathbb{P}(\,Y(x)-Y(0) < 0\,),
 $$
 
 and, with covariates $Z$, $\mathrm{THR}(x\mid z)=\mathbb{P}\{Y(x)-Y(0)<0\mid Z=z\}$.
