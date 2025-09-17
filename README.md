@@ -5,7 +5,7 @@ Code for simulations and application in [Counterfactual Cocycles](https://arxiv.
 
 ## Table of Contents
 
-1. [When to use Counterfactual Cocycles?](#tl;dr)
+1. [When to use Counterfactual Cocycles?](#tldr)
 2. [Installation](#installation)  
 3. [Reproducing Experiments](#reproducing-experiments)  
 3. [Repository Structure](#repository-structure)  
@@ -15,7 +15,7 @@ Code for simulations and application in [Counterfactual Cocycles](https://arxiv.
 ## TL;DR
 
 
-## Installation (from scratch)
+## Installation
 
 > Prereqs: Conda (miniconda/mambaforge) installed; Git available.
 
