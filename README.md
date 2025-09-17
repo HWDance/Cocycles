@@ -32,10 +32,7 @@ cd Cocycles
   ```
 3. **Check successful installation**
   ```bash
-  python - <<'PY'
-  import causal_cocycle as cc
-  print("OK import causal_cocycle")
-  PY
+python -c "import causal_cocycle as cc; print('OK causal_cocycle from', cc.__file__)"
   ```
 
 To run the examples and application, you will need ```ipykernel``` to be able to run the .ipynb notebooks
