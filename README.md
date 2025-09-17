@@ -2,7 +2,7 @@
 Code for simulations and application in [Counterfactual Cocycles](https://arxiv.org/abs/2405.13844) (Dance and Bloem-Reddy, 2025).
 
 ### Overview
-We model counterfactuals via a system of transports $\(T_{x',x}:\mathcal{Y}\to\mathcal{Y}\)_{x,x'}$ between treatment levels $x \in \mathbb X$, written
+We model counterfactuals via a system of transports $\(T_{x',x}:\mathcal{Y}\to\mathcal{Y}\)_{x,x'}$ between counterfactuals under different treatment level pairs $(x,x')$,
 
 $$T_{x',x}:\mathcal{Y}\to\mathcal{Y}$ with $T_{x',x}(Y(x))=Y(x')$$
 
