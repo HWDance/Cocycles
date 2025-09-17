@@ -1,6 +1,7 @@
 # Counterfactual Cocycles
 Code for simulations and application in [Counterfactual Cocycles](https://arxiv.org/abs/2405.13844) (Dance and Bloem-Reddy, 2025).
 
+```latex
 \paragraph{Overview.}
 We model counterfactuals via a \emph{system of transports} between treatment levels, written
 \(T_{x',x}:\mathcal{Y}\to\mathcal{Y}\) with \(T_{x',x}(Y(x))=Y(x')\).
@@ -10,7 +11,6 @@ These maps satisfy the axioms of a coherent counterfactual model:
 (Enforcing these axioms addresses the path–dependence that can arise when fitting transports
 \emph{pairwise}—e.g.\ with OT—without global consistency constraints.)
 
-\smallskip
 Each transport is implemented with \emph{treatment–conditioned autoregressive normalizing flows}
 and trained via \emph{conditional MMD (CMMD)} to match the relevant interventional/observational
 marginals. By factoring transports as
@@ -20,7 +20,7 @@ latent space—so no fixed base density (e.g.\ Gaussian/Laplace) needs to be cho
 tail/support mis–specification sensitivity in flow–based SCMs. After fitting, counterfactuals are
 imputed by transport, and quantities of interest (e.g.\ dose–response treatment harm rate and
 conditional quantiles/means) are estimated with simple empirical or kernel–weighted summaries.
-
+```
 
 ## Table of Contents
 1. [Installation](#installation)  
