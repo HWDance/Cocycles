@@ -10,11 +10,9 @@ $T_{z,x}=T_{z,y}\circ T_{y,x}$.
 (Enforcing these axioms addresses the path–dependence that can arise when fitting transports
 \emph{pairwise}—e.g.\ with OT—without global consistency constraints.)
 
-Each transport is implemented with \emph{treatment–conditioned autoregressive normalizing flows}
+Each transport is implemented with {autoregressive normalizing flows} $T_{x',x}=f_{x'}\circ f_x^{-1}$,
 and trained via \emph{conditional MMD (CMMD)} to match the relevant interventional/observational
-marginals. By factoring transports as
-$T_{x',x}=f_{x'}\circ f_x^{-1}$,
-the model behaves like an SCM with a \emph{shared exogenous noise} learned \emph{implicitly} in
+marginals. The resulting model behaves like an SCM with a \emph{shared exogenous noise} learned \emph{implicitly} in
 latent space—so no fixed base density (e.g.\ Gaussian/Laplace) needs to be chosen, avoiding
 tail/support mis–specification sensitivity in flow–based SCMs. After fitting, counterfactuals are
 imputed by transport, and quantities of interest (e.g.\ dose–response treatment harm rate and
