@@ -88,7 +88,7 @@ For the simulations on the linear model with the fxed linear architecture (i.e.,
 python simulations/linear_model/run_simlin_linearfixed.py # Run cocycles, maximum-likelihood BGMs and URR BGMs with fixed linear architecture
 ```
 
-** Experiment 8.2 (Confounding and Path-Consistency Ablation)**
+**Experiment 8.2 (Confounding and Path-Consistency Ablation)**
 
 For the simulations on the confounded chain DAG, run the following files:
 ```bash
@@ -102,7 +102,7 @@ python simulations/OT/run_simot_cocycles.py # for cocycles (MAF flow)
 python simulations/OT/run_simot_ot.py # for OT and sequential OT
 ```
 
-** Experiment 8.3 (SCM Benchmarks)**
+**Experiment 8.3 (SCM Benchmarks)**
 
 For the simulations on SCM benchmarks, run the following files:
 ```bash
@@ -114,7 +114,7 @@ python simulations/Csuite/run_simcsuite_bgm.py # for BGM
 
 
 ### 401(k) application
-To replicate the results of the 401(k) application open a ```jupyter notebook``` and run ```e401k-Cocycles-NF.ipynb``` in the ```applications``` folder. Note, no separate data files are needed. The notebook loads the 401(k) dataset directly via `doubleml.datasets`, which is bundled with the `doubleml` package (which is loaded via ```environment.yml```).
+To replicate the results of the 401(k) application open a ```jupyter notebook``` and run ```e401k-Cocycles-NF.ipynb``` in the ```applications``` folder. Note, no separate data files are needed. The notebook loads the 401(k) dataset directly via `doubleml.datasets`, which is bundled with the `doubleml` package (installed via ```environment.yml```).
 
 
 ## License
