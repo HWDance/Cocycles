@@ -2,10 +2,15 @@ name: cocycles
 channels:
   - conda-forge
 dependencies:
-  - python
-  - pip
-  - numpy
-  - pytorch
-  - matplotlib
+  - python=3.12.2
+  - pip=24.0
+  - numpy=1.26
+  - pytorch=2.1.2
+  - matplotlib=3.8.3
+  - pandas=2.2.0
   - pip:
+      - doubleml==0.7.1
+      - causalflows==0.1.0
+      - zuko==1.4.0
+      - seaborn==0.13.2
       - -e .
