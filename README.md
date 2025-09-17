@@ -17,6 +17,7 @@ cd Cocycles
   conda activate cocycles
   ```
 ## Repository Structure
+Below we show the basic structure of the repo. The source code is in the ```bash causal_cocycle``` folder. Code to run the ```bash simulations```, ```bash examples``` and ```bash applications``` is in those folders respectively. 
 ```bash
 Cocycles/
 ├── simulations/        # .py runners (and *_hpc.py for clusters)
