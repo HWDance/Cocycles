@@ -33,12 +33,18 @@ Cocycles/
 ```
 
 ## Citation
-@article{dance2025counterfactualcocycles,
-  title   = {Counterfactual Cocycles: A Framework for Robust and Coherent Counterfactual Transports},
-  author  = {Dance, Hugh and Bloem-Reddy, Benjamin},
-  journal = {arXiv:2405.13844},
-  year    = {2025}
+@misc{dance2025counterfactualcocycles,
+  title         = {Counterfactual Cocycles: A Framework for Robust and Coherent Counterfactual Transports},
+  author        = {Hugh Dance and Benjamin Bloem-Reddy},
+  year          = {2025},
+  eprint        = {2405.13844},
+  archivePrefix = {arXiv},
+  primaryClass  = {stat.ME},
+  doi           = {10.48550/arXiv.2405.13844},
+  url           = {https://arxiv.org/abs/2405.13844},
+  note          = {arXiv:2405.13844v3}
 }
+
 
 ## License
 This project is licensed under the Apache 2.0 License. See the LICENSE file for details.
