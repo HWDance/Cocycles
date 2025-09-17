@@ -41,11 +41,9 @@ cd Cocycles
 To run the examples and application, you will need ```ipykernel``` to be able to run the .ipynb notebooks
 ```bash
 pip install notebook ipykernel
+python -m ipykernel install --user --name=cocycles --display-name "cocycles" (optionally register env as selectable Jupyter kernel)
 ```
-(Optional) Register this env as a selectable Jupyter kernel
-```bash
-python -m ipykernel install --user --name=cocycles --display-name "cocycles"
-```
+
 ## Repository Structure
 Below we show the basic structure of the repo. The source code is in the ```causal_cocycle``` folder. Code to run the ```simulations```, ```examples``` and ```applications``` is in those folders respectively. 
 ```bash
