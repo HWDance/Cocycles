@@ -71,16 +71,39 @@ Code for Examples 1 and 2 in the paper can be found in the ```examples``` folder
 
 ### Simulations
 
-**Experiment 8.1 (Linear Model)**
+**Experiment 8.1 (Noise Ablation in Linear Model)**
 
-To run the simulations on the linear model with cross-validation over flow architectures (i.e., Table 3), run the following files:
+For the simulations on the linear model with cross-validation over flow architectures (i.e., Table 3), run the following files:
 ```bash
 python simulations/linear_model/run_simlin_cocycles.py # for cocycles (CMMD-V/CMMD-U)
 python simulations/linear_model/run_simlin_bgm.py # for bijective causal models with different base distributions
 ```
-To run the simulations on the linear model with the fxed linear architecture (i.e., Figure 10), run the following file:
+For the simulations on the linear model with the fxed linear architecture (i.e., Figure 10), run the following file:
 ```bash
 python simulations/linear_model/run_simlin_linearfixed.py # Run cocycles, maximum-likelihood BGMs and URR BGMs with fixed linear architecture
+```
+
+** Experiment 8.2 (Confounding and Path-Consistency Ablation)**
+
+For the simulalions on the confounded chain DAG, run the following files:
+```bash
+python simulations/OT/run_simot_chain_cocycles.py # for cocycles (MAF flow)
+python simulations/OT/run_simot_chain_ot.py # for OT and sequential OT
+```
+
+For the simulalions on the non-additive triangle DAG, run the following files:
+```bash
+python simulations/OT/run_simot_cocycles.py # for cocycles (MAF flow)
+python simulations/OT/run_simot_ot.py # for OT and sequential OT
+```
+
+** Experiment 8.3 (SCM Benchmarks)**
+For the simulations on SCM benchmarks, run the following files:
+```bash
+python simulations/Csuite/run_simcsuite_cocycles.py # for cocycles
+python simulations/Csuite/run_simcsuite_carefl.py # for CAREFL
+python simulations/Csuite/run_simcsuite_causalnf.py # for CAUSALNF
+python simulations/Csuite/run_simcsuite_bgm.py # for BGM
 ```
 
 
