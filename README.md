@@ -7,8 +7,9 @@ Code for simulations and application in [Counterfactual Cocycles](https://arxiv.
 
 1. [When to use Counterfactual Cocycles?](#tldr)
 2. [Installation](#installation)  
-3. [Reproducing Experiments](#reproducing-experiments)  
 3. [Repository Structure](#repository-structure)  
+4. [Reproducing Experiments](#reproducing-experiments)
+5. [Citation](#citation)
 6. [License](#license)
 7. [Contact](#contact)
 
@@ -41,7 +42,9 @@ Cocycles/
 ├── requirements.txt
 ├── setup.py
 └── README.md
+
 ```
+## Reproducing Experiments 
 
 ## Citation
 ```bibtex
@@ -53,8 +56,6 @@ Cocycles/
   url     = {https://arxiv.org/abs/2405.13844}
 }
 ```
-
-
 
 ## License
 This project is licensed under the Apache 2.0 License. See the LICENSE file for details.
