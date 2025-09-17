@@ -4,7 +4,7 @@ Code for simulations and application in [Counterfactual Cocycles](https://arxiv.
 ### Overview
 We model counterfactuals via a system of transports $\(T_{x',x}:\mathcal{Y}\to\mathcal{Y}\)_{x,x'}$ between counterfactuals under different treatment level pairs $(x,x')$,
 
-$$T_{x',x}:\mathcal{Y}\to\mathcal{Y}$ with $T_{x',x}(Y(x))=Y(x')$$
+$$T_{x',x}(Y(x))=Y(x')$$
 
 These maps satisfy the (cocycle) axioms of a coherent counterfactual model:
 *identity* $T_{x,x}=\mathrm{id}$ and *path independence*
