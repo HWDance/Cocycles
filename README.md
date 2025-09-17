@@ -14,8 +14,7 @@ Each transport is implemented with autoregressive normalizing flows conditioned 
 and trained via conditional MMD (CMMD) to match the relevant counterfactual
 marginals. The resulting model behaves like an SCM with a latent noise distribution learned implicitly. Thus, no fixed base density (e.g., Gaussian/Laplace) needs to be chosen, avoiding
 tail/support mis–specification sensitivity in typical causal normalizing flows. After fitting, counterfactuals are
-imputed by transport, and quantities of interest (e.g., dose–response treatment harm rate and
-conditional quantiles/means) are estimated with simple empirical or kernel–weighted summaries.
+imputed by transport, and quantities of interest are estimated with simple empirical or kernel–weighted summaries.
 
 ## Table of Contents
 1. [Installation](#installation)  
