@@ -5,12 +5,14 @@ Code for simulations and application in [Counterfactual Cocycles](https://arxiv.
 
 ## Table of Contents
 
-1. [When to use Counterfactual Cocycles?](#tldr)
+1. [When to use Counterfactual Cocycles?](#tl;dr)
 2. [Installation](#installation)  
 3. [Reproducing Experiments](#reproducing-experiments)  
 3. [Repository Structure](#repository-structure)  
 6. [License](#license)
 7. [Contact](#contact)
+
+## TL;DR
 
 
 ## Installation (from scratch)
