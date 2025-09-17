@@ -1,5 +1,5 @@
 # Counterfactual Cocycles
-Welcome to the repository to repdoduce the results of the article [Counterfactual Cocycles](https://arxiv.org/abs/2405.13844) (Dance and Bloem-Reddy, 2025). This repository contains all the source code used in our experiments. We appreciate your interest in our work and hope you find it valuable.
+This is the repository to reproduce the results of the article [Counterfactual Cocycles](https://arxiv.org/abs/2405.13844) (Dance and Bloem-Reddy, 2025). It contains all source code used in our experiments. We appreciate your interest in our work and hope you find it valuable.
 
 ## Installation
 
