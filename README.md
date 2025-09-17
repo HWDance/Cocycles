@@ -35,12 +35,19 @@ To run the examples and application, you will need ```ipykernel``` to be able to
 ```bash
 pip install notebook ipykernel
 ```
+(Optional) Fegister this env as a selectable Jupyter kernel
+```bash
+python -m ipykernel install --user --name=cocycles --display-name "cocycles"
+```
 ## Repository Structure
 Below we show the basic structure of the repo. The source code is in the ```causal_cocycle``` folder. Code to run the ```simulations```, ```examples``` and ```applications``` is in those folders respectively. 
 ```bash
 Cocycles/
 ├── simulations/        # .py runners (and *_hpc.py for clusters)
 ├── examples/           # notebooks + figure code
+  └── scm_example       # code for example 1
+  └── ot_example        # Code for example 2
+  └── illustrative examples        # Code for illustrative figures
 ├── applications/       # 401k example
 ├── causal_cocycle/     # core library (models, training, kernels)
 ├── environment.yml
@@ -54,7 +61,6 @@ Cocycles/
 ### Examples
 Code for Examples 1 and 2 in the paper can be found in the ```examples``` folder in Jupyter notebooks. To run these, you will need to first open a jupyter notebook:
 ``` bash
-python -m ipykernel install --user --name=cocycles --display-name "cocycles"
 jupyter notebook
 ```
 
