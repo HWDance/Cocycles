@@ -62,12 +62,26 @@ Cocycles/
 ## Reproducing Experiments in the Paper
 
 ### Examples
-Code for Examples 1 and 2 in the paper can be found in the ```examples``` folder in Jupyter notebooks. To run these, you will need to first open a ```bash jupyter notebook```.
+Code for Examples 1 and 2 in the paper can be found in the ```examples``` folder in Jupyter notebooks. To run these, you will need to first open a ```jupyter notebook```.
 
 - To replicate the causal normalizing flows on the binary noise SCM in Example 1, run ```gaussian_flow_binary_example.ipynb``` and ```laplace_flow_binary_example.ipynb``` in the ```scm_example``` subfolder
 - To replicate the causal normalizing flows on the mixed tailed noise SCM in Example 1, run ```gaussian_flow_mixed_example.ipynb``` and ```laplace_flow_mixed_example.ipynb``` in the ```scm_example``` subfolder
 - To replicate the Gaussian Optimal transport Example 2 and Figure 2, run ```OT_inconsistency.ipynb``` in the ```ot_example``` subfolder
 - To replicate counterfactual cocycles on the binary noise SCM and mixed tailed noise SCM in Example 1, run ```cocycles_binary_example.ipynb``` and ```cocycles_mixedtails_example.ipynb``` respectively in the ```scm_example``` subfolder.
+
+### Simulations
+
+#### Experiment 8.1 (Linear Model)
+To run the simulations on the linear model with cross-validation over flow architectures (i.e., Table 3), run the following files:
+```bash
+python simulations/linear_model/run_simlin_cocycles.py # for cocycles (CMMD-V/CMMD-U)
+python simulations/linear_model/run_simlin_bgm.py # for bijective causal models with different base distributions
+```
+To run the simulations on the linea model with the fxed linear architecture (i.e., Figure XX), run the following file:
+```bash
+python simulations/linear_model/run_simlin_linearfixed.py # Run cocycles, maximum-likelihood BGMs and URR BGMs with fixed linear architecture
+```
+
 
 ### 401(k) application
 To replicate the resuls of the 401(k) application open a ```jupyter notebook``` and run ```e401k-Cocycles-NF.ipynb``` in the ```applications``` folder.
