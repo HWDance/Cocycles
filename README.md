@@ -112,9 +112,8 @@ python simulations/Csuite/run_simcsuite_causalnf.py # for CAUSALNF
 python simulations/Csuite/run_simcsuite_bgm.py # for BGM
 ```
 
-
 ### 401(k) application
-To replicate the results of the 401(k) application open a ```jupyter notebook``` and run ```e401k-Cocycles-NF.ipynb``` in the ```applications``` folder. Note, no separate data files are needed. The notebook loads the 401(k) dataset directly via `doubleml.datasets`, which is bundled with the `doubleml` package (installed via ```environment.yml```).
+To replicate the results of the real 401(k) application open a ```jupyter notebook``` and run ```e401k-Cocycles-NF.ipynb``` in the ```applications``` folder. Note, no separate data files are needed. The notebook loads the 401(k) dataset directly via `doubleml.datasets`, which is bundled with the `doubleml` package (installed via ```environment.yml```).
 
 
 ## License
