@@ -8,9 +8,9 @@ Code for simulations and application in [Counterfactual Cocycles](https://arxiv.
 1. [When to use Counterfactual Cocycles?](#tldr)
 2. [Installation](#installation)  
 3. [Reproducing Experiments](#reproducing-experiments)  
-4. [License](#license)
-5. [Citation](#citation)
-6. [Contact](#contact)
+3. [Repository Structure](#repository-structure)  
+6. [License](#license)
+7. [Contact](#contact)
 
 
 ## Installation (from scratch)
