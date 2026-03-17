@@ -1,4 +1,3 @@
-import copy
 import torch
 from typing import Optional
 
@@ -7,10 +6,11 @@ from causal_cocycle.rkhs_estimation import FunctionalRegressor
 
 class RKHSWeightEstimator:
     """
-    High-level wrapper for learning linear smoother weights on covariates
-    ``(X, Z)`` and returning matrices
+    High-level wrapper for learning fixed linear smoother weights on CME
+    conditioning covariates ``(X, C)`` and returning the full in-sample
+    weight matrix
 
-        W[i, j] = beta_j(X_query[i], Z_query[i]).
+        W[i, j] = beta_j(X_query[i], C_query[i]).
 
     The underlying smoother is any functional exposing
 
@@ -30,7 +30,7 @@ class RKHSWeightEstimator:
             else None
         )
         self._X: Optional[torch.Tensor] = None
-        self._Z: Optional[torch.Tensor] = None
+        self._C: Optional[torch.Tensor] = None
         self._Y: Optional[torch.Tensor] = None
         self._U: Optional[torch.Tensor] = None
 
@@ -42,19 +42,19 @@ class RKHSWeightEstimator:
             raise ValueError(f"{name} must be 1D or 2D, got shape {tuple(value.shape)}.")
         return value
 
-    def _stack_inputs(self, X: torch.Tensor, Z: torch.Tensor) -> torch.Tensor:
+    def _stack_inputs(self, X: torch.Tensor, C: torch.Tensor) -> torch.Tensor:
         X = self._as_2d("X", X)
-        Z = self._as_2d("Z", Z)
-        if X.shape[0] != Z.shape[0]:
+        C = self._as_2d("C", C)
+        if X.shape[0] != C.shape[0]:
             raise ValueError(
-                f"X and Z must have the same batch size, got {X.shape[0]} and {Z.shape[0]}."
+                f"X and C must have the same batch size, got {X.shape[0]} and {C.shape[0]}."
             )
-        return torch.cat((X, Z), dim=-1)
+        return torch.cat((X, C), dim=-1)
 
     def tune(
         self,
         X: torch.Tensor,
-        Z: torch.Tensor,
+        C: torch.Tensor,
         Y: torch.Tensor,
         kernel_y=None,
         maxiter: int = 100,
@@ -67,7 +67,7 @@ class RKHSWeightEstimator:
         """
         Tune smoother hyperparameters by RKHS cross-validation loss
 
-            ||psi(Y) - m_hat(X, Z)||_H^2.
+            ||psi(Y) - m_hat(X, C)||_H^2.
         """
         if kernel_y is not None:
             self.kernel_y = kernel_y
@@ -76,7 +76,7 @@ class RKHSWeightEstimator:
             raise ValueError("kernel_y must be provided either at init or in tune().")
 
         self.regressor = FunctionalRegressor(self.functional, kernel_y=self.kernel_y)
-        U = self._stack_inputs(X, Z)
+        U = self._stack_inputs(X, C)
         losses = self.regressor.optimise(
             U,
             self._as_2d("Y", Y),
@@ -89,17 +89,21 @@ class RKHSWeightEstimator:
         )
         return losses
 
-    def fit(self, X: torch.Tensor, Z: torch.Tensor, Y: torch.Tensor):
+    def fit(self, X: torch.Tensor, C: torch.Tensor, Y: torch.Tensor):
         """
-        Store the support set and fit the smoother on ``U = [X, Z]``.
+        Store the support set and fit the smoother on ``U = [X, C]``.
+
+        This is the intended preprocessing step for ``WCMMD_V``:
+        fit once on the full support set, then use ``training_weights()`` to
+        obtain the full fixed weight matrix ``W`` before cocycle training.
         """
         X = self._as_2d("X", X)
-        Z = self._as_2d("Z", Z)
+        C = self._as_2d("C", C)
         Y = self._as_2d("Y", Y)
-        U = self._stack_inputs(X, Z)
+        U = self._stack_inputs(X, C)
 
         self._X = X
-        self._Z = Z
+        self._C = C
         self._Y = Y
         self._U = U
         self.functional.fit(Y, U)
@@ -108,7 +112,7 @@ class RKHSWeightEstimator:
     def fit_tune(
         self,
         X: torch.Tensor,
-        Z: torch.Tensor,
+        C: torch.Tensor,
         Y: torch.Tensor,
         kernel_y=None,
         maxiter: int = 100,
@@ -123,7 +127,7 @@ class RKHSWeightEstimator:
         """
         self.tune(
             X,
-            Z,
+            C,
             Y,
             kernel_y=kernel_y,
             maxiter=maxiter,
@@ -133,9 +137,9 @@ class RKHSWeightEstimator:
             print_=print_,
             generator=generator,
         )
-        return self.fit(X, Z, Y)
+        return self.fit(X, C, Y)
 
-    def weights(self, X_query: torch.Tensor, Z_query: torch.Tensor) -> torch.Tensor:
+    def weights(self, X_query: torch.Tensor, C_query: torch.Tensor) -> torch.Tensor:
         """
         Return the smoother coefficient matrix of shape
 
@@ -144,52 +148,16 @@ class RKHSWeightEstimator:
         if self._U is None:
             raise ValueError("Estimator must be fit before calling weights().")
 
-        U_query = self._stack_inputs(X_query, Z_query)
+        U_query = self._stack_inputs(X_query, C_query)
         return self.functional.linear_weights(U_query)
 
     def training_weights(self) -> torch.Tensor:
         """
-        Return in-sample smoother weights of shape ``(n_support, n_support)``.
+        Return the full in-sample fixed weight matrix ``W`` of shape
+        ``(n_support, n_support)``. This is the object to pass into
+        ``build_loss(..., loss_type="WCMMD_V", weights=W)`` before cocycle
+        training.
         """
         if self._U is None:
             raise ValueError("Estimator must be fit before calling training_weights().")
         return self.functional.training_weights()
-
-    def batch_weight_fn(self):
-        """
-        Return a callable suitable for ``WCMMD_V`` in the current minibatch regime.
-
-        The callable expects either:
-        - a tensor ``U_batch`` containing concatenated covariates, or
-        - a dict with entries ``'X'`` and ``'Z'``.
-
-        It fits a fresh copy of the smoother on the batch and returns the
-        batch-local weight matrix of shape ``(n_batch, n_batch)``.
-        """
-
-        def _weight_fn(inputs):
-            if isinstance(inputs, dict):
-                if "X" not in inputs or "Z" not in inputs:
-                    raise ValueError("Batch dict inputs must contain keys 'X' and 'Z'.")
-                X_batch = inputs["X"]
-                Z_batch = inputs["Z"]
-            else:
-                raise ValueError(
-                    "batch_weight_fn currently expects dict inputs with keys 'X' and 'Z'."
-                )
-
-            batch_functional = copy.deepcopy(self.functional)
-            U_batch = self._stack_inputs(X_batch, Z_batch)
-
-            # Any Y-like argument with the correct first dimension works here because
-            # linear_weights depend only on the support covariates and tuned
-            # hyperparameters. Using zeros avoids imposing an outcome dependency.
-            dummy_y = torch.zeros(
-                (U_batch.shape[0], 1),
-                device=U_batch.device,
-                dtype=U_batch.dtype,
-            )
-            batch_functional.fit(dummy_y, U_batch)
-            return batch_functional.training_weights()
-
-        return _weight_fn

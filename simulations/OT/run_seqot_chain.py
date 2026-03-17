@@ -7,7 +7,7 @@ from helpers import multivariate_laplace, compute_weights_from_kernel, build_KR_
 # End-to-end KR transport procedure
 # ----------------------------
 
-def run(seed, n = None, m = None, epsilon = 0, wrongorder = False, additive = True, corr = 0.5, multivariate_noise = False, dist = "laplace"):
+def run(seed, n = None, m = None, epsilon = 0, wrongorder = False, additive = True, corr = 0.5, multivariate_noise = False, dist = "laplace", affine = True):
 
     np.random.seed(seed)
     n0 = n1 = n2 = n or 250

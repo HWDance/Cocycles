@@ -1,5 +1,5 @@
 import torch
-from run_cocycles_ot import run
+from run_cocycles import run
 
 
 def main():
@@ -24,7 +24,7 @@ def main():
                 multivariate_noise=multivariate,
                 learn_rate=learn_rate,
             )
-            results.append(res)
+            results.append(("cocycle", corr, seed, res))
 
     # Save results to disk
     outfile = "cocycle_results.pt"

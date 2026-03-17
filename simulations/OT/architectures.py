@@ -179,9 +179,14 @@ class DiscreteSelectorTransform(nn.Module):
                 if isinstance(flow_k, (IdentityTransform, ChainTransform)):
                     y_k = flow_k.inverse(u_k)
                 else:
-                    # MaskedAutoregressiveTransform(context=0) → AutoregressiveTransform
-                    ctx = u_k.new_empty((u_k.shape[0], 0))
-                    bij = flow_k(ctx)            # AutoregressiveTransform
+                    # For scalar outputs, zuko's context=0 path behaves like the
+                    # working binary SCM example and expects ``None`` rather than
+                    # an explicit empty context tensor.
+                    if y_dim == 1:
+                        bij = flow_k(None)
+                    else:
+                        ctx = u_k.new_empty((u_k.shape[0], 0))
+                        bij = flow_k(ctx)
                     # Use bij.inverse(...) to invert latents → data
                     y_k = bij.inv(u_k)       # returns a single Tensor
 
@@ -206,9 +211,14 @@ class DiscreteSelectorTransform(nn.Module):
                 if isinstance(flow_k, (IdentityTransform,ChainTransform)):
                     u_k= flow_k.forward(y_k)
                 else:
-                    # MaskedAutoregressiveTransform(context=0) → AutoregressiveTransform
-                    ctx = y_k.new_empty((y_k.shape[0], 0))
-                    bij = flow_k(ctx)         # AutoregressiveTransform
+                    # For scalar outputs, zuko's context=0 path behaves like the
+                    # working binary SCM example and expects ``None`` rather than
+                    # an explicit empty context tensor.
+                    if y_dim == 1:
+                        bij = flow_k(None)
+                    else:
+                        ctx = y_k.new_empty((y_k.shape[0], 0))
+                        bij = flow_k(ctx)
                     # Use __call__ (i.e. bij(y_k)) to map data → latent
                     u_k = bij(y_k)            # returns a single Tensor
 

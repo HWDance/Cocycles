@@ -1,7 +1,7 @@
 # Imports
 from dask_jobqueue import SLURMCluster
 from distributed import Client
-from run_cocycles_ot import run
+from run_cocycles import run
 import torch
 
 def main():
@@ -30,16 +30,16 @@ def main():
     additive = False
     multivariate = False
     futures = []
+    metadata = []
     learn_rate = 1e-2
     for corr in corrs:
         for seed in range(ntrial):
             f0 = client.submit(run,n = n, seed = seed, corr = corr, additive = additive, multivariate_noise = multivariate, learn_rate = learn_rate)
-            futures += [f0]
+            futures.append(f0)
+            metadata.append(("cocycle", corr, seed))
     
-    futures
-    
-    # Gettaing results
-    results = client.gather(futures)
+    gathered = client.gather(futures)
+    results = [meta + (result,) for meta, result in zip(metadata, gathered)]
     
     # Closing client
     client.close()

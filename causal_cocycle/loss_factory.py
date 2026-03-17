@@ -16,6 +16,7 @@ class CocycleLossFactory:
             An optional parameter for subsampling if needed.
         """
         self.kernel = kernel
+        self._wcmmd_weights = None
         # Map loss type strings to internal methods.
         self.loss_mapping = {
             "HSIC": self._hsic,
@@ -43,9 +44,8 @@ class CocycleLossFactory:
         ordered_keys = []
         if "X" in X:
             ordered_keys.append("X")
-        if "Z" in X:
-            ordered_keys.append("Z")
-        ordered_keys.extend(sorted(k for k in X.keys() if k not in {"X", "Z", "__idx__"}))
+        if "C" in X:
+            ordered_keys.append("C")
 
         if not ordered_keys:
             raise ValueError("Input dict must contain at least one tensor for kernel computations.")
@@ -57,6 +57,61 @@ class CocycleLossFactory:
                 value = value.unsqueeze(-1)
             pieces.append(value)
         return torch.cat(pieces, dim=-1)
+
+    def _resolve_weights(
+        self,
+        inputs,
+        outputs,
+    ):
+        n = len(outputs)
+        if self._wcmmd_weights is None:
+            raise ValueError("WCMMD_V weights have not been initialized. Build the loss with fixed weights first.")
+
+        W = self._wcmmd_weights
+        idx = inputs.get("__idx__", None)
+
+        if idx is not None:
+            if not torch.is_tensor(idx):
+                idx = torch.as_tensor(idx, device=outputs.device, dtype=torch.long)
+            else:
+                idx = idx.to(device=outputs.device, dtype=torch.long)
+            W = W.index_select(0, idx).index_select(1, idx)
+
+        if not torch.is_tensor(W):
+            W = torch.as_tensor(W, device=outputs.device, dtype=outputs.dtype)
+        else:
+            W = W.to(device=outputs.device, dtype=outputs.dtype)
+
+        if W.shape != (n, n):
+            raise ValueError(f"Weights must have shape {(n, n)}, got {tuple(W.shape)}.")
+
+        return W
+
+    def _call_cocycle_outer(self, model, inputs, outputs):
+        """
+        Dispatch ``model.cocycle_outer`` for either
+        - tensor inputs,
+        - X-only dict inputs, or
+        - dict inputs with explicit structural variation ``Z``.
+
+        Conventions:
+          - ``X`` is always the treatment / intervention input.
+          - ``Z`` optionally parameterizes structural cocycle variation.
+          - ``C`` contains CME-only covariates and is ignored by the cocycle map.
+        """
+        if not isinstance(inputs, dict):
+            return model.cocycle_outer(inputs, inputs, outputs)
+
+        x = inputs["X"]
+        z = inputs.get("Z", None)
+
+        if z is None:
+            return model.cocycle_outer(x, x, outputs)
+
+        try:
+            return model.cocycle_outer(x, x, z, outputs)
+        except TypeError:
+            return model.cocycle_outer(x, x, outputs)
     
     def _set_median_heuristic(self, X, Y, subsamples=10000):
         """
@@ -103,7 +158,7 @@ class CocycleLossFactory:
         Compute the V-statistic version of CMMD.
         """
         n = len(outputs)
-        outputs_pred = model.cocycle_outer(inputs, inputs, outputs)
+        outputs_pred = self._call_cocycle_outer(model, inputs, outputs)
         if outputs_pred.dim() < 3:
             outputs_pred = outputs_pred[..., None]
         K = 0.0
@@ -118,53 +173,11 @@ class CocycleLossFactory:
                                                 outputs_pred[i*batchsize:(i+1)*batchsize]).sum() / (n**2))
         return K
 
-    def _resolve_weights(
-        self,
-        inputs,
-        outputs,
-        weights=None,
-        weight_fn=None,
-        normalize=False,
-        require_full_batch=False,
-    ):
-        n = len(outputs)
-
-        if (weights is None) == (weight_fn is None):
-            raise ValueError("Provide exactly one of `weights` or `weight_fn` for WCMMD_V.")
-
-        if weight_fn is not None:
-            W = weight_fn(inputs)
-        else:
-            W = weights
-
-        if not torch.is_tensor(W):
-            W = torch.as_tensor(W, device=outputs.device, dtype=outputs.dtype)
-        else:
-            W = W.to(device=outputs.device, dtype=outputs.dtype)
-
-        if W.shape != (n, n):
-            if require_full_batch:
-                raise ValueError(
-                    "Fixed WCMMD_V weights were precomputed for the full support set with shape "
-                    f"{tuple(W.shape)}, but the current loss call received a batch of size {n}. "
-                    "Fixed mode currently assumes full-batch loss evaluation."
-                )
-            raise ValueError(f"Weights must have shape {(n, n)}, got {tuple(W.shape)}.")
-
-        if normalize:
-            W = W / W.sum(dim=1, keepdim=True).clamp_min(torch.finfo(W.dtype).eps)
-
-        return W
-
     def _wcmmd_v(
         self,
         model,
         inputs,
         outputs,
-        weights=None,
-        weight_fn=None,
-        normalize_weights=False,
-        require_full_batch=False,
     ):
         """
         Compute the weighted V-statistic CMMD loss
@@ -172,21 +185,22 @@ class CocycleLossFactory:
             -(2/n) sum_{i,j} w_ij k(Y_i, Y_T^{(i,j)})
             +(1/n) sum_{i,j,k} w_ij w_ik k(Y_T^{(i,j)}, Y_T^{(i,k)}).
 
-        The weighting is supplied either by a fixed matrix `weights` or by
-        `weight_fn(inputs)`, which should return an (n, n) tensor for the
-        current batch.
+        Conventions for dict inputs:
+          - ``X``: intervention/treatment input
+          - optional ``Z``: structural cocycle variation
+          - optional ``C``: CME-only conditioning covariates
+          - optional ``__idx__``: batch indices used to extract the
+            corresponding submatrix of the fixed precomputed weight matrix.
+
+        The cocycle is evaluated on `(X, Z)` if structural variation `Z` is
+        provided and the model supports it; otherwise the cocycle is evaluated
+        on `X` only. The precomputed weight matrix is used only for the
+        weighted CME loss and is ignored by the cocycle map.
         """
         n = len(outputs)
-        W = self._resolve_weights(
-            inputs,
-            outputs,
-            weights=weights,
-            weight_fn=weight_fn,
-            normalize=normalize_weights,
-            require_full_batch=require_full_batch,
-        )
+        W = self._resolve_weights(inputs, outputs)
 
-        outputs_pred = model.cocycle_outer(inputs, inputs, outputs)
+        outputs_pred = self._call_cocycle_outer(model, inputs, outputs)
         if outputs_pred.dim() < 3:
             outputs_pred = outputs_pred[..., None]
 
@@ -207,7 +221,7 @@ class CocycleLossFactory:
             Mask[i, :, i] = 0
             Mask[i, i, :] = 0
             Mask[:, i, i] = 0
-        outputs_pred = model.cocycle_outer(inputs, inputs, outputs)
+        outputs_pred = self._call_cocycle_outer(model, inputs, outputs)
         if outputs_pred.dim() < 3:
             outputs_pred = outputs_pred[..., None]
         K1 = self.kernel[1].get_gram(outputs_pred, outputs_pred)
@@ -264,7 +278,6 @@ class CocycleLossFactory:
         weight_fn=None,
         weight_estimator=None,
         weight_mode="fixed",
-        normalize_weights=False,
     ):
         """
         Build and return a CocycleLoss object configured with the chosen loss function
@@ -292,34 +305,34 @@ class CocycleLossFactory:
         self._set_median_heuristic(X, Y, subsamples)
 
         if loss_type == "WCMMD_V":
-            fixed_full_weights = False
-
             if weight_estimator is not None:
                 if weights is not None or weight_fn is not None:
                     raise ValueError(
                         "Provide `weight_estimator` or explicit weights, not multiple weight sources."
                     )
-                if weight_mode != "fixed":
-                    raise ValueError(
-                        f"Unsupported weight_mode '{weight_mode}' for WCMMD_V. "
-                        "Only 'fixed' is currently implemented."
-                    )
                 weights = weight_estimator.training_weights()
-                fixed_full_weights = True
 
-            if weights is None and weight_fn is None:
+            if weight_fn is not None:
                 raise ValueError(
-                    "WCMMD_V requires one of `weights`, `weight_fn`, or `weight_estimator`."
+                    "WCMMD_V no longer accepts `weight_fn`; supply a fixed precomputed weight matrix."
                 )
+
+            if weights is None:
+                raise ValueError(
+                    "WCMMD_V requires a fixed precomputed weight matrix passed to build_loss via `weights` or `weight_estimator`."
+                )
+
+            if weight_mode != "fixed":
+                raise ValueError(
+                    f"Unsupported weight_mode '{weight_mode}' for WCMMD_V. Only 'fixed' is supported."
+                )
+
+            self._wcmmd_weights = weights
 
             loss_callable = lambda model, inputs, outputs: self._wcmmd_v(
                 model,
                 inputs,
                 outputs,
-                weights=weights,
-                weight_fn=weight_fn,
-                normalize_weights=normalize_weights,
-                require_full_batch=fixed_full_weights,
             )
         else:
             # Select the callable loss function.

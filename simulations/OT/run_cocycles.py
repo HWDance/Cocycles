@@ -1,64 +1,12 @@
 import torch
-import numpy as np
 from causal_cocycle.model_new import ZukoCocycleModel
 from causal_cocycle.optimise_new import validate
-from causal_cocycle.loss import CocycleLoss
 from causal_cocycle.loss_factory import CocycleLossFactory
 from causal_cocycle.kernels import gaussian_kernel
 from architectures import get_anchored_discrete_flows_single
-import os
-import math
-from helpers import multivariate_laplace
+from dgp import generate_ot_data
 
-# === Step 1: Set up SCM ground truth for Y(x) ===
-
-def generate_scm_data(n=250, seed=0, learn_rate = 1e-2, corr = 0.5, additive = True, multivariate_noise = False, dist = "laplace"):
-    np.random.seed(seed)
-    m0 = np.array([0.0, 0.0])
-    m1 = np.array([1.0, 1.0])
-    m2 = np.array([2.0, 2.0])
-
-    if not additive:
-        S0 = np.array([[1.0, 0.0], [0.0, 1.0]])
-        S1 = np.array([[1.0, -corr], [-corr, 1.0]])
-        S2 = np.array([[(1+corr), 0.0], [0.0, (1/(1+corr))]])
-
-    else:
-        S0 = np.array([[1.0, 0.0], [0.0, 1.0]])
-        S1 = np.array([[1.0, 0.0], [0.0, 1.0]])
-        S2 = np.array([[1.0, 0.0], [0.0, 1.0]])
-        
-    L0 = np.linalg.cholesky(S0)
-    L1 = np.linalg.cholesky(S1)
-    L2 = np.linalg.cholesky(S2)
-
-    if multivariate_noise:
-        if dist == "laplace":
-            xi= multivariate_laplace(size = n, rng = seed, corr = corr)
-        else:
-            cov = np.ones((2,2))*corr + (1-corr)*np.eye(2)
-            xi = np.random.multivariate_normal(size = n, mean = torch.zeros(2), cov = cov),
-        xi[:,1] = xi[:,0] + xi[:,1]
-    else:
-        if dist == "laplace":
-            xi = np.random.laplace(size = (n,2))
-        else:
-            xi = np.random.normal(size = (n,2))
-            
-    Y0 = m0 + xi @ L0.T
-    Y1 = m1 + xi @ L1.T
-    Y2 = m2 + xi @ L2.T
-
-    X = np.concatenate([
-        np.tile([0], n),
-        np.tile([1], n),
-        np.tile([2], n)
-    ])[:, None]
-
-    Y = np.concatenate([Y0, Y1, Y2])
-    return torch.tensor(X, dtype=torch.float32), torch.tensor(Y, dtype=torch.float32), xi
-
-# === Step 2: Build ZukoCocycleModels ===
+# === Step 1: Build ZukoCocycleModels ===
 
 def build_models(x_dim, y_dim):
     models = []
@@ -71,20 +19,36 @@ def build_models(x_dim, y_dim):
         )
     return models
 
-# === Step 3: Loss and kernel ===
+# === Step 2: Loss and kernel ===
 
 def build_loss(X, Y):
     kernel = [gaussian_kernel(), gaussian_kernel()]
     loss_factory = CocycleLossFactory(kernel)
     return loss_factory.build_loss("CMMD_U", X, Y)
 
-# === Step 4: Run validation + evaluation ===
+# === Step 3: Run validation + evaluation ===
 
-def run(seed=0, n=250, learn_rate = 1e-3, wrong_order = False, corr = 0.5, additive = True, multivariate_noise = False, dist = "laplace"):
-    
-    X_raw, Y, xi = generate_scm_data(n=n, seed=seed, corr=corr, additive = additive, multivariate_noise = multivariate_noise, dist = dist)
+def run(seed=0, n=250, learn_rate = 1e-3, wrong_order = False, corr = 0.5, additive = True, multivariate_noise = False, dist = "laplace", epochs=1000, print_=True):
+    data = generate_ot_data(
+        seed=seed,
+        n=n,
+        corr=corr,
+        additive=additive,
+        multivariate_noise=multivariate_noise,
+        dist=dist,
+    )
+    X_raw = data["X_obs"]
+    Y = data["Y_obs"]
+    P0 = Y[:n]
+    true_Y1_cf = torch.tensor(data["Y1_cf"], dtype=torch.float32)
+    true_Y2_cf = torch.tensor(data["Y2_cf"], dtype=torch.float32)
+
     if wrong_order:
         Y = Y.flip(dims=[1])
+        P0 = P0.flip(dims=[1])
+        true_Y1_cf = true_Y1_cf.flip(dims=[1])
+        true_Y2_cf = true_Y2_cf.flip(dims=[1])
+
     x_dim = 1
     y_dim = Y.shape[1]
     # Shuffle data
@@ -93,11 +57,11 @@ def run(seed=0, n=250, learn_rate = 1e-3, wrong_order = False, corr = 0.5, addit
     Y_tr = Y[perm]
 
     opt_kwargs = dict(
-        epochs=1000,
+        epochs=epochs,
         learn_rate=learn_rate,
         scheduler=False,
         batch_size=128,
-        print_=True,
+        print_=print_,
     )
 
     # Fit cocycle model
@@ -117,16 +81,12 @@ def run(seed=0, n=250, learn_rate = 1e-3, wrong_order = False, corr = 0.5, addit
 
     # Estimate counterfactual outcomes using best model
     with torch.no_grad():
-        P0 = Y[:n]
         x0 = torch.zeros((n, 1))
         x1 = torch.ones((n, 1))
         x2 = 2 * torch.ones((n, 1))
 
         Y1_cf = best_model.cocycle(x1, x0, P0)
         Y2_cf = best_model.cocycle(x2, x0, P0)
-
-        true_Y1_cf = Y[n:2*n]
-        true_Y2_cf = Y[2*n:3*n]
 
         diff_10 = Y1_cf - P0
         diff_21 = Y2_cf - Y1_cf
@@ -159,5 +119,19 @@ def run(seed=0, n=250, learn_rate = 1e-3, wrong_order = False, corr = 0.5, addit
     return results
 
 if __name__ == "__main__":
-    run(n=500, learn_rate = 1e-2)
-
+    result = run(
+        seed=0,
+        n=50,
+        learn_rate=1e-2,
+        corr=0.5,
+        additive=False,
+        multivariate_noise=False,
+        epochs=20,
+        print_=False,
+    )
+    print("\n===== Cocycle Smoke Test =====")
+    for k, v in result.items():
+        if isinstance(v, float):
+            print(f"{k:>20}: {v:.6f}")
+        else:
+            print(f"{k:>20}: {v}")

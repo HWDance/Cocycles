@@ -32,17 +32,39 @@ def main():
     multivariate = True
     dist = "laplace"
     futures = []
+    metadata = []
         
     for corr in corrs:
         for seed in range(ntrial):
-            f1 = client.submit(run_seqot,seed,n,m, corr = corr, additive = additive, multivariate_noise = multivariate, dist = dist)
-            f3 = client.submit(run_ot,seed,n,m,"sqeuclidean", corr = corr, additive = additive, multivariate_noise = multivariate, dist = dist)
-            futures += [f1,f3,f4,f5]
+            f1 = client.submit(
+                run_seqot,
+                seed,
+                n,
+                m,
+                corr=corr,
+                additive=additive,
+                multivariate_noise=multivariate,
+                dist=dist,
+            )
+            futures.append(f1)
+            metadata.append(("seqot", corr, seed))
+
+            f3 = client.submit(
+                run_ot,
+                seed,
+                n,
+                m,
+                "sqeuclidean",
+                corr=corr,
+                additive=additive,
+                multivariate_noise=multivariate,
+                dist=dist,
+            )
+            futures.append(f3)
+            metadata.append(("ot", corr, seed))
     
-    futures
-    
-    # Getting results
-    results = client.gather(futures)
+    gathered = client.gather(futures)
+    results = [meta + (result,) for meta, result in zip(metadata, gathered)]
     
     # Closing client
     client.close()

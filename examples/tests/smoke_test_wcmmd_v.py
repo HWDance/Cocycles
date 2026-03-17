@@ -13,8 +13,12 @@ def rmse(a, b):
 
 class DummyModel(torch.nn.Module):
     def cocycle_outer(self, inputs1, inputs2, outputs):
-        x = inputs1["X"]
-        z = inputs1["Z"]
+        if isinstance(inputs1, dict):
+            x = inputs1["X"]
+            z = inputs1["Z"]
+        else:
+            x = inputs1
+            z = torch.zeros_like(x)
         n = outputs.shape[0]
         base = outputs.unsqueeze(0).expand(n, n, outputs.shape[-1])
         shift = 0.01 * x.unsqueeze(1)[..., : outputs.shape[-1]] + 0.01 * z[:, :1].unsqueeze(1)
@@ -27,40 +31,41 @@ def main():
     n_train = 40
     n_test = 20
     x_dim = 1
-    z_dim = 2
+    c_dim = 2
     y_dim = 1
 
     X_train = torch.randn(n_train, x_dim)
-    Z_train = torch.randn(n_train, z_dim)
+    C_train = torch.randn(n_train, c_dim)
+    Z_train = C_train[:, :1]
     noise_train = 0.05 * torch.randn(n_train, y_dim)
-    Y_train = 0.8 * X_train + 0.3 * Z_train[:, :1] - 0.2 * Z_train[:, 1:2] + noise_train
+    Y_train = 0.8 * X_train + 0.3 * C_train[:, :1] - 0.2 * C_train[:, 1:2] + noise_train
 
     X_test = torch.randn(n_test, x_dim)
-    Z_test = torch.randn(n_test, z_dim)
+    C_test = torch.randn(n_test, c_dim)
     noise_test = 0.05 * torch.randn(n_test, y_dim)
-    Y_test = 0.8 * X_test + 0.3 * Z_test[:, :1] - 0.2 * Z_test[:, 1:2] + noise_test
+    Y_test = 0.8 * X_test + 0.3 * C_test[:, :1] - 0.2 * C_test[:, 1:2] + noise_test
 
-    U_test = torch.cat([X_test, Z_test], dim=-1)
+    U_test = torch.cat([X_test, C_test], dim=-1)
 
-    kernel_u = GaussianKernel(lengthscale=torch.ones(x_dim + z_dim))
+    kernel_u = GaussianKernel(lengthscale=torch.ones(x_dim + c_dim))
     kernel_y = GaussianKernel(lengthscale=torch.ones(y_dim))
     functional = KRRFunctional(kernel_u, penalty=1e-1)
     estimator = RKHSWeightEstimator(functional, kernel_y=kernel_y)
 
-    estimator.fit(X_train, Z_train, Y_train)
+    estimator.fit(X_train, C_train, Y_train)
     Y_pred_before = estimator.functional.predict(U_test)
     rmse_before = rmse(Y_pred_before, Y_test)
 
     cv_losses = estimator.tune(
         X_train,
-        Z_train,
+        C_train,
         Y_train,
         maxiter=5,
         nfold=3,
         learn_rate=5e-2,
         print_=False,
     )
-    estimator.fit(X_train, Z_train, Y_train)
+    estimator.fit(X_train, C_train, Y_train)
     Y_pred_after = estimator.functional.predict(U_test)
     rmse_after = rmse(Y_pred_after, Y_test)
 
@@ -72,12 +77,18 @@ def main():
     loss_factory = CocycleLossFactory([gaussian_kernel(), gaussian_kernel()])
     loss = loss_factory.build_loss(
         "WCMMD_V",
-        X={"X": X_train, "Z": Z_train},
+        X={"X": X_train, "C": C_train},
         Y=Y_train,
         weight_estimator=estimator,
         weight_mode="fixed",
     )
-    loss_value = loss(model, {"X": X_train, "Z": Z_train}, Y_train)
+    loss_inputs = {
+        "X": X_train,
+        "Z": Z_train,
+        "C": C_train,
+        "__idx__": torch.arange(n_train),
+    }
+    loss_value = loss(model, loss_inputs, Y_train)
     assert torch.isfinite(loss_value), loss_value
 
     print("smoke_test_ok")

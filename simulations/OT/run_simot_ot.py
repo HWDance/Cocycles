@@ -43,7 +43,7 @@ def main():
             results.append(("ot", corr, seed, res_ot))
 
     # Save results
-    outfile = "OT_results_chain.pt"
+    outfile = "OT_results.pt"
     torch.save(results, outfile)
     print(f"Saved results to {outfile}")
 
