@@ -56,6 +56,95 @@ class ZukoCocycleModel(nn.Module):
         return v_rep.view(M, N, -1)
 
 
+class ZukoConditionalCocycleModel(nn.Module):
+    """
+    Zuko cocycle model with an explicit split between intervention inputs ``x``
+    and auxiliary covariates ``z``. Internally, transforms are conditioned on
+    the augmented context ``(x, z)``.
+    """
+    def __init__(self, transforms: nn.ModuleList):
+        super().__init__()
+        self.transforms = nn.ModuleList(transforms)
+
+    @staticmethod
+    def _as_2d(name: str, value: Tensor) -> Tensor:
+        if value.dim() == 1:
+            return value.unsqueeze(-1)
+        if value.dim() != 2:
+            raise ValueError(f"{name} must be a 1D or 2D tensor, got shape {tuple(value.shape)}.")
+        return value
+
+    def _context(self, x: Tensor, z: Tensor) -> Tensor:
+        x = self._as_2d("x", x)
+        z = self._as_2d("z", z)
+        if x.size(0) != z.size(0):
+            raise ValueError(
+                f"x and z must have the same batch size, got {x.size(0)} and {z.size(0)}."
+            )
+        return torch.cat((x, z), dim=-1)
+
+    def transformation(self, x: Tensor, z: Tensor, u: Tensor) -> Tensor:
+        """
+        Generation: latent u -> y under context (x, z).
+        """
+        context = self._context(x, z)
+        y = u
+        for T in self.transforms:
+            transform = T(context)
+            y = transform.inv(y)
+        return y
+
+    def inverse_transformation(self, x: Tensor, z: Tensor, y: Tensor) -> Tensor:
+        """
+        Abduction: observed y -> u under context (x, z).
+        """
+        context = self._context(x, z)
+        u = y
+        for T in reversed(self.transforms):
+            transform = T(context)
+            u = transform(u)
+        return u
+
+    def cocycle(self, x1: Tensor, x2: Tensor, z: Tensor, y: Tensor) -> Tensor:
+        """
+        Transport ``y`` from context ``(x2, z)`` to ``(x1, z)``.
+        """
+        u = self.inverse_transformation(x2, z, y)
+        return self.transformation(x1, z, u)
+
+    def cocycle_outer(
+        self,
+        x1: Tensor,    # (M, x_dim)
+        x2: Tensor,    # (N, x_dim)
+        z: Tensor,     # (N, z_dim)
+        y: Tensor,     # (N, y_dim)
+    ) -> Tensor:      # -> (M, N, y_dim)
+        """
+        Returns a tensor whose ``(i, j)`` entry is
+        ``T_{(x1[i], z[j]), (x2[j], z[j])}(y[j])``.
+        """
+        x1 = self._as_2d("x1", x1)
+        x2 = self._as_2d("x2", x2)
+        z = self._as_2d("z", z)
+        y = self._as_2d("y", y)
+
+        M, N = x1.size(0), y.size(0)
+        if x2.size(0) != N or z.size(0) != N:
+            raise ValueError(
+                "x2, z, and y must have the same batch size in cocycle_outer, "
+                f"got {x2.size(0)}, {z.size(0)}, and {N}."
+            )
+
+        u = self.inverse_transformation(x2, z, y)
+
+        x1_rep = x1.unsqueeze(1).expand(M, N, x1.size(1)).reshape(M * N, -1)
+        z_rep = z.unsqueeze(0).expand(M, N, z.size(1)).reshape(M * N, -1)
+        u_rep = u.unsqueeze(0).expand(M, N, u.size(1)).reshape(M * N, -1)
+
+        v_rep = self.transformation(x1_rep, z_rep, u_rep)
+        return v_rep.view(M, N, -1)
+
+
 class CocycleOutcomeModel(nn.Module):
     def __init__(self, model, inputs_train, outputs_train):
         """
@@ -279,4 +368,3 @@ class ZukoFlowModel(nn.Module):
         v_rep  = self.transformation(x1_rep, u_rep)  # (M*N, y_dim)
         # 4) reshape back
         return v_rep.view(M, N, -1)
-

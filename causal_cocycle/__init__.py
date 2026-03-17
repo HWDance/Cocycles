@@ -4,6 +4,9 @@ from causal_cocycle import conditioners_new
 from causal_cocycle import transformers_new
 from causal_cocycle import distribution_estimation
 from causal_cocycle import regression_functionals
+from causal_cocycle import rkhs_estimation
+from causal_cocycle import rkhs_functionals
+from causal_cocycle import rkhs_weight_estimation
 from causal_cocycle import kernels
 from causal_cocycle import kde
 from causal_cocycle import helper_functions

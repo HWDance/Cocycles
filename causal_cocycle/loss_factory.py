@@ -20,24 +20,58 @@ class CocycleLossFactory:
         self.loss_mapping = {
             "HSIC": self._hsic,
             "CMMD_V": self._cmmd_v,
+            "WCMMD_V": self._wcmmd_v,
             "CMMD_U": self._cmmd_u,
             "URR": self._urr,
             "URR_N": self._urr_n,
             "LS": self._ls
         }
+
+    def _num_samples(self, X):
+        if isinstance(X, dict):
+            for key, value in X.items():
+                if key == "__idx__":
+                    continue
+                return value.shape[0]
+            raise ValueError("Input dict must contain at least one non-index tensor.")
+        return X.shape[0]
+
+    def _kernel_input_tensor(self, X):
+        if not isinstance(X, dict):
+            return X
+
+        ordered_keys = []
+        if "X" in X:
+            ordered_keys.append("X")
+        if "Z" in X:
+            ordered_keys.append("Z")
+        ordered_keys.extend(sorted(k for k in X.keys() if k not in {"X", "Z", "__idx__"}))
+
+        if not ordered_keys:
+            raise ValueError("Input dict must contain at least one tensor for kernel computations.")
+
+        pieces = []
+        for key in ordered_keys:
+            value = X[key]
+            if value.dim() == 1:
+                value = value.unsqueeze(-1)
+            pieces.append(value)
+        return torch.cat(pieces, dim=-1)
     
     def _set_median_heuristic(self, X, Y, subsamples=10000):
         """
         Compute and set the median-heuristic lengthscale for the kernels using the data.
         For the first kernel (assumed for inputs) and, if available, for the second kernel (for outputs).
         """
+        X_tensor = self._kernel_input_tensor(X)
+
         # Subsample if needed.
-        if subsamples < len(X):
-            indices = torch.randperm(len(X))[:subsamples]
-            X_sub = X[indices]
+        if subsamples < self._num_samples(X):
+            indices = torch.randperm(self._num_samples(X))[:subsamples]
+            X_sub = X_tensor[indices]
             Y_sub = Y[indices] if Y is not None else None
         else:
-            X_sub = X
+            X_sub = X_tensor
             Y_sub = Y
         
         # For the first kernel.
@@ -83,6 +117,85 @@ class CocycleLossFactory:
             K += (-2 * self.kernel[1].get_gram(outputs[i*batchsize:(i+1)*batchsize, None, :],
                                                 outputs_pred[i*batchsize:(i+1)*batchsize]).sum() / (n**2))
         return K
+
+    def _resolve_weights(
+        self,
+        inputs,
+        outputs,
+        weights=None,
+        weight_fn=None,
+        normalize=False,
+        require_full_batch=False,
+    ):
+        n = len(outputs)
+
+        if (weights is None) == (weight_fn is None):
+            raise ValueError("Provide exactly one of `weights` or `weight_fn` for WCMMD_V.")
+
+        if weight_fn is not None:
+            W = weight_fn(inputs)
+        else:
+            W = weights
+
+        if not torch.is_tensor(W):
+            W = torch.as_tensor(W, device=outputs.device, dtype=outputs.dtype)
+        else:
+            W = W.to(device=outputs.device, dtype=outputs.dtype)
+
+        if W.shape != (n, n):
+            if require_full_batch:
+                raise ValueError(
+                    "Fixed WCMMD_V weights were precomputed for the full support set with shape "
+                    f"{tuple(W.shape)}, but the current loss call received a batch of size {n}. "
+                    "Fixed mode currently assumes full-batch loss evaluation."
+                )
+            raise ValueError(f"Weights must have shape {(n, n)}, got {tuple(W.shape)}.")
+
+        if normalize:
+            W = W / W.sum(dim=1, keepdim=True).clamp_min(torch.finfo(W.dtype).eps)
+
+        return W
+
+    def _wcmmd_v(
+        self,
+        model,
+        inputs,
+        outputs,
+        weights=None,
+        weight_fn=None,
+        normalize_weights=False,
+        require_full_batch=False,
+    ):
+        """
+        Compute the weighted V-statistic CMMD loss
+
+            -(2/n) sum_{i,j} w_ij k(Y_i, Y_T^{(i,j)})
+            +(1/n) sum_{i,j,k} w_ij w_ik k(Y_T^{(i,j)}, Y_T^{(i,k)}).
+
+        The weighting is supplied either by a fixed matrix `weights` or by
+        `weight_fn(inputs)`, which should return an (n, n) tensor for the
+        current batch.
+        """
+        n = len(outputs)
+        W = self._resolve_weights(
+            inputs,
+            outputs,
+            weights=weights,
+            weight_fn=weight_fn,
+            normalize=normalize_weights,
+            require_full_batch=require_full_batch,
+        )
+
+        outputs_pred = model.cocycle_outer(inputs, inputs, outputs)
+        if outputs_pred.dim() < 3:
+            outputs_pred = outputs_pred[..., None]
+
+        K_obs = self.kernel[1].get_gram(outputs[:, None, :], outputs_pred).squeeze(1)
+        K_pred = self.kernel[1].get_gram(outputs_pred, outputs_pred)
+
+        term_obs = -2.0 * (W * K_obs).sum() / n
+        term_pred = torch.einsum('ij,ijk,ik->', W, K_pred, W) / n
+        return term_obs + term_pred
     
     def _cmmd_u(self, model, inputs, outputs):
         """
@@ -141,7 +254,18 @@ class CocycleLossFactory:
         """
         return (model.inverse_transformation(inputs, outputs).abs() ** 2).mean()
     
-    def build_loss(self, loss_type, X, Y, subsamples=10000):
+    def build_loss(
+        self,
+        loss_type,
+        X,
+        Y,
+        subsamples=10000,
+        weights=None,
+        weight_fn=None,
+        weight_estimator=None,
+        weight_mode="fixed",
+        normalize_weights=False,
+    ):
         """
         Build and return a CocycleLoss object configured with the chosen loss function
         and kernels with median-heuristic tuned hyperparameters.
@@ -166,10 +290,40 @@ class CocycleLossFactory:
             raise ValueError(f"Unknown loss type '{loss_type}'. Supported types: {list(self.loss_mapping.keys())}")
         # Tune the kernel hyperparameters using the median heuristic.
         self._set_median_heuristic(X, Y, subsamples)
-        
-        # Select the callable loss function.
-        loss_callable = self.loss_mapping[loss_type]
+
+        if loss_type == "WCMMD_V":
+            fixed_full_weights = False
+
+            if weight_estimator is not None:
+                if weights is not None or weight_fn is not None:
+                    raise ValueError(
+                        "Provide `weight_estimator` or explicit weights, not multiple weight sources."
+                    )
+                if weight_mode != "fixed":
+                    raise ValueError(
+                        f"Unsupported weight_mode '{weight_mode}' for WCMMD_V. "
+                        "Only 'fixed' is currently implemented."
+                    )
+                weights = weight_estimator.training_weights()
+                fixed_full_weights = True
+
+            if weights is None and weight_fn is None:
+                raise ValueError(
+                    "WCMMD_V requires one of `weights`, `weight_fn`, or `weight_estimator`."
+                )
+
+            loss_callable = lambda model, inputs, outputs: self._wcmmd_v(
+                model,
+                inputs,
+                outputs,
+                weights=weights,
+                weight_fn=weight_fn,
+                normalize_weights=normalize_weights,
+                require_full_batch=fixed_full_weights,
+            )
+        else:
+            # Select the callable loss function.
+            loss_callable = self.loss_mapping[loss_type]
         
         # Instantiate and return a final CocycleLoss object that holds the kernel and callable.
         return CocycleLoss(loss_callable, self.kernel)
-
