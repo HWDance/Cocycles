@@ -1,3 +1,9 @@
+"""Combined OT + seqOT SLURM launcher for design (ii).
+
+Use this file for the historical paired OT vs seqOT benchmark.
+For seqOT-only wrong-order sweeps, use run_simot_seqot_hpc.py instead.
+"""
+
 # Imports
 from dask_jobqueue import SLURMCluster
 from distributed import Client
@@ -5,8 +11,10 @@ from run_seqot import run as run_seqot
 from run_ot import run as run_ot
 import torch
 
+
 def main():
-    
+    print("Running combined OT + seqOT HPC launcher for design (ii). For seqOT wrong-order sweeps, use run_simot_seqot_hpc.py.")
+
     # Cluster creation
     cluster = SLURMCluster(
         n_workers=0,
@@ -23,7 +31,7 @@ def main():
     )
     cluster.adapt(minimum=0, maximum=100)
     client = Client(cluster)
-    
+
     # Submitting jobs
     n = 500
     m = n
@@ -63,16 +71,16 @@ def main():
             )
             futures.append(f3)
             metadata.append(("ot", corr, seed))
-    
+
     gathered = client.gather(futures)
     results = [meta + (result,) for meta, result in zip(metadata, gathered)]
-    
+
     # Closing client
     client.close()
     cluster.close()
 
     torch.save(f = "OT_results.pt", obj = results)
 
-    
+
 if __name__ == "__main__":
     main()

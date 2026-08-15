@@ -1,9 +1,16 @@
+"""Combined OT + seqOT launcher for design (i).
+
+Use this file when you want the historical paired OT vs seqOT benchmark.
+For seqOT-only wrong-order sweeps, use run_simot_chain_seqot_hpc.py instead.
+"""
+
 import torch
 from run_seqot_chain import run as run_seqot
 from run_ot import run as run_ot
 
 
 def main():
+    print("Running combined OT + seqOT launcher for design (i). For seqOT wrong-order sweeps, use run_simot_chain_seqot_hpc.py.")
     # Experiment settings
     n = 500
     m = n

@@ -4,8 +4,9 @@ from distributed import Client
 from run_cocycles import run
 import torch
 
+
 def main():
-    
+
     # Cluster creation
     cluster = SLURMCluster(
         n_workers=0,
@@ -22,30 +23,55 @@ def main():
     )
     cluster.adapt(minimum=0, maximum=100)
     client = Client(cluster)
-    
+
     # Submitting jobs
     n = 500
     ntrial = 20
-    corrs = [0.1,0.3,0.5,0.7,0.9]
-    additive = False
-    multivariate = False
+    corrs = [0.1, 0.3, 0.5, 0.7, 0.9]
+    learn_rate = 1e-2
+    dist = "laplace"
     futures = []
     metadata = []
-    learn_rate = 1e-2
+
     for corr in corrs:
         for seed in range(ntrial):
-            f0 = client.submit(run,n = n, seed = seed, corr = corr, additive = additive, multivariate_noise = multivariate, learn_rate = learn_rate)
+            f0 = client.submit(
+                run,
+                n=n,
+                seed=seed,
+                corr=corr,
+                additive=False,
+                multivariate_noise=False,
+                wrong_order=False,
+                dist=dist,
+                learn_rate=learn_rate,
+            )
             futures.append(f0)
-            metadata.append(("cocycle", corr, seed))
-    
+            metadata.append(("cocycle", "design_ii", False, corr, seed))
+
+            f1 = client.submit(
+                run,
+                n=n,
+                seed=seed,
+                corr=corr,
+                additive=False,
+                multivariate_noise=False,
+                wrong_order=True,
+                dist=dist,
+                learn_rate=learn_rate,
+            )
+            futures.append(f1)
+            metadata.append(("cocycle", "design_ii", True, corr, seed))
+
     gathered = client.gather(futures)
     results = [meta + (result,) for meta, result in zip(metadata, gathered)]
-    
+
     # Closing client
     client.close()
     cluster.close()
 
-    torch.save(f = "cocycle_results.pt", obj = results)
-    
+    torch.save(f="cocycle_results.pt", obj=results)
+
+
 if __name__ == "__main__":
     main()

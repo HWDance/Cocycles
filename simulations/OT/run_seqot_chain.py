@@ -1,7 +1,8 @@
 import numpy as np
 import torch
 from causal_cocycle.kernels_new import GaussianKernel, median_heuristic, median_heuristic_ard
-from helpers import multivariate_laplace, compute_weights_from_kernel, build_KR_map
+from dgp import generate_ot_data
+from helpers import compute_weights_from_kernel, build_KR_map
 
 # ----------------------------
 # End-to-end KR transport procedure
@@ -9,68 +10,20 @@ from helpers import multivariate_laplace, compute_weights_from_kernel, build_KR_
 
 def run(seed, n = None, m = None, epsilon = 0, wrongorder = False, additive = True, corr = 0.5, multivariate_noise = False, dist = "laplace", affine = True):
 
-    np.random.seed(seed)
-    n0 = n1 = n2 = n or 250
-    if m is not None:
-        n1 = m
-
-    # Sample from the DGP
-    m0 = np.array([0.0, 0.0])
-    m1 = np.array([1.0, 1.0])
-    m2 = np.array([2.0, 2.0])
-
-    if not additive:
-        S0 = np.array([[1.0, 0.0], [0.0, 1.0]])
-        S1 = np.array([[1.0, -corr], [-corr, 1.0]])
-        S2 = np.array([[(1+corr), 0.0], [0.0, (1/(1+corr))]])
-
-    else:
-        S0 = np.array([[1.0, 0.0], [0.0, 1.0]])
-        S1 = np.array([[1.0, 0.0], [0.0, 1.0]])
-        S2 = np.array([[1.0, 0.0], [0.0, 1.0]])
-        
-    L0 = np.linalg.cholesky(S0)
-    L1 = np.linalg.cholesky(S1)
-    L2 = np.linalg.cholesky(S2)
-
-    if multivariate_noise:
-        if dist == "laplace":
-            xi0,xi1,xi2 = (
-                multivariate_laplace(size = n0, rng = seed, corr = corr),
-                multivariate_laplace(size = n1, rng = seed+1, corr = corr),
-                multivariate_laplace(size = n2, rng = seed+2, corr = corr)
-        )
-        else:
-            cov = np.ones((2,2))*corr + (1-corr)*np.eye(2)
-            xi0,xi1,xi2 = (
-                np.random.multivariate_normal(size = n0, mean = np.zeros(2), cov = cov),
-                np.random.multivariate_normal(size = n0, mean = np.zeros(2), cov = cov),
-                np.random.multivariate_normal(size = n0, mean = np.zeros(2), cov = cov),
-        )                
-        
-        xi0[:,1] = xi0[:,0] + xi0[:,1]
-        xi1[:,1] = xi1[:,0] + xi1[:,1]
-        xi2[:,1] = xi2[:,0] + xi2[:,1]
-    else:
-        if dist == "laplace":
-            xi0,xi1,xi2 = ( 
-                np.random.laplace(size = (n0,2)),
-                np.random.laplace(size = (n1,2)),
-                np.random.laplace(size = (n2,2))
-            )
-        else:
-            xi0,xi1,xi2 = ( 
-                np.random.normal(size = (n0,2)),
-                np.random.normal(size = (n1,2)),
-                np.random.normal(size = (n2,2))
-            )
-    P0 = m0 + xi0 @ L0.T
-    P1 = m1 + xi1 @ L1.T
-    P2 = m2 + xi2 @ L2.T
-
     if not affine:
-        P1 = 1/(1+np.exp(-P1))*5
-        P2 = 1/(1+np.exp(-P2))*10
+        raise ValueError("run_seqot_chain now uses the shared OT DGP and only supports affine=True.")
+
+    data = generate_ot_data(
+        seed=seed,
+        n=n,
+        m=m,
+        corr=corr,
+        additive=additive,
+        multivariate_noise=multivariate_noise,
+        dist=dist,
+    )
+    P0, P1, P2 = data["P0"], data["P1"], data["P2"]
+    Y1_cf, Y2_cf = data["Y1_cf"], data["Y2_cf"]
 
     
     # Convert to torch tensors
@@ -147,17 +100,6 @@ def run(seed, n = None, m = None, epsilon = 0, wrongorder = False, additive = Tr
     Yhat1_2d = torch.stack([Yhat1, mapped_second_1], dim=1)
     Yhat2_direct_2d = torch.stack([Yhat2_direct, mapped_second_direct], dim=1)
     Yhat2_composite_2d = torch.stack([Yhat2_composite, mapped_second_composite], dim=1)
-
-    # ------------------------------
-    # Ground truth from SCM model
-
-    # Recover latent noise ξ from P0
-    L0inv = np.linalg.inv(L0)
-    xi_hat = (P0 - m0) @ L0inv.T  # each row is a ξ sample
-
-    # Compute counterfactual outcomes using shared ξ
-    Y1_cf = m1 + xi_hat @ L1.T
-    Y2_cf = m2 + xi_hat @ L2.T
 
     # True counterfactual shifts
     true_shift_10 = Y1_cf - P0
