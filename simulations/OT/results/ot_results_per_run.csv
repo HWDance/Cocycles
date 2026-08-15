@@ -1,0 +1,1001 @@
+design,method,method_label,wrong_order,rho,seed,ate_error,cf_rmse,cf_inconsistency,source
+design_i,seqot,Seq-OT,False,0.1,0,0.12722670437605843,0.42265286425330423,0.006963244010727048,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.1,1,0.12020688097667873,0.3680322145619959,0.00454094162359285,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.1,2,0.07720485285813347,0.36134678488156474,0.005111398426816632,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.1,3,0.07916240181560269,0.38450416735407494,0.007479151295731736,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.1,4,0.10882889316375297,0.6109060679493871,0.0035646653566423943,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.1,5,0.07679243465249744,0.36270316333747415,0.0037119521226481357,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.1,6,0.23056050567481978,0.39922851093031225,0.0035892162664108475,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.1,7,0.05542239934824962,0.35522658260679996,0.004690759983796507,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.1,8,0.06858318141751425,0.4131734826952909,0.004684671355031126,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.1,9,0.11796661648460477,0.32909217445053834,0.005913886361631413,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.1,10,0.06352684183005886,0.321795838737027,0.004263556582541727,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.1,11,0.06970930911513186,0.3654912064708158,0.004095860176121095,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.1,12,0.1046018649350919,0.33014766232174575,0.004032112735309986,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.1,13,0.16542502750952212,0.6132167912774913,0.003732105704163503,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.1,14,0.22951631276999157,0.3907062828952788,0.004160996938497769,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.1,15,0.0678209097339023,0.42448561407960905,0.003785098977612168,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.1,16,0.09859760146111488,0.3403506527297464,0.005128724509079358,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.1,17,0.042382930008730994,0.43297540780682026,0.005774356316772183,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.1,18,0.07652606769118456,0.3637263023221151,0.0037251808473210426,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.1,19,0.053686956826742294,0.36615505610037696,0.005880567017407254,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.3,0,0.033768131775957486,0.37297418766097085,0.009512707541160733,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.3,1,0.04317996997798755,0.37532212675476717,0.0037692612965605703,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.3,2,0.05100133174343543,0.3871539792580931,0.005446892003743675,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.3,3,0.08975153875327403,0.3852887940883388,0.011674297533865566,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.3,4,0.21200262112611856,0.63863230222194,0.005245049292456127,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.3,5,0.10096357773517409,0.3590162953861826,0.004118018664027182,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.3,6,0.15079872744207615,0.37017380191066274,0.003442753879724705,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.3,7,0.08620171523587192,0.3202504235504197,0.008348760518104553,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.3,8,0.06174088463073054,0.3996549444140986,0.004489276309864847,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.3,9,0.020492724095693877,0.31428279457163455,0.006359762263244049,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.3,10,0.13962003474637258,0.3889414849184868,0.004700963813604705,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.3,11,0.04741253849165738,0.3495626399685252,0.005985614556823697,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.3,12,0.07683624907773785,0.3514934004936284,0.004410499051151545,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.3,13,0.281123048938875,0.6811236284226375,0.004330840556596988,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.3,14,0.12114354284697669,0.30298403384145944,0.004204230986315944,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.3,15,0.1067993449705162,0.46614236653593105,0.004431215445542036,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.3,16,0.07025752738911267,0.3683340454534019,0.004320674381557654,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.3,17,0.12270602830736783,0.45088998928950935,0.007926351988244118,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.3,18,0.04704671199934889,0.39307927126685654,0.004390740542907679,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.3,19,0.11255277210763996,0.3916858318400357,0.006353870078263792,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.5,0,0.10513042716848559,0.36891361477104945,0.009823453948076431,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.5,1,0.1685339782313824,0.46164077546556065,0.0058676899492104825,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.5,2,0.1623377605541701,0.43557237152196904,0.0052914072471301875,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.5,3,0.20954114090630774,0.43885041027586946,0.00587695731118151,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.5,4,0.30888153871417284,0.6736710633115816,0.0041735337145326085,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.5,5,0.22164525243699584,0.4414943566975498,0.005932235483909474,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.5,6,0.09359509337999837,0.38459796023556736,0.004192750927200658,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.5,7,0.22179457701935051,0.39115089472106784,0.00570694653802341,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.5,8,0.19493282264505643,0.46020724877458596,0.004506672388506187,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.5,9,0.12281007878790637,0.39114702654555744,0.005626829750116485,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.5,10,0.2513305015364417,0.48207324586158035,0.006105593785574421,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.5,11,0.15561940443596653,0.39389517340710417,0.011637446530135634,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.5,12,0.15977245706347842,0.42564650323550096,0.005873367900272978,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.5,13,0.39562689778399673,0.7479842416460584,0.008425304276159486,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.5,14,0.008539885557273677,0.3041696262068259,0.005330990355167483,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.5,15,0.22648802684418634,0.5491245461847675,0.004286867612498029,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.5,16,0.15310361242214582,0.4212658828615334,0.004061702256141285,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.5,17,0.21769889800701922,0.5121956184990846,0.007093371044394247,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.5,18,0.1553932053955659,0.4496447172507087,0.004701829784403908,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.5,19,0.2062784498398071,0.45662842564164124,0.007386000902334738,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.7,0,0.23040677625122152,0.4378673062375339,0.00972135697220853,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.7,1,0.3252238078598559,0.5932795219970773,0.00441416034029067,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.7,2,0.2637248429876853,0.5078148944287535,0.006441161370086091,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.7,3,0.3395815941266573,0.5347371914011854,0.00688851089967036,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.7,4,0.39166990395805507,0.6951701228842265,0.006370331111190273,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.7,5,0.3628994141445886,0.5849249716491698,0.0038419060536398703,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.7,6,0.13853581678068913,0.4433909225319125,0.004198624906115196,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.7,7,0.3518135494150208,0.5418539730031653,0.00819790824692858,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.7,8,0.30406652264601075,0.5326578118972312,0.005379303577263932,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.7,9,0.268947314694067,0.519202539884898,0.006221989421167481,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.7,10,0.3696470205232558,0.6086947910430804,0.005049933262553799,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.7,11,0.26415739045735914,0.5001165821021022,0.00580305077177933,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.7,12,0.26785827200499646,0.5155603407694234,0.005431367302047326,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.7,13,0.495423333648549,0.8122379178520107,0.003825034466313911,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.7,14,0.09977774462228974,0.3477722707506345,0.004772692587137014,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.7,15,0.3616328681800921,0.6536088342299081,0.005411269148692064,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.7,16,0.24228024779945603,0.49832573057144336,0.006427111740121641,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.7,17,0.3130609579070284,0.5983691386075196,0.005990722557582173,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.7,18,0.27132632248929084,0.5395879707588415,0.0042423677990645,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.7,19,0.29000711937041534,0.5535012306119177,0.0043758154640863925,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.9,0,0.34563903742872665,0.5664522048489206,0.005995154832371366,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.9,1,0.5117462908751812,0.7753274524488633,0.006435108943933285,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.9,2,0.38175970254485564,0.6286504439949779,0.006435214608057563,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.9,3,0.46521111311958663,0.6858426246117281,0.006484636677076706,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.9,4,0.44611875655662303,0.7097676071313727,0.004314549613005252,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.9,5,0.5026694730787754,0.7545243314724197,0.005391959837108801,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.9,6,0.2402013431519063,0.5394378178083823,0.005139541502505649,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.9,7,0.500199680154716,0.7414728740788752,0.005359462577404518,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.9,8,0.4291504411689101,0.6706168046630965,0.004773359814130012,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.9,9,0.3941235953292306,0.665893515463966,0.005761408579865229,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.9,10,0.49543241298209584,0.7589769526081231,0.007418948060918725,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.9,11,0.3615706775727363,0.6132337014038883,0.01120892925304047,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.9,12,0.3831588016700507,0.6373299941107746,0.005087828072854775,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.9,13,0.591244323517804,0.8957661458258075,0.006875123668949092,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.9,14,0.21188593203717293,0.45949415308365416,0.005187185410345018,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.9,15,0.5140177320278355,0.7806774899128716,0.006547189564989621,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.9,16,0.33810521895291656,0.6010090098693786,0.005862537881480481,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.9,17,0.3999796063074344,0.6831161711724533,0.0044539566837379,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.9,18,0.38558578675364286,0.63611520207721,0.00495123180363668,seqot_results_chain.pt
+design_i,seqot,Seq-OT,False,0.9,19,0.36647959405601477,0.686278623090214,0.004883221548514975,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.1,0,0.4491543576524635,0.6814070825153202,0.005267957034961709,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.1,1,0.39707440898780844,0.6449157438919715,0.004639742733200967,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.1,2,0.38931978969425446,0.7111869482817356,0.005168462054261728,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.1,3,0.36623855735059924,0.6081942130371162,0.005469240650184735,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.1,4,0.45887241203334833,0.671174677905681,0.004286327223827003,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.1,5,0.4489628974656867,0.6861611794344006,0.004170400067876057,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.1,6,0.4990178088064409,0.7312673106882384,0.0052464364789129424,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.1,7,0.3858589904385042,0.5769838766511344,0.005260415114064644,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.1,8,0.4737085473135589,0.6896118355118386,0.005326344507015291,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.1,9,0.40694999862735015,0.6286837987069291,0.006111765273373208,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.1,10,0.3962350135507931,0.5955673956471402,0.005298774401417309,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.1,11,0.45171582683595557,0.6964090892223236,0.005308281390633601,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.1,12,0.44462945077383803,0.6788108430040435,0.005050287037306603,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.1,13,0.35659154330144877,0.5820068581335095,0.004715672070268066,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.1,14,0.5426964019547561,0.7831248269271972,0.00560975084599411,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.1,15,0.3741185335808142,0.6227485330810889,0.0056301669424314235,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.1,16,0.5035126005375412,0.7646313443557237,0.007698696974601893,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.1,17,0.45717624710355725,0.6618874061013005,0.005413045513266693,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.1,18,0.46370860729732916,0.6712386586540539,0.007107399300692395,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.1,19,0.4459649649501448,0.6873726168275246,0.004650618139651994,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.3,0,0.452447520699631,0.6719615159659118,0.005465772323421234,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.3,1,0.3928001344303902,0.6295847281200847,0.005751868444483065,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.3,2,0.4283191253304229,0.6935199148118274,0.005401470358744806,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.3,3,0.37173915242173955,0.6053407676621428,0.00814804976830176,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.3,4,0.4671350277783926,0.6820580875205574,0.004933861499981441,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.3,5,0.4437905600030835,0.678182896715808,0.006675266659816506,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.3,6,0.5087228545354485,0.7430930478211487,0.007407610896037292,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.3,7,0.3916538273243754,0.5836001739004494,0.0047667667707282126,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.3,8,0.4639016156270123,0.687169932740616,0.006009111286829969,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.3,9,0.4112765064109226,0.6325804862577404,0.0051936967832757,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.3,10,0.39712660652520887,0.6038145830456486,0.005366411512161323,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.3,11,0.46343256732025256,0.7145640379855468,0.005197376619530885,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.3,12,0.4654912746664435,0.7108439707122975,0.005356578096760942,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.3,13,0.3639732978939683,0.5926435613234593,0.004849768152750106,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.3,14,0.5329663160341348,0.77106120350214,0.006375088728152035,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.3,15,0.37353463209590587,0.6315804155696706,0.006231776126893094,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.3,16,0.5236044904648751,0.7727101891589586,0.0066120292148974065,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.3,17,0.4588669978042184,0.6611643975166377,0.0054812836397292565,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.3,18,0.4648544120913262,0.6771350336952652,0.006600695249731933,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.3,19,0.4399085600557455,0.6803800300034978,0.004607120746049987,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.5,0,0.45737986165189415,0.6708461926045132,0.005673873788875875,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.5,1,0.3857987141693828,0.6241026181300156,0.0058852904572443115,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.5,2,0.445278986237393,0.6958980981406405,0.007110064920797872,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.5,3,0.3889118730497399,0.606772581649366,0.005894867767392365,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.5,4,0.47393463380101203,0.6934879302234401,0.006474721592263851,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.5,5,0.43513233609920293,0.668602547144003,0.006223574923581348,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.5,6,0.5198344518740884,0.7542353291809665,0.006420520127981802,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.5,7,0.4002672230469813,0.5922773490291781,0.006663651409060867,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.5,8,0.45113240469420246,0.6682515033851346,0.006132201346187813,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.5,9,0.41405148572021794,0.6354452514791361,0.007137576696828137,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.5,10,0.40414890496777217,0.6169778945448208,0.00630163675824434,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.5,11,0.4681995026421106,0.7204420676587738,0.00535394356742092,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.5,12,0.48673739077884226,0.730677738155802,0.006061132236900144,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.5,13,0.3729553878423841,0.6018870137496367,0.007108887679075909,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.5,14,0.5134378047750204,0.7482002375454478,0.00582186086646096,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.5,15,0.373652893354613,0.6366142529497911,0.007403722993793326,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.5,16,0.5358422108023018,0.7847159767956975,0.00689344189272026,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.5,17,0.45896152678526847,0.6650039666429358,0.006116208700565611,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.5,18,0.4674976928225556,0.6838124280785757,0.005548233230223809,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.5,19,0.4347078659175699,0.6821826616223169,0.005183283986362847,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.7,0,0.46486286120820514,0.672421346620168,0.006038713543753598,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.7,1,0.3924234636023718,0.6130768116459742,0.007554587738916179,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.7,2,0.4637905200479079,0.6902738856717094,0.006480112782933261,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.7,3,0.39842434305749885,0.6203228288283624,0.00632269281362647,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.7,4,0.474547673729347,0.6904367783817464,0.005783353092279297,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.7,5,0.42838311143209706,0.663113246195365,0.005984944439095329,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.7,6,0.526970574455629,0.7668754492086541,0.006677915362668187,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.7,7,0.40596713067754414,0.6005430573526644,0.006929702689397339,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.7,8,0.4359300152871927,0.653288405816947,0.006833712284559398,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.7,9,0.43181135394199555,0.6518781040444814,0.00676686567875133,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.7,10,0.40744036680991175,0.6245088846593496,0.006543597823551707,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.7,11,0.4637857849045668,0.7153913252226038,0.008758220881627187,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.7,12,0.5044157629019322,0.7498324019967749,0.006890940960472854,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.7,13,0.3883021648134173,0.6127350142482,0.00763654550014444,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.7,14,0.49683172829090483,0.7305176748887606,0.007705057190299274,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.7,15,0.38381601449189007,0.6448670743032292,0.005721934406813382,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.7,16,0.536620838460415,0.7856510954537714,0.006595317604284667,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.7,17,0.4629329277152703,0.6690539679143888,0.005393141626730904,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.7,18,0.46183085045361444,0.6785600925051554,0.006482209561630819,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.7,19,0.43345026835063644,0.678235418555664,0.004369582966987156,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.9,0,0.4745059288856562,0.6903659530528575,0.008397163084765446,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.9,1,0.4022090650970827,0.615741238227326,0.009080104240360147,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.9,2,0.46507471169945597,0.6934090014656684,0.0054531187318242295,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.9,3,0.4125036711883678,0.631039712901156,0.005559667057061404,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.9,4,0.4775011089668627,0.694472391250808,0.006768712293885108,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.9,5,0.4195492192030844,0.6653225675700455,0.007116271115854296,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.9,6,0.5365160257008592,0.7849756502003545,0.006032371551293449,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.9,7,0.4116897352158286,0.615485198175373,0.008004929342717593,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.9,8,0.42930925589915764,0.6523215258228191,0.006847398254609662,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.9,9,0.44874911529063205,0.6660093346864869,0.006203546448186769,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.9,10,0.41210211688654924,0.627901791139566,0.00786184983124384,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.9,11,0.4706606129065645,0.7132616130653735,0.008936574524139238,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.9,12,0.5143594024305902,0.7601684710124088,0.008492195421169961,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.9,13,0.4020801278867669,0.6262258318986881,0.008735956235733826,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.9,14,0.4779437705036993,0.7073172728755404,0.007301118181778559,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.9,15,0.4011421335822419,0.6666173475617236,0.006011802595629063,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.9,16,0.5262375726561086,0.7682999927508106,0.007529391087528367,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.9,17,0.4650430959560516,0.6762071363687064,0.00566700669868469,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.9,18,0.4540468427966625,0.6810869845441996,0.006247504425972024,seqot_results_chain.pt
+design_i,seqot,Seq-OT (wrong order),True,0.9,19,0.42622375827062353,0.6708368849122673,0.005872168780767538,seqot_results_chain.pt
+design_i,cocycles,Cocycles,False,0.1,0,0.09113793820142746,0.21457558870315552,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.1,1,0.05149049684405327,0.15221208333969116,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.1,2,0.031077545136213303,0.21829278767108917,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.1,3,0.09634851664304733,0.14959600567817688,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.1,4,0.11163385212421417,0.21038565039634705,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.1,5,7.3647379875183105,10.437978744506836,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.1,6,0.01667841710150242,0.09009673446416855,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.1,7,0.11136846244335175,0.18151915073394775,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.1,8,0.39139777421951294,0.8225343823432922,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.1,9,0.0957392230629921,0.179273322224617,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.1,10,0.06973506510257721,0.2165483832359314,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.1,11,0.03460199758410454,0.2918868064880371,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.1,12,0.08119495958089828,0.1724739670753479,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.1,13,0.19097119569778442,0.3140724003314972,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.1,14,0.1546601802110672,0.2623142898082733,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.1,15,0.03732341155409813,0.13420379161834717,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.1,16,26.24513816833496,37.428977966308594,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.1,17,0.03980104997754097,0.09983853250741959,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.1,18,0.05744541063904762,0.1367289125919342,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.1,19,0.07970237731933594,0.26360204815864563,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.3,0,0.13465559482574463,0.2347893863916397,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.3,1,0.15504217147827148,0.25181660056114197,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.3,2,0.08200471848249435,0.27714473009109497,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.3,3,0.14633168280124664,0.2570911645889282,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.3,4,7.908614158630371,11.514019966125488,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.3,5,122.87847900390625,174.00856018066406,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.3,6,0.057338979095220566,0.09737265855073929,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.3,7,0.1407310664653778,0.21094849705696106,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.3,8,0.16079726815223694,0.3410452604293823,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.3,9,0.053442735224962234,0.12559306621551514,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.3,10,0.07274304330348969,0.23628193140029907,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.3,11,0.1263422667980194,0.5374386310577393,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.3,12,0.0737573504447937,0.16654106974601746,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.3,13,0.1993333101272583,0.2862599492073059,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.3,14,0.05731215327978134,0.23574195802211761,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.3,15,0.05041183903813362,0.44921037554740906,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.3,16,0.24144740402698517,0.44284722208976746,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.3,17,0.10855580121278763,0.19114865362644196,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.3,18,0.11782438308000565,0.190242737531662,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.3,19,0.02569633722305298,0.18466578423976898,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.5,0,0.10722645372152328,0.34503063559532166,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.5,1,0.061371445655822754,0.1517583280801773,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.5,2,1.3973463773727417,2.164523124694824,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.5,3,0.06126813217997551,0.18886688351631165,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.5,4,0.026440180838108063,0.10303658246994019,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.5,5,0.07080291956663132,0.11682505160570145,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.5,6,0.10128714144229889,0.14825013279914856,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.5,7,0.20965878665447235,0.30575817823410034,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.5,8,0.07250732183456421,0.1937485635280609,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.5,9,0.03189591318368912,0.12163342535495758,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.5,10,0.0655854344367981,0.20853252708911896,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.5,11,0.09424876421689987,0.25383132696151733,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.5,12,0.09267082810401917,0.19308751821517944,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.5,13,0.030736619606614113,0.1734994798898697,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.5,14,0.045607052743434906,0.22658319771289825,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.5,15,0.01403640117496252,0.13260145485401154,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.5,16,0.06368103623390198,0.15014657378196716,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.5,17,0.03853513300418854,0.10020700842142105,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.5,18,0.03291032463312149,0.11988896876573563,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.5,19,0.14149630069732666,0.2806861400604248,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.7,0,0.10541675239801407,0.2192067950963974,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.7,1,0.14683720469474792,0.25303247570991516,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.7,2,0.04199180752038956,0.14334692060947418,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.7,3,0.0830405130982399,0.22239503264427185,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.7,4,0.020571531727910042,0.09482303261756897,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.7,5,2.564812183380127,4.232978343963623,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.7,6,0.07219114154577255,0.15323397517204285,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.7,7,0.07145294547080994,0.12127155810594559,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.7,8,0.05401363596320152,0.17599958181381226,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.7,9,0.03962589055299759,0.1349424421787262,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.7,10,0.07623329758644104,0.12918420135974884,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.7,11,0.05511997267603874,0.2637196183204651,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.7,12,0.042527128010988235,0.1447601020336151,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.7,13,0.12323383241891861,0.20487917959690094,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.7,14,0.1544455885887146,0.2584812343120575,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.7,15,2.2331230640411377,3.653596878051758,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.7,16,0.03906340152025223,0.15855762362480164,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.7,17,0.07429096102714539,0.17741386592388153,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.7,18,0.0358586348593235,0.12178879231214523,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.7,19,0.5090024471282959,1.0608593225479126,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.9,0,0.10556727647781372,0.17481142282485962,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.9,1,0.06999795883893967,0.19575229287147522,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.9,2,0.06144679710268974,0.13040390610694885,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.9,3,0.17508098483085632,0.2547059953212738,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.9,4,0.015283376909792423,0.12417608499526978,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.9,5,3.4852147102355957,5.12384033203125,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.9,6,0.1933937519788742,0.31911489367485046,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.9,7,0.03245016187429428,0.15793560445308685,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.9,8,0.06684459000825882,0.18578451871871948,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.9,9,0.05421798303723335,0.1107596904039383,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.9,10,0.004640578292310238,0.04413795843720436,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.9,11,0.03229157254099846,0.13879752159118652,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.9,12,0.1799086183309555,0.26631277799606323,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.9,13,0.09522878378629684,0.19768093526363373,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.9,14,0.03368958830833435,0.14074963331222534,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.9,15,0.05990706384181976,0.13684891164302826,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.9,16,0.9832683801651001,1.4624892473220825,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.9,17,0.02552933245897293,0.046040020883083344,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.9,18,0.0595058873295784,0.13449837267398834,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles,False,0.9,19,9.125624656677246,12.924642562866211,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.1,0,0.1097155213356018,0.18568511307239532,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.1,1,0.08740641921758652,0.17819997668266296,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.1,2,0.09098923206329346,0.15799580514431,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.1,3,0.09022512286901474,0.1829875409603119,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.1,4,13.68277359008789,19.50510597229004,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.1,5,0.09286735206842422,0.15141354501247406,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.1,6,0.052116114646196365,0.1272619366645813,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.1,7,0.08810900896787643,0.16778649389743805,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.1,8,0.14562614262104034,0.23646916449069977,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.1,9,0.11246279627084732,0.21910378336906433,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.1,10,1.6732829809188843,2.5966904163360596,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.1,11,0.05998842790722847,0.24575313925743103,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.1,12,0.09259743988513947,0.24798409640789032,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.1,13,0.0829525887966156,0.1610884964466095,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.1,14,1.404961347579956,2.6548025608062744,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.1,15,0.08479167520999908,0.21891213953495026,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.1,16,21.73188591003418,30.798507690429688,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.1,17,0.02555467188358307,0.06405244767665863,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.1,18,0.10268864035606384,0.18715296685695648,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.1,19,0.651533842086792,1.2202781438827515,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.3,0,0.08306730538606644,0.1831347793340683,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.3,1,0.2386920154094696,0.36742347478866577,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.3,2,0.023555252701044083,0.10454504191875458,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.3,3,0.19137702882289886,0.30130621790885925,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.3,4,0.12561455368995667,0.20622780919075012,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.3,5,0.1087968498468399,0.18565216660499573,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.3,6,0.1040261760354042,0.16278710961341858,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.3,7,0.1801765114068985,0.2713218033313751,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.3,8,0.10366671532392502,0.20418328046798706,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.3,9,0.007309689186513424,0.12123297154903412,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.3,10,0.0056216041557490826,0.18917129933834076,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.3,11,0.05449046567082405,0.2692161202430725,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.3,12,0.03535352274775505,0.1435057669878006,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.3,13,4.994693756103516,7.176535129547119,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.3,14,0.11023913323879242,0.24722819030284882,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.3,15,0.7959840297698975,1.377393364906311,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.3,16,0.026995379477739334,0.10534657537937164,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.3,17,0.06606114655733109,0.10866779088973999,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.3,18,0.03244820982217789,0.09535059332847595,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.3,19,0.8132243156433105,1.5598905086517334,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.5,0,0.0545370988547802,0.14329016208648682,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.5,1,0.08886929601430893,0.15391038358211517,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.5,2,0.012756351381540298,0.1326451599597931,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.5,3,0.08281015604734421,0.17296016216278076,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.5,4,0.15534017980098724,0.2430594116449356,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.5,5,0.08102300018072128,0.18426261842250824,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.5,6,0.08682984858751297,0.12996986508369446,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.5,7,0.14098897576332092,0.2322438657283783,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.5,8,0.33649399876594543,0.5684871077537537,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.5,9,0.04486257955431938,0.13176484405994415,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.5,10,0.11220012605190277,0.28515297174453735,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.5,11,0.11084983497858047,0.3061281740665436,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.5,12,0.031139109283685684,0.09273196756839752,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.5,13,0.10894565284252167,0.18871988356113434,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.5,14,0.1072838306427002,0.1769305020570755,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.5,15,162.5781707763672,230.06263732910156,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.5,16,23.318117141723633,33.14208221435547,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.5,17,0.10246941447257996,0.1531805545091629,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.5,18,0.10194975882768631,0.18317250907421112,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.5,19,0.5583175420761108,1.1719406843185425,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.7,0,0.050535883754491806,0.1770256906747818,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.7,1,0.11756034940481186,0.1939437985420227,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.7,2,0.02035159431397915,0.05748097226023674,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.7,3,0.07297787070274353,0.20643126964569092,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.7,4,0.26580843329429626,0.485493928194046,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.7,5,0.02614375576376915,0.5885554552078247,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.7,6,0.0438678115606308,0.1217365562915802,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.7,7,0.10575024783611298,0.15690010786056519,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.7,8,0.029087785631418228,0.18161427974700928,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.7,9,0.046651314944028854,0.20922893285751343,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.7,10,0.09886985272169113,0.29966387152671814,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.7,11,0.21504205465316772,0.5616072416305542,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.7,12,0.00744028203189373,0.11788123100996017,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.7,13,0.07802906632423401,0.12683230638504028,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.7,14,0.07882849872112274,0.1668834686279297,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.7,15,2.6882688999176025,4.467226982116699,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.7,16,21.76495933532715,30.889850616455078,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.7,17,0.03349030762910843,0.07864248752593994,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.7,18,0.08394400030374527,0.19181513786315918,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.7,19,5.363987445831299,7.725484848022461,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.9,0,0.05262865126132965,0.11718510091304779,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.9,1,0.0831531286239624,0.21370327472686768,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.9,2,0.06202368065714836,0.09594165533781052,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.9,3,0.1136590987443924,0.22993768751621246,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.9,4,0.16191434860229492,0.2589787542819977,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.9,5,0.047785304486751556,0.12055940181016922,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.9,6,0.816788911819458,1.2883844375610352,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.9,7,0.02818530611693859,0.08120935410261154,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.9,8,3.606022357940674,5.276266574859619,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.9,9,0.1175365000963211,0.22064074873924255,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.9,10,0.11219226568937302,0.2734664976596832,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.9,11,0.024391239508986473,0.15623034536838531,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.9,12,0.213250532746315,0.3234090209007263,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.9,13,0.03178606182336807,0.08987342566251755,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.9,14,0.10757812857627869,0.22558730840682983,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.9,15,0.2615666687488556,0.5656962394714355,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.9,16,3.617921829223633,5.8278961181640625,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.9,17,0.019456584006547928,0.08421603590250015,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.9,18,0.035694122314453125,0.10535411536693573,0.0,cocycle_results_chain.pt
+design_i,cocycles,Cocycles (wrong order),True,0.9,19,9.33167839050293,13.368155479431152,0.0,cocycle_results_chain.pt
+design_i,ot,OT,False,0.1,0,0.0346656929762868,0.24931060662081436,0.139792748750393,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.1,1,0.0811814715982316,0.2872463583794037,0.16317878136457187,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.1,2,0.03944447852646274,0.26577988796768326,0.15576145505976222,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.1,3,0.09937121547869646,0.2942059260635492,0.14273336289719998,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.1,4,0.0440612144638664,0.2560081412807743,0.1429576029105348,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.1,5,0.06362452700228387,0.2737088302685697,0.17095261798690006,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.1,6,0.13233418251969828,0.3196705738703637,0.20098111898944895,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.1,7,0.14012312678102992,0.3035627191383595,0.1678990811043829,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.1,8,0.0683787871298943,0.2525865027279867,0.1615921537863893,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.1,9,0.034445944838280486,0.2494585258413635,0.16871565327757354,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.1,10,0.06537907609534209,0.2930632886006509,0.17060064280320886,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.1,11,0.03338422599586269,0.31446219912867596,0.17736624849617247,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.1,12,0.10673907958431678,0.30036863666558433,0.16809609070167691,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.1,13,0.1637430302174936,0.3319272275126007,0.16057462950540266,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.1,14,0.122276909153719,0.2963684565705064,0.15205665989454564,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.1,15,0.17648992961325527,0.3347090963324229,0.1557180606158338,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.1,16,0.14967219987417643,0.30555501668982904,0.16191320063537168,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.1,17,0.04526846823373457,0.22799030291116204,0.18099717325085288,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.1,18,0.054041337808687334,0.24939356405791438,0.15250104627025596,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.1,19,0.12987970660465645,0.31706984880269273,0.14066204459280818,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.3,0,0.03676393823775645,0.24812197115362816,0.1359292181726597,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.3,1,0.08685841024203561,0.2850261510466532,0.14614903346037056,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.3,2,0.04306251692986395,0.2649781245920931,0.15007319133707067,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.3,3,0.10842657403339019,0.2895649668074476,0.13491187245641903,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.3,4,0.048813488171222635,0.25340465434577963,0.15344232041219488,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.3,5,0.05720646748383925,0.2659085617675758,0.16246979817413762,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.3,6,0.1463139051764149,0.3171610464277428,0.16601109551044546,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.3,7,0.1386106941727413,0.2980988091820367,0.16873757675996076,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.3,8,0.059370821975331674,0.25281493124925164,0.1492435466845485,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.3,9,0.02971502133189485,0.24436186673716834,0.15600584831042558,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.3,10,0.06924380201907288,0.29342352791070453,0.15542695647072557,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.3,11,0.03702842209916958,0.31141863375069145,0.1682929151466286,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.3,12,0.11722395776142731,0.30172680296018506,0.16320823595109582,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.3,13,0.16915275045059427,0.33238448049420527,0.15095544335630715,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.3,14,0.11749711536086574,0.29238623896994625,0.17574472892053988,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.3,15,0.18413475932343043,0.33878444927682416,0.14596864668239262,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.3,16,0.15865824462993697,0.3051808188998556,0.13993150214894087,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.3,17,0.04959721953594397,0.22154864666397106,0.1465765588559122,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.3,18,0.04786538661343631,0.2513277075799376,0.1560088372229432,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.3,19,0.13742404385911505,0.32736720459775165,0.16004879981371414,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.5,0,0.041287811800831485,0.2381234614331095,0.14908102705657228,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.5,1,0.09134136618960656,0.27529235398048546,0.14413225225480045,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.5,2,0.046550653773528225,0.2568278211133855,0.15074045449019827,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.5,3,0.11711590301494508,0.29090998695509285,0.13301641592972005,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.5,4,0.05410005526805661,0.24431629709197122,0.14277265751326854,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.5,5,0.053882284596897416,0.25611585139859383,0.13145543393000192,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.5,6,0.1614736297810333,0.3204067302385587,0.1586179870136102,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.5,7,0.1314843103745792,0.27521081837300276,0.14267222316621486,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.5,8,0.047555613658957885,0.2424469977056544,0.14179646014013303,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.5,9,0.024205044983627026,0.23603841049805308,0.14434461422040104,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.5,10,0.0777170492688997,0.29057443311015346,0.1684783258188002,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.5,11,0.041158014455027085,0.3095974307722989,0.15274800448256542,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.5,12,0.12786507439642317,0.30471874009848704,0.16311452725787934,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.5,13,0.16998150345608284,0.3236596367682638,0.15037823056675143,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.5,14,0.10701420845960953,0.278365186322877,0.16402505321542168,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.5,15,0.1874219230416954,0.34789439110545983,0.15503131509883356,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.5,16,0.16483979410057012,0.3060798605259715,0.13758482653731022,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.5,17,0.05622422404531206,0.21145942953036262,0.1353040901040821,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.5,18,0.038851743237154325,0.24883004617973664,0.13755341687592512,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.5,19,0.1424382154055351,0.3180486472968091,0.1350852025743228,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.7,0,0.048887291641710746,0.21385160278724744,0.13045296081001867,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.7,1,0.09410763648014059,0.25632292089413167,0.1252358528634254,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.7,2,0.04976578933213222,0.24028751617443683,0.15896338291880144,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.7,3,0.1250696841502174,0.2808745223466998,0.13804279899090954,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.7,4,0.059910104095753834,0.23011526681937897,0.1319657797740018,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.7,5,0.05930421648448064,0.2412944455226365,0.12411765976023655,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.7,6,0.1776908435662463,0.3158006327898458,0.12242638225244763,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.7,7,0.11671699822033862,0.24487912796561562,0.10508571856109108,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.7,8,0.035302602376026594,0.2245502525153766,0.1261937544921012,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.7,9,0.02029368159080437,0.21881842018846465,0.13794263133245635,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.7,10,0.09205106347423038,0.27548058131177433,0.14209312079056274,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.7,11,0.04578177858810126,0.27706152716217114,0.13262387574668025,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.7,12,0.13839057500232174,0.28770159617997515,0.12246804551092813,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.7,13,0.1645514924372871,0.30255995498570165,0.13494217130209174,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.7,14,0.08874711979168272,0.24250949747819192,0.13022792241849737,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.7,15,0.18472136928175503,0.3361392913177865,0.14092867226824385,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.7,16,0.16709079960156625,0.2946238784303552,0.12310444591111246,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.7,17,0.06556615504114852,0.20077335659811507,0.10765459214121904,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.7,18,0.026955778801147037,0.23738550589132962,0.1449187694141112,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.7,19,0.14391829098656328,0.30082091614296563,0.11075746970912215,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.9,0,0.06132969869296613,0.1911294075145158,0.08843872324118134,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.9,1,0.09340532273098594,0.2256598127251471,0.09148436581440257,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.9,2,0.0523143591654013,0.18567896088147784,0.09200067333378474,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.9,3,0.1312586059959293,0.2561210672644737,0.0801499418542053,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.9,4,0.0664298104561113,0.18118587765351876,0.08815969143785347,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.9,5,0.08183069595338914,0.23013382357564582,0.09262725223197708,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.9,6,0.19515038804219348,0.31378837731266324,0.10200227990553862,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.9,7,0.08698365559068479,0.19108249940305472,0.08595445714381456,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.9,8,0.038325584397160634,0.2009034527448374,0.08795505217535925,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.9,9,0.02609212689328254,0.17979425983613978,0.0807212028366256,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.9,10,0.11561272310791844,0.24298196529242358,0.09772089738795654,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.9,11,0.051110451933833255,0.23072827657648357,0.10604905574219674,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.9,12,0.14822137333179247,0.2702158958177832,0.09818739099657749,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.9,13,0.14689350546488575,0.2578385543168588,0.1002090905550024,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.9,14,0.055103995774893076,0.2034780863618855,0.10098391251820181,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.9,15,0.17027922571316517,0.2980507856597717,0.08978534380344916,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.9,16,0.1615316503218658,0.2616166674901833,0.092996309571925,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.9,17,0.07920461059105915,0.17305249659340785,0.08387139847393103,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.9,18,0.018896456701847017,0.19823411422522327,0.10067566380123295,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_i,ot,OT,False,0.9,19,0.13839175084124988,0.2629694881969052,0.08941176744930505,results/OT_affine_results_trials=20_n=500_m=500_additive=True_multivariate=True.pt
+design_ii,seqot,Seq-OT,False,0.1,0,0.10483543930516581,0.28305454364436866,0.004668014122778629,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.1,1,0.17129101084601545,0.3591887448008463,0.0056544218763636455,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.1,2,0.07375533613424853,0.231821700722274,0.005594198480331798,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.1,3,0.09966875490496921,0.2584856745245163,0.005116604233233968,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.1,4,0.11426909749901847,0.2985706846088053,0.00498561142076101,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.1,5,0.19572638557156485,0.3642174435844753,0.004015162959889016,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.1,6,0.06903579949327182,0.29882901642965864,0.003537079885958958,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.1,7,0.13821326139559162,0.28137433030925046,0.004905374594560181,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.1,8,0.04709675280220702,0.20872877274386387,0.0044723320667418775,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.1,9,0.02773552770381593,0.26008868971213467,0.004027221463413856,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.1,10,0.18140482768618665,0.32249303691256975,0.004618922429516576,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.1,11,0.054748872117467866,0.22130439335418034,0.005321679998840136,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.1,12,0.04423951174427934,0.2332275412377528,0.00486958924895402,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.1,13,0.12426142352372177,0.301903710427687,0.004549419501964153,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.1,14,0.0992692180928012,0.2605368477468661,0.00399774110478491,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.1,15,0.06528733813702366,0.23103299126630158,0.0050083963734354085,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.1,16,0.059412780900093394,0.2583441374533091,0.00478469499178457,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.1,17,0.07914611227572153,0.2397333245204168,0.004639640971835409,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.1,18,0.011035553826939453,0.22010253333427618,0.003252468532676949,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.1,19,0.09657566652810876,0.2629741126512668,0.004232975341597602,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.3,0,0.10794933635017769,0.3019331046461873,0.0048485445320270255,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.3,1,0.1561418594062274,0.3546747040572226,0.00637787203099366,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.3,2,0.06428504990682686,0.22090089017729667,0.0063791359463861354,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.3,3,0.09786638477005664,0.28558996322817126,0.005198296608231005,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.3,4,0.12499824016399257,0.30280487787131616,0.0060127398369051585,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.3,5,0.1715950877067847,0.3676310259124998,0.004359342675216635,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.3,6,0.06618329660641417,0.34923582152510196,0.003650411161300666,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.3,7,0.14751560173408504,0.3118575214928822,0.00537431879849921,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.3,8,0.04548598790712439,0.2547172185449357,0.00484274526665457,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.3,9,0.03163585329090372,0.27407355344049406,0.004351447275271376,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.3,10,0.18510058469618038,0.32968469079230067,0.004909543191546995,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.3,11,0.055943276547494286,0.25276960761584016,0.005673097935972731,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.3,12,0.04760225840698947,0.26372002469743266,0.005277823784504519,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.3,13,0.13639751595913932,0.34880532376326717,0.0049725250655690625,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.3,14,0.11079980139176777,0.2875705788041866,0.004457147858143467,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.3,15,0.04642135477853767,0.24356475519494786,0.005274399686685437,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.3,16,0.06451382210016039,0.28793804164558506,0.005217182368363495,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.3,17,0.07733393686548153,0.26130887290124233,0.004966184227919828,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.3,18,0.02036637437759322,0.2430484775593687,0.0036259861098770258,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.3,19,0.09844650235241081,0.2935960187616804,0.00460087819628406,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.5,0,0.1039662135364718,0.323540140277133,0.004950369943327361,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.5,1,0.1461494511669662,0.36218578655669187,0.006687356958860816,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.5,2,0.057785707658091975,0.22725062867553736,0.006721831024441718,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.5,3,0.09664914691761742,0.32883178700177934,0.006175428003960379,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.5,4,0.13397983804803246,0.3237625657866856,0.0057901891936339885,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.5,5,0.16190983529497452,0.39466694001421126,0.0045771640516388155,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.5,6,0.06539981381211374,0.40785593061743036,0.003751999264549541,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.5,7,0.15399817785553493,0.35997262055380286,0.005977785215971874,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.5,8,0.04624867281267804,0.3196051290411987,0.005013168929464084,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.5,9,0.0324805137563919,0.30542640768644236,0.00479838967410815,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.5,10,0.19276385902387355,0.35201787035830207,0.005143678307160412,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.5,11,0.05955937841342954,0.30368945251568064,0.006463767346191023,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.5,12,0.051832410023577524,0.3053453803381495,0.005354084718460601,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.5,13,0.14771020575450364,0.4026468765243775,0.005469593653810183,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.5,14,0.11767399813397138,0.32710618637160294,0.0049633342113621194,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.5,15,0.034647626014906514,0.28157212981524427,0.0057031645848816355,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.5,16,0.08063463632856346,0.3366668924149826,0.005595806337861378,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.5,17,0.07765153048591382,0.2979559916605916,0.005377405570132504,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.5,18,0.03373156580326271,0.2797052004097204,0.0041076741813211885,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.5,19,0.10177993573007353,0.3444138963626012,0.004913931782006628,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.7,0,0.09889663796994907,0.345908779711263,0.0052288110129529485,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.7,1,0.11936620058017489,0.40101551053843937,0.007122134291860309,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.7,2,0.05638607138833742,0.2579006410465104,0.007230014551428075,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.7,3,0.09730055596594091,0.37521845012589716,0.00684654013874108,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.7,4,0.14149528484417223,0.36358515353998055,0.006149188972211008,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.7,5,0.16875204527381726,0.44985233314673073,0.004802019012673783,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.7,6,0.06650269811166822,0.4717060335249853,0.00392784247284209,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.7,7,0.1594688740533855,0.41986938598835605,0.006211609157896173,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.7,8,0.04751648724119391,0.40183594988811516,0.005796926830009543,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.7,9,0.03450143740297832,0.3415601602699475,0.004992017776126552,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.7,10,0.2048775130712445,0.3954269935630888,0.006016239624073314,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.7,11,0.06184408694726871,0.3619410662818195,0.006392253641475076,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.7,12,0.059098894145314544,0.3661302125438407,0.00559756866102865,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.7,13,0.15823943109635683,0.4622943356061838,0.005839363126656043,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.7,14,0.11669097035143208,0.3788962068776492,0.0052104470117619655,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.7,15,0.05783998615312232,0.35070994208952216,0.00621705952220368,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.7,16,0.10656104020945649,0.40167918587022233,0.0060562750538504595,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.7,17,0.08024369091146634,0.3523775282446878,0.006022354830796756,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.7,18,0.045284384377402495,0.33451323994390036,0.004064074499678011,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.7,19,0.11046505985957052,0.4035724184842738,0.005361325102908387,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.9,0,0.08398479227143883,0.4209560149295537,0.0055714991903844414,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.9,1,0.08514926400933089,0.48625548259289697,0.007511497403370266,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.9,2,0.05810174299027469,0.3518089397847078,0.007855855427186071,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.9,3,0.09821617937045655,0.44621949862406507,0.007748266206490722,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.9,4,0.14512665287409549,0.44921176707464755,0.006296575345519044,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.9,5,0.19256494522010356,0.5639978875646275,0.005003720665041488,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.9,6,0.06628936458143166,0.5681890186134655,0.004401672451269989,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.9,7,0.16597457629269466,0.5136025451007709,0.006561554863144862,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.9,8,0.04878852083317305,0.5341449929660298,0.005672636966966818,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.9,9,0.03810285204156771,0.41774753018915184,0.005283623072322122,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.9,10,0.2219770310891668,0.48403867835325937,0.0062976477261597824,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.9,11,0.06352277801549107,0.4448240321526054,0.0068702671334944084,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.9,12,0.07417149129224836,0.47417148156036604,0.005903097948108119,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.9,13,0.16883383202081695,0.5499812091634171,0.006223159066569387,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.9,14,0.10329369979051542,0.4605297098764651,0.005285471014480509,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.9,15,0.11715369020953931,0.4665178286556911,0.007733251845983011,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.9,16,0.13662970503884495,0.5027953327064821,0.006473751946908838,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.9,17,0.076495521970155,0.4480052525518319,0.006234096633760147,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.9,18,0.06064674896414682,0.4309609999672885,0.004364587880947532,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT,False,0.9,19,0.1261044584034888,0.49115820098850144,0.005727796588287794,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.1,0,0.061164538901106555,0.2931250686772014,0.003948495977994188,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.1,1,0.07971599199834928,0.26150904490234916,0.0038442155705989602,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.1,2,0.1059683793882835,0.2969822077193329,0.009561181654473845,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.1,3,0.11641936928950226,0.3756447484137899,0.0038998631544652483,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.1,4,0.07173718821969632,0.33996779672426874,0.003959725890849624,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.1,5,0.03824984610134994,0.25131014476613944,0.004670802059010745,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.1,6,0.032084499027328,0.3097721790348778,0.0035870685376231557,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.1,7,0.07907981696497508,0.23094611568832277,0.003303958887553211,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.1,8,0.038548694125991184,0.2518041043621078,0.004274388891243648,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.1,9,0.10023675144201803,0.3627499862224358,0.004768572419604204,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.1,10,0.08619587927620727,0.2778530572209532,0.0047294300896523695,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.1,11,0.20727589502599508,0.44480136274506593,0.0058111198479259725,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.1,12,0.13324908870808697,0.35328887428477435,0.004746671594542484,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.1,13,0.0307976790478274,0.24657128320512275,0.0049903478827885575,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.1,14,0.054033083145925816,0.2909214614994164,0.0039252995857224455,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.1,15,0.04992038646809973,0.3202197991717152,0.0036144955609220633,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.1,16,0.030223017264669822,0.20278076045651364,0.0053568142490347135,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.1,17,0.08187968310926377,0.385298748329128,0.003597807833359564,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.1,18,0.08820086607003808,0.24531113873931742,0.004176142653527578,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.1,19,0.12177866649343945,0.33697547281088147,0.0037111604076017794,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.3,0,0.056692500590212996,0.47199464291937343,0.003643670715412058,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.3,1,0.08527286812943805,0.46688169092138737,0.0035711202705917336,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.3,2,0.1044428023329158,0.48031319769954833,0.00703757743222581,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.3,3,0.11418851805121473,0.6142551104352757,0.005213477230234403,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.3,4,0.04677030486733808,0.5852052680120358,0.0035830894377435244,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.3,5,0.02262335203198498,0.449537852839171,0.004396798659865208,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.3,6,0.03597735397273997,0.5647832656916301,0.003407267205306778,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.3,7,0.08849142029961043,0.4322515296314663,0.0030000722321825704,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.3,8,0.041737123575053964,0.40725137588468147,0.003961923946901933,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.3,9,0.11432361108420953,0.5971665241531132,0.004208719077295339,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.3,10,0.06543197276981304,0.40874267797171787,0.004227005560818162,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.3,11,0.2151388198700126,0.6051430480804186,0.005327649856290121,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.3,12,0.13487594103192702,0.5728025623543384,0.004326240696088092,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.3,13,0.030230113491502036,0.4626952378262608,0.004270161509090167,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.3,14,0.05277497654254844,0.48396465125197774,0.0035903830463023517,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.3,15,0.048904811763793035,0.5405451632704966,0.0032898785249033556,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.3,16,0.039786280255385,0.39662058288020924,0.0044058821142169075,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.3,17,0.09858337572309742,0.6120168556260271,0.0032450867130136246,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.3,18,0.08269866469553441,0.46944507054173656,0.0038781024464796436,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.3,19,0.13171423537446522,0.556756612014499,0.0035417360833367617,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.5,0,0.05125455210289539,0.6418906571105446,0.003394340283796067,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.5,1,0.056192181044051916,0.604016345831784,0.0035324442303855167,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.5,2,0.10663020370199622,0.6351070828473091,0.006985193025988251,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.5,3,0.11770748594222875,0.7745840792195394,0.0032907015611961096,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.5,4,0.036856583098674345,0.7816577703048059,0.0034528469958791073,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.5,5,0.008069437800557404,0.6211949024647313,0.004014980765487853,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.5,6,0.04902059480915197,0.7522419731563091,0.0031188667500014677,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.5,7,0.0956348626217201,0.5988526721355992,0.0030327310698743198,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.5,8,0.05007488468476068,0.558930245929429,0.0036225720173841285,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.5,9,0.10987953958888529,0.7840553014290145,0.004033479263399631,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.5,10,0.046703683470477805,0.5567226429822314,0.004014223912276476,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.5,11,0.2162406680210774,0.7664422348919961,0.004634786231278454,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.5,12,0.13060059775388305,0.7250647304235951,0.003921469050555849,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.5,13,0.0352498713045831,0.6556490736706257,0.004387245820037196,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.5,14,0.05449883305876736,0.6381005533963726,0.003281111640351675,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.5,15,0.05137545648296504,0.7068231038723868,0.004506379947343948,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.5,16,0.042400948962350124,0.5681953781730615,0.004069640212056569,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.5,17,0.11617696651949885,0.7564172354971033,0.0029315911551324085,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.5,18,0.08298404632076398,0.6582400591848233,0.0036044857890000985,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.5,19,0.12543305423237366,0.7554703779218382,0.0031640126484430934,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.7,0,0.05036738657752037,0.74399177385603,0.003100103891914015,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.7,1,0.05440490815691528,0.6984865298808987,0.003146246574715431,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.7,2,0.10629313876397554,0.760103526127856,0.006859642312777128,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.7,3,0.12362665846622194,0.8559362703426775,0.003281103053996824,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.7,4,0.05360570848790924,0.9222356471566975,0.0031321334604789692,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.7,5,0.009180549138735701,0.7264058763719535,0.003736164581297749,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.7,6,0.05353497581583309,0.8502073788801033,0.0029794552149026935,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.7,7,0.10650627102860712,0.7029917772493338,0.0025641390169970787,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.7,8,0.06663056630930998,0.6415758531708868,0.0034263739155729897,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.7,9,0.10615953716229615,0.8579200922483845,0.006916431747820967,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.7,10,0.022930585894835827,0.6401393470437681,0.0036162034156653937,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.7,11,0.22043838664741539,0.8411660450945866,0.0044782376583612045,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.7,12,0.12128813657964452,0.7853724582967317,0.003711768579599813,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.7,13,0.062188056778026676,0.7428948725113355,0.0038236929400300205,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.7,14,0.05325365191094644,0.7322432199710583,0.0029935047130926966,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.7,15,0.048560109488972616,0.7833064412165477,0.002876794705232956,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.7,16,0.043023978811697776,0.6398489612313581,0.003941810928416754,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.7,17,0.1336805938061535,0.831667817330164,0.0027823674152838104,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.7,18,0.08237802139242593,0.7466454085270784,0.0034147979797987727,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.7,19,0.12784119791065165,0.8692878039910522,0.003022384345576419,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.9,0,0.04634798271876642,0.7114726138269786,0.0031444430409730537,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.9,1,0.0560804043501713,0.6935245671925799,0.0033843867721639483,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.9,2,0.1155276742039879,0.7728582574330656,0.005644653199316311,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.9,3,0.12529347404349497,0.8231538432917743,0.0033497696178397102,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.9,4,0.08059825207222653,0.9027097697600778,0.003054964178746896,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.9,5,0.03985553820711613,0.7174216955167186,0.0035165367457391733,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.9,6,0.05857765429136136,0.8221227867293952,0.0028252785727226853,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.9,7,0.12492215299036737,0.7104648306513968,0.0029187293104777643,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.9,8,0.09568347969112175,0.6317124934202163,0.0032531242976406418,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.9,9,0.0986157996985932,0.8169315054159163,0.0033056532363449236,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.9,10,0.00857194208037548,0.5992157063661161,0.003962581276179171,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.9,11,0.22614176937347763,0.8129922036315381,0.004339696100241533,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.9,12,0.09696103315322491,0.7189790994357176,0.0035495502097233995,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.9,13,0.09683349313548988,0.711583025822355,0.00378972224644032,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.9,14,0.04845232884307342,0.7176111960758308,0.0029096976981028417,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.9,15,0.03434094545010984,0.7432350797263448,0.0026888011716119592,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.9,16,0.058741913883797986,0.6416283452063106,0.004005340772203905,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.9,17,0.1522544577301277,0.8026896375671024,0.002638102397045595,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.9,18,0.0842496570959965,0.7168817420244452,0.0031261881783619517,seqot_results_design_ii_wrong_order.pt
+design_ii,seqot,Seq-OT (wrong order),True,0.9,19,0.13270123863210784,0.8692577722147972,0.0028975535210425704,seqot_results_design_ii_wrong_order.pt
+design_ii,cocycles,Cocycles,False,0.1,0,0.14121350646018982,0.31058579683303833,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.1,1,0.07443647086620331,0.18890951573848724,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.1,2,0.2123364508152008,0.3616567850112915,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.1,3,1.5481611490249634,2.2513856887817383,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.1,4,0.02403154782950878,0.21204949915409088,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.1,5,0.0764615386724472,0.2885085344314575,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.1,6,0.029091285541653633,0.13659389317035675,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.1,7,0.0670095756649971,0.1657141149044037,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.1,8,0.08772031217813492,0.21678683161735535,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.1,9,0.08616828918457031,0.2541314661502838,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.1,10,0.12286923825740814,0.24845413863658905,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.1,11,0.1259758174419403,0.24843551218509674,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.1,12,0.15195661783218384,0.28873211145401,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.1,13,0.0783001184463501,0.19114921987056732,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.1,14,0.16263100504875183,0.3245532512664795,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.1,15,0.18773384392261505,0.3837937116622925,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.1,16,0.029988553375005722,0.16195476055145264,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.1,17,0.042047169059515,0.2198311984539032,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.1,18,0.030305596068501472,0.18502750992774963,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.1,19,0.1453656256198883,0.2976999878883362,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.3,0,0.10894762724637985,0.28955379128456116,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.3,1,0.07573571801185608,0.1983688920736313,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.3,2,0.11430071294307709,0.2610381841659546,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.3,3,0.12479846179485321,0.2487640678882599,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.3,4,0.11940852552652359,0.23372916877269745,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.3,5,0.052376847714185715,0.21919578313827515,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.3,6,0.0538940355181694,0.20288005471229553,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.3,7,0.1454261839389801,0.32499590516090393,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.3,8,0.1941414624452591,0.4420086443424225,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.3,9,0.005381279159337282,0.17798523604869843,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.3,10,0.0993446558713913,0.27090907096862793,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.3,11,0.21905364096164703,0.5004287958145142,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.3,12,0.06310482323169708,0.31178534030914307,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.3,13,0.11655034869909286,0.27350521087646484,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.3,14,0.03959561511874199,0.21850097179412842,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.3,15,0.14120972156524658,0.3252190351486206,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.3,16,0.06805004924535751,0.28034675121307373,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.3,17,0.0925445631146431,0.31001532077789307,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.3,18,0.09174122661352158,0.27543607354164124,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.3,19,0.17903676629066467,0.35049229860305786,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.5,0,0.18347720801830292,0.3863316774368286,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.5,1,0.10975746810436249,0.30187365412712097,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.5,2,0.07381977140903473,0.27076810598373413,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.5,3,0.16468511521816254,0.3014623522758484,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.5,4,0.07457225769758224,0.2601330578327179,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.5,5,0.008971276693046093,0.40757396817207336,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.5,6,0.1051473617553711,0.3005935251712799,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.5,7,0.03410830348730087,0.21745096147060394,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.5,8,0.06225530803203583,0.21711404621601105,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.5,9,0.1743623912334442,0.37458890676498413,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.5,10,0.03773900866508484,0.2351285219192505,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.5,11,0.08702030777931213,0.23209448158740997,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.5,12,0.10982117056846619,0.3324650824069977,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.5,13,0.07277192175388336,0.1715022176504135,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.5,14,0.07494654506444931,0.32169631123542786,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.5,15,0.1754475086927414,0.31227660179138184,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.5,16,0.008170702494680882,0.2169339656829834,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.5,17,0.11285024136304855,0.29837048053741455,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.5,18,0.10034660249948502,0.295332670211792,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.5,19,0.1746225208044052,0.4466053545475006,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.7,0,0.048396527767181396,0.23513922095298767,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.7,1,0.03904367610812187,0.20942702889442444,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.7,2,0.061821188777685165,0.13711199164390564,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.7,3,0.09483020752668381,0.257038950920105,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.7,4,0.06284152716398239,0.2305358350276947,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.7,5,0.06298541277647018,0.25666511058807373,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.7,6,0.10829794406890869,0.2969540059566498,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.7,7,0.015753954648971558,0.2888503074645996,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.7,8,0.039726585149765015,0.31690338253974915,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.7,9,0.11248530447483063,0.3215937614440918,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.7,10,0.1280437707901001,0.2834794819355011,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.7,11,0.2575051486492157,0.4293800890445709,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.7,12,0.22085508704185486,0.3445627987384796,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.7,13,0.03600963577628136,0.21037670969963074,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.7,14,0.07281547784805298,0.3255291283130646,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.7,15,0.13088074326515198,0.30247971415519714,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.7,16,0.09301486611366272,0.23779240250587463,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.7,17,0.04739466682076454,0.2144678384065628,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.7,18,0.03536577150225639,0.2516416311264038,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.7,19,0.09387719631195068,0.3614054024219513,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.9,0,0.1382404863834381,0.3131686747074127,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.9,1,0.09086991846561432,0.23623070120811462,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.9,2,0.1952877640724182,0.5024421811103821,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.9,3,0.01062190905213356,0.21388210356235504,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.9,4,0.08442381769418716,0.3189736604690552,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.9,5,0.04617798328399658,0.3187161982059479,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.9,6,0.04441654309630394,0.1847216784954071,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.9,7,0.10172751545906067,0.33932870626449585,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.9,8,0.011707158759236336,0.2744726538658142,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.9,9,0.12788495421409607,0.3455154597759247,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.9,10,0.08267507702112198,0.3068150579929352,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.9,11,0.06477341055870056,0.26550593972206116,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.9,12,0.11063462495803833,0.3377256691455841,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.9,13,0.15204529464244843,0.2888448238372803,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.9,14,0.21244581043720245,0.6079121828079224,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.9,15,0.12283917516469955,0.23996210098266602,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.9,16,0.08539935201406479,0.22349905967712402,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.9,17,0.11853434145450592,0.29072070121765137,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.9,18,0.2033928632736206,0.38300374150276184,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles,False,0.9,19,0.11258069425821304,0.3334785997867584,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.1,0,0.15869010984897614,0.5947587490081787,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.1,1,0.11425027251243591,0.22208301723003387,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.1,2,0.04894423857331276,0.24645313620567322,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.1,3,0.08377212285995483,0.2383342683315277,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.1,4,0.0561048686504364,0.23822340369224548,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.1,5,0.052132584154605865,0.22304397821426392,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.1,6,0.07986433058977127,0.2716582417488098,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.1,7,0.12402281165122986,0.2478574812412262,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.1,8,0.09066227823495865,0.23721519112586975,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.1,9,0.08359371870756149,0.26388421654701233,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.1,10,0.05746447294950485,0.19436782598495483,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.1,11,0.055603958666324615,0.24413646757602692,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.1,12,0.1260564625263214,0.2916417717933655,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.1,13,0.05070200189948082,0.19615629315376282,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.1,14,0.11517929285764694,0.2525307834148407,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.1,15,0.1809452921152115,0.3304997682571411,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.1,16,0.060161154717206955,0.2161865234375,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.1,17,0.12962600588798523,0.3862711191177368,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.1,18,0.07700906693935394,0.1861175149679184,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.1,19,0.13092654943466187,0.2741123139858246,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.3,0,0.052914366126060486,0.5648137331008911,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.3,1,0.016715724021196365,0.4627428948879242,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.3,2,0.12474673986434937,0.5536137819290161,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.3,3,0.09845638275146484,0.5682333111763,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.3,4,0.06605376303195953,0.5910306572914124,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.3,5,0.08112137764692307,0.5396565198898315,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.3,6,0.023485485464334488,0.5101498961448669,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.3,7,0.05944707989692688,0.482628732919693,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.3,8,0.10954704880714417,0.5252907276153564,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.3,9,0.1918288916349411,0.5860223770141602,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.3,10,0.05366700887680054,0.4946090281009674,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.3,11,0.14640916883945465,0.7259974479675293,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.3,12,0.14350120723247528,0.5264145731925964,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.3,13,0.09090076386928558,0.5043542385101318,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.3,14,0.08772426843643188,0.525486409664154,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.3,15,0.134067565202713,0.6013390421867371,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.3,16,0.042064715176820755,0.4287625253200531,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.3,17,0.05676626041531563,0.6825165152549744,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.3,18,0.03881096467375755,0.47201648354530334,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.3,19,0.14325778186321259,0.5893769860267639,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.5,0,569.8245849609375,806.6619262695312,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.5,1,0.024047307670116425,0.8036559820175171,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.5,2,0.27564531564712524,1.0381830930709839,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.5,3,0.07401245832443237,0.8329218626022339,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.5,4,0.13154201209545135,0.9223986864089966,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.5,5,0.1190592497587204,0.9183445572853088,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.5,6,0.05516062676906586,1.0586152076721191,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.5,7,0.03046926110982895,0.7342850565910339,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.5,8,0.022811811417341232,0.8258000016212463,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.5,9,0.11233947426080704,0.8415505290031433,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.5,10,0.10827212780714035,0.7799630761146545,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.5,11,0.17946971952915192,0.9008303880691528,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.5,12,0.14621561765670776,0.9051564335823059,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.5,13,0.03734322637319565,1.0952672958374023,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.5,14,0.1385803371667862,0.8831921219825745,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.5,15,0.1900443136692047,1.0903716087341309,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.5,16,0.05683010816574097,0.7261257171630859,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.5,17,0.11593639850616455,1.1618525981903076,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.5,18,0.05317169427871704,0.8081581592559814,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.5,19,0.1598612517118454,0.9259145259857178,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.7,0,0.26511165499687195,1.2812376022338867,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.7,1,0.030387960374355316,1.15330171585083,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.7,2,0.13052955269813538,1.2814717292785645,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.7,3,0.04912187531590462,1.3505231142044067,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.7,4,0.03104640170931816,1.4537681341171265,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.7,5,0.08926268666982651,1.2814487218856812,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.7,6,0.09093492478132248,1.2894861698150635,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.7,7,0.09141764789819717,1.1660958528518677,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.7,8,0.0927332192659378,1.057747483253479,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.7,9,0.2179761379957199,1.3235599994659424,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.7,10,0.17884643375873566,1.1754112243652344,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.7,11,1.5856947898864746,3.4182515144348145,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.7,12,0.19197705388069153,1.1569275856018066,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.7,13,0.14180074632167816,1.370344638824463,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.7,14,0.08439170569181442,1.3856310844421387,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.7,15,0.04577150568366051,1.236849069595337,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.7,16,0.061627257615327835,1.162033200263977,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.7,17,0.09074540436267853,1.4506011009216309,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.7,18,0.02998536452651024,1.2498266696929932,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.7,19,0.25750043988227844,1.3368852138519287,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.9,0,0.14505040645599365,1.58468496799469,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.9,1,0.1467861384153366,1.9524651765823364,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.9,2,0.14257781207561493,1.6734787225723267,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.9,3,0.059534959495067596,1.6539313793182373,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.9,4,0.09315656870603561,1.7412019968032837,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.9,5,0.1245226189494133,1.8292118310928345,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.9,6,0.14217814803123474,1.6595598459243774,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.9,7,0.04996171593666077,1.4640920162200928,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.9,8,0.04022996127605438,1.524092435836792,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.9,9,0.15144793689250946,1.6325761079788208,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.9,10,0.15965743362903595,1.586798071861267,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.9,11,0.025983605533838272,1.6162220239639282,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.9,12,0.2666686773300171,1.5464520454406738,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.9,13,0.28721973299980164,1.650678277015686,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.9,14,0.19327884912490845,1.6909703016281128,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.9,15,0.2300461232662201,1.6506890058517456,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.9,16,0.5187757015228271,2.3667197227478027,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.9,17,0.08908132463693619,1.708250880241394,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.9,18,0.05026603117585182,1.7175612449645996,0.0,cocycle_results.pt
+design_ii,cocycles,Cocycles (wrong order),True,0.9,19,0.1952960342168808,1.6759611368179321,0.0,cocycle_results.pt
+design_ii,ot,OT,False,0.1,0,0.08647038180455927,0.3772109084216032,0.2301306409290604,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.1,1,0.1697644772898848,0.43673399158600873,0.22603809289373372,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.1,2,0.06624217586552565,0.3517034028378594,0.21928075749183162,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.1,3,0.10321748070384931,0.3601321731070671,0.23791069075599897,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.1,4,0.11128005245566083,0.3743232904758229,0.19946187624367515,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.1,5,0.18480292083151273,0.43228676889424106,0.20187998975210747,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.1,6,0.0672760274038017,0.40226883326480767,0.20977512715031088,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.1,7,0.13113194481080825,0.3757686145040784,0.2201503912694986,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.1,8,0.046089844390249726,0.3194628308456048,0.20300861064883297,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.1,9,0.025132917797059753,0.346557630133405,0.1854280561427283,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.1,10,0.1735393393886803,0.4237483495113463,0.22952409477760785,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.1,11,0.0565874814209865,0.333968998175494,0.2031178718336172,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.1,12,0.0443068929831899,0.3670998400502119,0.2477081469479662,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.1,13,0.11935086239250547,0.375773665557862,0.19827359827322158,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.1,14,0.10703790399118708,0.3639979263639114,0.23838934764044517,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.1,15,0.0728082270890247,0.3531420185421472,0.23205490007810003,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.1,16,0.06285647623325609,0.35284631662091737,0.2222457640401385,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.1,17,0.07939159168005931,0.3505121937822986,0.24557208516708415,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.1,18,0.011015057308298262,0.34162666498664634,0.20690076548794817,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.1,19,0.09608311504177745,0.36292770138524855,0.21130381684159472,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.3,0,0.0896643146597393,0.42646795066170023,0.22109445085066715,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.3,1,0.15441819118075298,0.49891847629493774,0.24379424712469377,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.3,2,0.06028431727659842,0.41483062819985583,0.23878128536667137,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.3,3,0.10078833061569804,0.3915141488666154,0.22497334228135107,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.3,4,0.11942957912640208,0.45400013472639617,0.24184552386022376,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.3,5,0.16655585067519643,0.4820239694414488,0.21285677979401335,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.3,6,0.06476281580646634,0.45401856540498153,0.19695243331699402,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.3,7,0.13793645663606532,0.4543150917805824,0.23052027441455977,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.3,8,0.04811511283912671,0.3940469732159837,0.22212111511017257,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.3,9,0.02768130128902196,0.40886883669703766,0.22130122747974815,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.3,10,0.18098879527802353,0.4839368219858687,0.2328574543902939,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.3,11,0.0603128108044724,0.3862549019099467,0.21870581378934298,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.3,12,0.04566685391590153,0.4158441184945145,0.23356501140701036,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.3,13,0.13014882483133294,0.4527934563012035,0.1956880509019071,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.3,14,0.11731757415386951,0.41093759769264615,0.2618503651063451,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.3,15,0.053200762923836215,0.41177575047678816,0.23412239387462364,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.3,16,0.07287373757134981,0.4079221341724376,0.24372081649384375,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.3,17,0.08030628438953176,0.40655016362242224,0.2379247635776697,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.3,18,0.022897422727900327,0.40316511379399805,0.19198347140101732,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.3,19,0.0991647168483987,0.4229143741174998,0.2031280285905185,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.5,0,0.08946444321480901,0.5505910730532644,0.2801046834430458,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.5,1,0.13636740760157184,0.5775560916689344,0.2213059659920645,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.5,2,0.055482308569308504,0.5205481341075137,0.262052553342041,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.5,3,0.10064307845196653,0.47728920274478676,0.25667454826384517,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.5,4,0.12911754078578488,0.5643951701828229,0.27444143974351914,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.5,5,0.16314270352965315,0.5762291264563327,0.26141829319664883,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.5,6,0.0634616943782302,0.5680225574641936,0.25122832791455324,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.5,7,0.1445000228728686,0.5599564415238933,0.2756239992573555,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.5,8,0.050405656537587475,0.5122283529658311,0.22057735984800547,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.5,9,0.030178137740703822,0.4953770278736393,0.20685699383780706,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.5,10,0.19106593342008626,0.5824726949912917,0.24751256648229017,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.5,11,0.06352114984948823,0.4821242048272627,0.23551915157702297,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.5,12,0.049805860596125795,0.527692253061434,0.24525384178092513,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.5,13,0.14028753066312352,0.5645380282706653,0.26851581296377985,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.5,14,0.12437728772244115,0.4956830581668258,0.2720086840038551,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.5,15,0.03810866364275737,0.5272086514886216,0.2636289757994704,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.5,16,0.0901949347994746,0.5306826956016233,0.26977916339171554,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.5,17,0.08018440210640435,0.4791769281425703,0.2636079688602779,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.5,18,0.03629725445322156,0.5266728247371969,0.23353516413958636,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.5,19,0.1035793060976794,0.5091148782844065,0.2066049614983011,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.7,0,0.08523821904053935,0.7209637485475674,0.3717131335110609,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.7,1,0.11473549719670997,0.7449920783071595,0.31703530428467463,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.7,2,0.05151291139307079,0.7022948680104162,0.38566674471608275,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.7,3,0.10204706958593697,0.6255802075728144,0.29721768274952365,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.7,4,0.1382307949811974,0.6973776327139608,0.31867591257268724,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.7,5,0.173983248473825,0.7195073862986787,0.313319485951518,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.7,6,0.0630560524580471,0.692771710345806,0.25090813073660106,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.7,7,0.15065086133764322,0.728755195910196,0.3754601832675201,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.7,8,0.0524012326634929,0.6812673396835053,0.2806412789207181,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.7,9,0.03226103167801087,0.6521631884188476,0.2781960229138432,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.7,10,0.20290243710918274,0.7182026878284835,0.2963416764610653,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.7,11,0.06605434282883232,0.6324016453634967,0.29202047932713593,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.7,12,0.05748255822992719,0.6862321129499168,0.31019652039353307,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.7,13,0.15002118616122534,0.7287062023587891,0.33844834412164393,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.7,14,0.12662246259624313,0.6238012256432975,0.27434344964941376,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.7,15,0.05453357461956769,0.6973381652326539,0.3554414494471143,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.7,16,0.1122331172565146,0.6883322395962519,0.3183695052947219,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.7,17,0.07838775809791526,0.6158856345550281,0.28584607135434137,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.7,18,0.050333811311228896,0.6961281092543816,0.2998852628206175,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.7,19,0.11125391799666376,0.6386007508855605,0.2597411233187867,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.9,0,0.07503886803683314,0.9661317646107281,0.5230434540078748,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.9,1,0.08800708092857071,0.9346140629088276,0.42578880523048146,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.9,2,0.04821530539581311,0.940618867222653,0.5311796959919727,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.9,3,0.10456720013099746,0.7978088388435512,0.3812881486310672,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.9,4,0.14338008167581806,0.9212826010966327,0.4414500487721559,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.9,5,0.1957103867424401,0.9373476909070598,0.4618848947090053,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.9,6,0.06345073047696852,0.8918671601310818,0.37310532815972924,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.9,7,0.1559897398979899,0.8746288867690494,0.4433062005381258,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.9,8,0.053889706638346024,0.8870094442067531,0.37689606406609494,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.9,9,0.033151121628950904,0.8641832673490459,0.4262562711275324,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.9,10,0.21527474465661334,0.9810401584223666,0.49831573321428585,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.9,11,0.06740492298357745,0.8287924866049543,0.40657500496413157,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.9,12,0.0750562901249997,0.9051046279060156,0.42323686504280944,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.9,13,0.1600179149919631,0.9483828839644036,0.4540783066800959,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.9,14,0.11888646777956945,0.8511294468439612,0.37672814697773677,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.9,15,0.10971515867113948,0.921809121649364,0.4749059154466633,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.9,16,0.138155017884591,0.8912386036491976,0.42327769602292753,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.9,17,0.07305217870941846,0.863991452984901,0.43097794926636634,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.9,18,0.06529156313708617,0.9187949344018418,0.45720254772726815,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
+design_ii,ot,OT,False,0.9,19,0.1264977105009223,0.861903451430976,0.3897389888043871,results/OT_affine_results_trials=20_n=500_m=500_additive=False_multivariate=False_dist=laplace.pt
