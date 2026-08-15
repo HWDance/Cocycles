@@ -30,7 +30,7 @@ RESULT_PATHS = {
 
 METHOD_LABELS = {
     "cocycles": "Cocycles",
-    "gaussian_base": "Gaussian-base flow",
+    "gaussian_base": "Gaussian base",
 }
 
 NOISE_LABELS = {
@@ -150,7 +150,7 @@ def _draw_panel(
         ax.set_ylim(0.0, 1.03)
         ax.set_xticks([-1.0, 0.0, 1.0, 2.0])
         ax.set_yticks([0.0, 0.5, 1.0])
-        ax.set_xlabel(r"Effect $Y(1)-Y(0)$")
+        ax.set_xlabel(r"$Y(1)-Y(0)$")
     elif noise == "mixed_tails":
         grid = np.linspace(0.0, 1.0, 800)
         # The bounded monotone transform makes the extreme asymmetric tail
@@ -168,9 +168,7 @@ def _draw_panel(
         ax.set_ylim(0.0, 1.03)
         ax.set_xticks([0.0, 0.5, 1.0])
         ax.set_yticks([0.0, 0.5, 1.0])
-        ax.set_xlabel(
-            "Transformed effect\n" r"$\sigma\,\left(Y(1)-Y(0)\right)$"
-        )
+        ax.set_xlabel(r"$\sigma\,\left(Y(1)-Y(0)\right)$")
     else:
         raise ValueError(f"Unknown noise type in result: {noise}")
 
@@ -238,32 +236,28 @@ def make_comparison_figure(
     results = {
         key: load_effect_results(path) for key, path in RESULT_PATHS.items()
     }
-    methods = ("cocycles", "gaussian_base")
+    methods = ("gaussian_base", "cocycles")
     noises = ("binary", "mixed_tails")
     panel_letters = ("a", "b", "c", "d")
 
     with plt.rc_context(PLOT_STYLE):
-        fig, axes = plt.subplots(
-            1,
-            4,
-            figsize=(7.2, 2.65),
-            sharey=True,
-            constrained_layout=True,
-        )
+        fig = plt.figure(figsize=(7.2, 2.65), constrained_layout=True)
+        subfigures = fig.subfigures(1, 2, wspace=0.05)
         legend_handles: tuple[Line2D, Line2D] | None = None
         panel = 0
 
-        for row, noise in enumerate(noises):
-            for column, method in enumerate(methods):
-                ax = axes[panel]
+        axes: list[plt.Axes] = []
+        for subfigure, noise in zip(subfigures, noises):
+            subfigure.suptitle(NOISE_LABELS[noise], fontweight="bold")
+            pair_axes = subfigure.subplots(1, 2, sharey=True)
+            for method, ax in zip(methods, pair_axes):
+                axes.append(ax)
                 estimated_line, true_line, _ = _draw_panel(
                     ax, results[(noise, method)]
                 )
                 if legend_handles is None:
                     legend_handles = (estimated_line, true_line)
-                ax.set_title(
-                    f"{NOISE_LABELS[noise]}\n{METHOD_LABELS[method]}", pad=7
-                )
+                ax.set_title(METHOD_LABELS[method], pad=7)
                 ax.text(
                     -0.18,
                     1.04,
@@ -273,6 +267,8 @@ def make_comparison_figure(
                     ha="left",
                     va="bottom",
                 )
+                if panel > 0:
+                    ax.tick_params(labelleft=False)
                 panel += 1
 
         axes[0].set_ylabel("CDF")
@@ -281,8 +277,7 @@ def make_comparison_figure(
         fig.legend(
             handles=legend_handles,
             labels=("Estimated", "True"),
-            loc="upper center",
-            bbox_to_anchor=(0.5, 1.065),
+            loc="outside lower center",
             ncol=2,
             frameon=False,
             handlelength=2.8,
