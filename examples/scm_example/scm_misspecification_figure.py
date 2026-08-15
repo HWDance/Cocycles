@@ -2,7 +2,7 @@
 
 Each example notebook saves raw estimated and true treatment effects with
 ``save_effect_results``.  Running this module after all four notebooks have
-completed builds the shared 2 x 2 vector PDF without retraining any model.
+completed builds the shared 1 x 4 vector PDF without retraining any model.
 """
 
 from __future__ import annotations
@@ -50,7 +50,7 @@ PLOT_STYLE = {
     "xtick.labelsize": 8,
     "ytick.labelsize": 8,
     "axes.linewidth": 0.8,
-    "lines.linewidth": 1.8,
+    "lines.linewidth": 2.4,
     "legend.fontsize": 9,
     "pdf.fonttype": 42,
     "ps.fonttype": 42,
@@ -168,7 +168,9 @@ def _draw_panel(
         ax.set_ylim(0.0, 1.03)
         ax.set_xticks([0.0, 0.5, 1.0])
         ax.set_yticks([0.0, 0.5, 1.0])
-        ax.set_xlabel(r"Transformed effect $\sigma\!\left(Y(1)-Y(0)\right)$")
+        ax.set_xlabel(
+            "Transformed effect\n" r"$\sigma\,\left(Y(1)-Y(0)\right)$"
+        )
     else:
         raise ValueError(f"Unknown noise type in result: {noise}")
 
@@ -193,6 +195,7 @@ def _draw_panel(
         true_curve,
         color=TRUE_COLOR,
         linestyle=(0, (4, 2)),
+        linewidth=2.6,
         label="True",
         zorder=4,
     )[0]
@@ -223,7 +226,7 @@ def plot_result_preview(path: str | Path) -> tuple[plt.Figure, plt.Axes]:
 def make_comparison_figure(
     output_path: str | Path = DEFAULT_FIGURE_PATH,
 ) -> Path:
-    """Build the paper-ready 2 x 2 comparison from all saved results."""
+    """Build the paper-ready 1 x 4 comparison from all saved results."""
     missing = [path for path in RESULT_PATHS.values() if not path.exists()]
     if missing:
         missing_text = "\n".join(f"  - {path}" for path in missing)
@@ -237,59 +240,49 @@ def make_comparison_figure(
     }
     methods = ("cocycles", "gaussian_base")
     noises = ("binary", "mixed_tails")
-    panel_letters = (("a", "b"), ("c", "d"))
+    panel_letters = ("a", "b", "c", "d")
 
     with plt.rc_context(PLOT_STYLE):
         fig, axes = plt.subplots(
-            2,
-            2,
-            figsize=(7.2, 5.3),
-            sharex="row",
-            sharey="row",
+            1,
+            4,
+            figsize=(7.2, 2.65),
+            sharey=True,
             constrained_layout=True,
         )
         legend_handles: tuple[Line2D, Line2D] | None = None
+        panel = 0
 
         for row, noise in enumerate(noises):
             for column, method in enumerate(methods):
-                ax = axes[row, column]
+                ax = axes[panel]
                 estimated_line, true_line, _ = _draw_panel(
                     ax, results[(noise, method)]
                 )
                 if legend_handles is None:
                     legend_handles = (estimated_line, true_line)
-                ax.set_title(METHOD_LABELS[method], pad=7)
+                ax.set_title(
+                    f"{NOISE_LABELS[noise]}\n{METHOD_LABELS[method]}", pad=7
+                )
                 ax.text(
-                    -0.14,
+                    -0.18,
                     1.04,
-                    f"({panel_letters[row][column]})",
+                    f"({panel_letters[panel]})",
                     transform=ax.transAxes,
                     fontweight="bold",
                     ha="left",
                     va="bottom",
                 )
+                panel += 1
 
-        axes[0, 0].set_ylabel("CDF")
-        axes[1, 0].set_ylabel("CDF")
-
-        for row, label in enumerate(("Binary noise", "Mixed-tail noise")):
-            axes[row, 0].text(
-                -0.31,
-                0.5,
-                label,
-                transform=axes[row, 0].transAxes,
-                rotation=90,
-                ha="center",
-                va="center",
-                fontweight="bold",
-            )
+        axes[0].set_ylabel("CDF")
 
         assert legend_handles is not None
         fig.legend(
             handles=legend_handles,
             labels=("Estimated", "True"),
             loc="upper center",
-            bbox_to_anchor=(0.55, 1.045),
+            bbox_to_anchor=(0.5, 1.065),
             ncol=2,
             frameon=False,
             handlelength=2.8,
