@@ -248,7 +248,7 @@ def make_comparison_figure(
 
         axes: list[plt.Axes] = []
         for subfigure, noise in zip(subfigures, noises):
-            subfigure.suptitle(NOISE_LABELS[noise], fontweight="bold")
+            subfigure.suptitle(NOISE_LABELS[noise])
             pair_axes = subfigure.subplots(1, 2, sharey=True)
             for method, ax in zip(methods, pair_axes):
                 axes.append(ax)
