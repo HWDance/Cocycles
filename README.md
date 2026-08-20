@@ -63,6 +63,8 @@ Cocycles/
 
 ## Reproducing Experiments in the Paper
 
+For a reviewer-facing, code-linked record of data-generating processes, model architectures, optimization settings, evaluation metrics, and the 401(k) preprocessing pipeline, see [Experimental implementation details](IMPLEMENTATION_DETAILS.md).
+
 ### Examples
 Code for Examples 1 and 2 in the paper can be found in the ```examples``` folder in Jupyter notebooks. To run these, you will need to first open a ```jupyter notebook```.
 
