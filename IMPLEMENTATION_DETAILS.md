@@ -78,7 +78,7 @@ This experiment was called “Example 1” in the repository README. In the curr
 | DGP | Exogenous noise U | Training sample |
 |---|---|---|
 | Binary | Bernoulli(0.5) | 1,000 observations per treatment; each arm contains 500 zeros and 500 ones. |
-| Mixed tails | Draw B~Bernoulli(0.5). If B=1, U=abs(Z) with Z~N(0,1). If B=0, draw tau~BetaPrime(0.1,0.1), Z~N(0,tau), and set U=-abs(Z). | 1,000 observations per treatment. The cocycle notebook draws 2,000 independent U values for pooled treatment data; the flow notebooks draw 1,000 controls and set Y(1)=2Y(0). |
+| Mixed tails | Draw B from Bernoulli(0.5). If B=1, draw Z from N(0,1) and set U=abs(Z). If B=0, draw tau from BetaPrime(0.1,0.1), draw Z from N(0,tau), and set U=-abs(Z). | 1,000 observations per treatment. The cocycle notebook draws 2,000 independent U values for pooled treatment data; the flow notebooks draw 1,000 controls and set Y(1)=2Y(0). |
 
 | Estimator | Architecture | Objective | Optimization | Effect evaluation |
 |---|---|---|---|---|
@@ -94,7 +94,7 @@ The data and fitting code are in the [binary cocycle](examples/scm_example/cocyc
 |---|---|---|
 | SCM | X1=U1; X2=10X1-U2; X3=0.25X2+2U3; X4=X3+U4; X5=-X4+U5 | [SCM](simulations/linear_model/csuite.py#L246-L277) |
 | Replicates | N=1,000; seeds 0–49 | [launcher](simulations/linear_model/run_simlin_cocycles.py#L7-L29) |
-| Noise | U1~N(0,1). Independently for (U2, ..., U5): standard Normal, Rademacher from sign(Uniform(-1,1)), standard Cauchy, Gamma(1,1), or inverse-Gamma(1,1). Correlation is zero. | [construction](simulations/linear_model/run_cocycles.py#L189-L212) |
+| Noise | U1 follows N(0,1). Independently for (U2, ..., U5): standard Normal, Rademacher from sign(Uniform(-1,1)), standard Cauchy, Gamma(1,1), or inverse-Gamma(1,1). Correlation is zero. | [construction](simulations/linear_model/run_cocycles.py#L189-L212) |
 | Modeling | Input X1; outcome (X2, ..., X5); no DAG mask; intervention do(X1=0) | [setup](simulations/linear_model/run_cocycles.py#L183-L225) |
 
 All five estimators use the identical conditional outcome architecture search: a 4D MAF for (X2, ..., X5) conditional on scalar X1, with candidates A0–A3 as defined in the architecture dictionary. For BGM, that conditional MAF is embedded in a 5D coupling flow that leaves X1 unchanged. Thus the cocycle and BGM rows differ in the fitted object, base distribution, objective, and validation procedure—not in the candidate conditional outcome architectures.
@@ -113,7 +113,7 @@ See [cocycle implementation](simulations/linear_model/run_cocycles.py#L153-L261)
 
 | Component | Implemented value |
 |---|---|
-| DGP | X~N(1,1), Y=X+U, true slope 1; N=1,000; seeds 0–49 |
+| DGP | X follows N(1,1); Y=X+U; true slope 1; N=1,000; seeds 0–49 |
 | Noise | Standard Normal; Rademacher; standard Cauchy; Gamma(1,1)-1; inverse-Gamma(1,1), uncentered |
 | Architecture | Linear conditioner without bias followed by a shift |
 | Estimators | ML with learnable Normal or Laplace base; URR with either base; CMMD-V; CMMD-U; true coefficient |
@@ -130,14 +130,14 @@ Metrics are coordinatewise for (X2, ..., X5). <code>KS_CF</code> and <code>W1_CF
 
 For domain x in {0,1,2}, the 2D outcome is Y(x)=m_x+xi_x L_xᵀ, with means (0,0), (1,1), (2,2) and L_x the Cholesky factor of S_x. Truth for domain-0 units reuses standardized noise under counterfactual domains ([DGP](simulations/OT/dgp.py#L53-L130)).
 
-Design I generates each arm's exogenous vector independently as follows. First draw W~Exponential(rate=1) and Z=(Z1,Z2)~N(0,R_rho), where R_rho has ones on the diagonal and rho off the diagonal. Form V=sqrt(W)Z, then set xi=(V1,V1+V2). Thus rho controls dependence in the Gaussian component, and the final assignment adds the first component into the second. Since S0=S1=S2=I, treatment changes only the mean in this design. Design II instead draws the two components of xi independently from Laplace(0,1), while treatment changes the structural Cholesky factor.
+Design I generates each arm's exogenous vector independently as follows. First draw W from Exponential(rate=1) and Z=(Z1,Z2) from N(0,R_rho), where R_rho has ones on the diagonal and rho off the diagonal. Form V=sqrt(W)Z, then set xi=(V1,V1+V2). Thus rho controls dependence in the Gaussian component, and the final assignment adds the first component into the second. Since S0=S1=S2=I, treatment changes only the mean in this design. Design II instead draws the two components of xi independently from Laplace(0,1), while treatment changes the structural Cholesky factor.
 
 | Setting | Design I: additive, multivariate Laplace | Design II: non-additive, independent Laplace |
 |---|---|---|
 | S0 | I | I |
 | S1 | I | [[1,-rho],[-rho,1]] |
 | S2 | I | diag(1+rho,1/(1+rho)) |
-| Exogenous draw xi | Draw W~Exponential(rate=1) and Z~N(0,R_rho); set V=sqrt(W)Z and xi=(V1,V1+V2). Each treatment arm uses an independent draw with RNG seeds s, s+1, and s+2. | Draw xi1 and xi2 independently from Laplace(0,1), again separately by arm. |
+| Exogenous draw xi | Draw W from Exponential(rate=1) and Z from N(0,R_rho); set V=sqrt(W)Z and xi=(V1,V1+V2). Each treatment arm uses an independent draw with RNG seeds s, s+1, and s+2. | Draw xi1 and xi2 independently from Laplace(0,1), again separately by arm. |
 | Sweep | 500 observations per domain; rho in {0.1,0.3,0.5,0.7,0.9}; seeds 0–19 | 500 observations per domain; rho in {0.1,0.3,0.5,0.7,0.9}; seeds 0–19 |
 
 The multivariate-Laplace sampler is in [helpers](simulations/OT/helpers.py#L4-L42).
