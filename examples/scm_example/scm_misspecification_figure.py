@@ -237,7 +237,7 @@ def make_comparison_figure(
         key: load_effect_results(path) for key, path in RESULT_PATHS.items()
     }
     methods = ("gaussian_base", "cocycles")
-    noises = ("binary", "mixed_tails")
+    noises = ("mixed_tails", "binary")
     panel_letters = ("a", "b", "c", "d")
 
     with plt.rc_context(PLOT_STYLE):
